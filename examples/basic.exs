@@ -1,4 +1,6 @@
 defmodule Momento.Examples.Basic do
+  @cache_name 'test-cache'
+
   @spec generate_key(integer) :: String.t()
   def generate_key(i) do
     "key#{i}"
@@ -7,7 +9,7 @@ defmodule Momento.Examples.Basic do
   @spec issue_set(Momento.CacheClient.t(), String.t()) :: {String.t(), Task.t()}
   def issue_set(cache_client, key) do
     IO.puts("Executing a 'set' for key: #{key}")
-    {key, Task.async(fn -> Momento.CacheClient.set(cache_client, key, "foo", 42) end)}
+    {key, Task.async(fn -> Momento.CacheClient.set(cache_client, @cache_name, key, "foo", 42.2) end)}
   end
 
   @spec await_set({String.t(), Task.t()}) :: String.t()
@@ -23,7 +25,7 @@ defmodule Momento.Examples.Basic do
   @spec issue_get(Momento.CacheClient.t(), String.t()) :: {String.t(), Task.t()}
   def issue_get(cache_client, key) do
     IO.puts("Executing a 'get' for key: #{key}")
-    {key, Task.async(fn -> Momento.CacheClient.get(cache_client, key) end)}
+    {key, Task.async(fn -> Momento.CacheClient.get(cache_client, @cache_name, key) end)}
   end
 
   @spec await_get({String.t(), Task.t()}) :: String.t()
