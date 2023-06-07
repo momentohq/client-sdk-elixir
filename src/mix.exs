@@ -7,6 +7,7 @@ defmodule Momento.MixProject do
       version: "0.1.0",
       elixir: "~> 1.14",
       start_permanent: Mix.env() == :prod,
+      elixirc_paths: elixirc_paths(Mix.env()),
       deps: deps()
     ]
   end
@@ -18,10 +19,15 @@ defmodule Momento.MixProject do
     ]
   end
 
+  defp elixirc_paths(_), do: ["lib", "generated"]
+
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:dialyxir, "~> 1.3", only: [:dev], runtime: false}
+      {:dialyxir, "~> 1.3", only: [:dev], runtime: false},
+      {:grpc, "~> 0.5.0"},
+      {:protobuf, "~> 0.12.0"},
+      {:google_protos, "~> 0.3"}
     ]
   end
 end
