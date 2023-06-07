@@ -15,15 +15,16 @@ defmodule Momento.CacheClient do
       TODO
 
   """
-  @spec set(String.t(), binary, binary, float) :: Task.t()
+  @spec set(String.t(), binary, binary, float) :: Momento.Responses.Set.t()
   def set(cache_name, key, value, ttl_seconds) do
-    Task.async(fn ->
-      rand = :rand.uniform(2)
-      case rand do
-        1 -> :success
-        2 -> {:error, %{}}
-      end
-    end)
+    time_to_sleep = :rand.uniform(100)
+    :timer.sleep(time_to_sleep)
+    IO.puts("Completed 'set' for key #{key}")
+    rand = :rand.uniform(2)
+    case rand do
+      1 -> :success
+      2 -> {:error, %{}}
+    end
   end
 
 
@@ -35,15 +36,16 @@ defmodule Momento.CacheClient do
       TODO
 
   """
-  @spec get(String.t(), binary) :: Task.t()
+  @spec get(String.t(), binary) :: Momento.Responses.Get.t()
   def get(cache_name, key) do
-    Task.async(fn ->
-      rand = :rand.uniform(3)
-      case rand do
-        1 -> :hit
-        2 -> :miss
-        3 -> {:error, %{}}
-      end
-    end)
+    time_to_sleep = :rand.uniform(100)
+    :timer.sleep(time_to_sleep)
+    IO.puts("Completed 'get' for key #{key}")
+    rand = :rand.uniform(3)
+    case rand do
+      1 -> :hit
+      2 -> :miss
+      3 -> {:error, %{}}
+    end
   end
 end
