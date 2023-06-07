@@ -1,0 +1,49 @@
+name: On Pull Request
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Commitlint and Other Shared Build Steps
+        uses: momentohq/standards-and-practices/github-actions/shared-build@gh-actions-v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Elixir
+        uses: erlef/setup-beam@v1
+        with:
+          otp-version: '25.3.2'
+          elixir-version: '1.14.5'
+
+      - name: Build and run tests
+        run: |
+          pushd src
+            mix deps.get
+            mix compile
+            mix format --check-formatted
+            mix dialyzer
+            mix test
+          popd
+
+      - name: Run integration tests
+        run: |
+          pushd src
+            mix test integration-test
+          popd
+
+      - name: Build and run examples
+        run: |
+          pushd examples
+            mix deps.get
+            mix compile
+            mix format --check-formatted
+            mix run basic.exs
+          popd
+
