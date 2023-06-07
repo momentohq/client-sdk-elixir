@@ -25,6 +25,7 @@ jobs:
       - name: Build and run tests
         run: |
           pushd src
+            mix deps.get
             mix compile
             mix format --check-formatted
             mix dialyzer
@@ -40,6 +41,7 @@ jobs:
       - name: Build and run examples
         run: |
           pushd examples
+            mix deps.get
             mix compile
             mix format --check-formatted
             mix run basic.exs
