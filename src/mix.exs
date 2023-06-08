@@ -24,10 +24,11 @@ defmodule Momento.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:dialyxir, "~> 1.3", only: [:dev], runtime: false},
       {:grpc, "~> 0.5.0"},
       {:protobuf, "~> 0.12.0"},
-      {:google_protos, "~> 0.3"}
+      {:google_protos, "~> 0.3"},
+      {:jason, "~> 1.4"},
+      {:dialyxir, "~> 1.3", only: [:dev], runtime: false}
     ]
   end
 end
