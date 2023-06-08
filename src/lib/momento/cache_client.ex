@@ -15,18 +15,19 @@ defmodule Momento.CacheClient do
       TODO
 
   """
-  @spec set(Momento.CacheClient.t(), String.t(), binary, binary, float) :: Momento.Responses.Set.t()
+  @spec set(Momento.CacheClient.t(), String.t(), binary, binary, float) ::
+          Momento.Responses.Set.t()
   def set(cache_client, cache_name, key, value, ttl_seconds) do
     time_to_sleep = :rand.uniform(100)
     :timer.sleep(time_to_sleep)
     IO.puts("Completed 'set' for key #{key}")
     rand = :rand.uniform(2)
+
     case rand do
       1 -> :success
       2 -> {:error, %{}}
     end
   end
-
 
   @doc """
   Get a value from the cache.
@@ -42,6 +43,7 @@ defmodule Momento.CacheClient do
     :timer.sleep(time_to_sleep)
     IO.puts("Completed 'get' for key #{key}")
     rand = :rand.uniform(3)
+
     case rand do
       1 -> :hit
       2 -> :miss
