@@ -55,11 +55,8 @@ config = %Momento.Configuration{}
 cache_client = %Momento.CacheClient{config: config}
 
 1..20
-  |> Enum.map(&Momento.Examples.Basic.generate_key(&1))
-  |> Enum.map(&Momento.Examples.Basic.issue_set(cache_client, &1))
-  |> Enum.map(&Momento.Examples.Basic.await_set(&1))
-  |> Enum.map(&Momento.Examples.Basic.issue_get(cache_client, &1))
-  |> Enum.map(&Momento.Examples.Basic.await_get(&1))
-
-
-
+|> Enum.map(&Momento.Examples.Basic.generate_key(&1))
+|> Enum.map(&Momento.Examples.Basic.issue_set(cache_client, &1))
+|> Enum.map(&Momento.Examples.Basic.await_set(&1))
+|> Enum.map(&Momento.Examples.Basic.issue_get(cache_client, &1))
+|> Enum.map(&Momento.Examples.Basic.await_get(&1))
