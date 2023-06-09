@@ -1,12 +1,12 @@
 IO.puts("gRPC Test")
 
-credential = Momento.Auth.Credential.parse_credential_from_env_var("MOMENTO_AUTH_TOKEN")
-metadata = %{cache: "cache", Authorization: credential.auth_token}
+credential_provider = Momento.Auth.CredentialProvider.from_env_var!("MOMENTO_AUTH_TOKEN")
+metadata = %{cache: "cache", Authorization: credential_provider.auth_token}
 
-IO.inspect(credential.cache_endpoint)
+IO.inspect(credential_provider.cache_endpoint)
 
 {:ok, channel} =
-  GRPC.Stub.connect(credential.cache_endpoint <> ":443",
+  GRPC.Stub.connect(credential_provider.cache_endpoint <> ":443",
     cred: GRPC.Credential.new([])
   )
 
