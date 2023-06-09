@@ -1,3 +1,5 @@
+require Logger
+
 defmodule Momento.Examples.Basic do
   @cache_name 'test-cache'
 
@@ -8,7 +10,7 @@ defmodule Momento.Examples.Basic do
 
   @spec issue_set(Momento.CacheClient.t(), String.t()) :: {String.t(), Task.t()}
   def issue_set(cache_client, key) do
-    IO.puts("Executing a 'set' for key: #{key}")
+    Logger.info("Executing a 'set' for key: #{key}")
 
     {key,
      Task.async(fn -> Momento.CacheClient.set(cache_client, @cache_name, key, "foo", 42.2) end)}
@@ -19,8 +21,8 @@ defmodule Momento.Examples.Basic do
     response = Task.await(set_task)
 
     case response do
-      :success -> IO.puts("'set' successful for key #{key}")
-      {:error, error} -> IO.puts("Got an error for key #{key}: #{inspect(error)}")
+      :success -> Logger.info("'set' successful for key #{key}")
+      {:error, error} -> Logger.info("Got an error for key #{key}: #{inspect(error)}")
     end
 
     key
@@ -28,7 +30,7 @@ defmodule Momento.Examples.Basic do
 
   @spec issue_get(Momento.CacheClient.t(), String.t()) :: {String.t(), Task.t()}
   def issue_get(cache_client, key) do
-    IO.puts("Executing a 'get' for key: #{key}")
+    Logger.info("Executing a 'get' for key: #{key}")
     {key, Task.async(fn -> Momento.CacheClient.get(cache_client, @cache_name, key) end)}
   end
 
@@ -37,33 +39,27 @@ defmodule Momento.Examples.Basic do
     response = Task.await(get_task)
 
     case response do
-      :hit -> IO.puts("'get' resulted in a 'hit' for key #{key}: #{inspect(response)}")
-      :miss -> IO.puts("'get' resulted in a 'miss' for key #{key}.")
-      {:error, error} -> IO.puts("Got an error for key #{key}: #{inspect(response)}")
+      :hit -> Logger.info("'get' resulted in a 'hit' for key #{key}: #{inspect(response)}")
+      :miss -> Logger.info("'get' resulted in a 'miss' for key #{key}.")
+      {:error, error} -> Logger.info("Got an error for key #{key}: #{inspect(response)}")
     end
 
     key
   end
 end
 
-IO.puts("Hello world")
+Logger.info("Hello world")
+Logger.info("Hello logging world!")
 
 config = %Momento.Configuration{}
 cache_client = %Momento.CacheClient{config: config}
 
-set_tasks =
-  1..20
-  |> Stream.map(&Momento.Examples.Basic.generate_key(&1))
-  |> Stream.map(&Momento.Examples.Basic.issue_set(cache_client, &1))
-  |> Enum.to_list()
+1..20
+  |> Enum.map(&Momento.Examples.Basic.generate_key(&1))
+  |> Enum.map(&Momento.Examples.Basic.issue_set(cache_client, &1))
+  |> Enum.map(&Momento.Examples.Basic.await_set(&1))
+  |> Enum.map(&Momento.Examples.Basic.issue_get(cache_client, &1))
+  |> Enum.map(&Momento.Examples.Basic.await_get(&1))
 
-get_tasks =
-  set_tasks
-  |> Stream.map(&Momento.Examples.Basic.await_set(&1))
-  |> Stream.map(&Momento.Examples.Basic.issue_get(cache_client, &1))
-  |> Enum.to_list()
 
-# force the completion of the tasks
-get_tasks
-|> Stream.map(&Momento.Examples.Basic.await_get(&1))
-|> Enum.to_list()
+
