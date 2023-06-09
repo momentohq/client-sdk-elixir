@@ -1,5 +1,6 @@
 defmodule Momento.CacheClient do
   require Logger
+  alias Momento.Config.Configuration, as: Configuration
 
   @moduledoc """
   Documentation for `Momento.CacheClient`.
@@ -7,7 +8,7 @@ defmodule Momento.CacheClient do
   @enforce_keys [:config]
   defstruct [:config]
 
-  @opaque t() :: %{required(:config) => Momento.Configuration.t()}
+  @opaque t() :: %{required(:config) => Configuration.t()}
 
   @doc """
   Set the value in cache with a given time to live (TTL) seconds.
