@@ -5,6 +5,7 @@ defmodule Momento.CacheClient do
   alias Momento.Internal.ScsDataClient
 
   require Logger
+  alias Momento.Config.Configuration, as: Configuration
 
   @moduledoc """
   Client to perform operations against a Momento cache.
