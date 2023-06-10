@@ -1,35 +1,49 @@
 defmodule Momento.CacheClient do
+  alias Momento.CacheClient
+  alias Momento.Auth.CredentialProvider
+  alias Momento.Configuration
+  alias Momento.Internal.ScsControlClient
+  alias Momento.Internal.ScsDataClient
+
   require Logger
 
   @moduledoc """
   Documentation for `Momento.CacheClient`.
   """
-  @enforce_keys [:config, :credential_provider, :control_channel, :cache_channel]
-  defstruct [:config, :credential_provider, :control_channel, :cache_channel]
+  @enforce_keys [
+    :config,
+    :credential_provider,
+    :control_client,
+    :data_client
+  ]
+  defstruct [
+    :config,
+    :credential_provider,
+    :control_client,
+    :data_client
+  ]
 
   @opaque t() :: %__MODULE__{
-            config: Momento.Configuration.t(),
-            credential_provider: Momento.Auth.CredentialProvider.t(),
-            control_channel: GRPC.Channel.t(),
-            cache_channel: GRPC.Channel.t()
+            config: Configuration.t(),
+            credential_provider: CredentialProvider.t(),
+            control_client: ScsControlClient.t(),
+            data_client: ScsDataClient.t()
           }
 
-  @spec create_client(Momento.Configuration.t(), Momento.Auth.CredentialProvider.t()) ::
-          {:ok, Momento.CacheClient.t()} | {:error, String.t()}
-  def create_client(config, credential_provider) do
-    with {:ok, control_channel} <-
-           Momento.Internal.ScsControlClient.init_channel(config, credential_provider),
-         {:ok, cache_channel} <-
-           Momento.Internal.ScsDataClient.init_channel(config, credential_provider) do
-      {:ok,
-       %Momento.CacheClient{
-         config: config,
-         credential_provider: credential_provider,
-         control_channel: control_channel,
-         cache_channel: cache_channel
-       }
+  @spec create_client!(
+          config :: Momento.Configuration.t(),
+          credential_provider :: CredentialProvider.t()
+        ) :: t()
+  def create_client!(config, credential_provider) do
+    with control_client <- ScsControlClient.create!(credential_provider),
+         data_client <- ScsDataClient.create!(credential_provider) do
+      %__MODULE__{
+        config: config,
+        credential_provider: credential_provider,
+        control_client: control_client,
+        data_client: data_client
       }
-      end
+    end
   end
 
   @doc """
@@ -40,10 +54,16 @@ defmodule Momento.CacheClient do
       TODO
 
   """
-  @spec set(Momento.CacheClient.t(), String.t(), binary, binary, float) ::
+  @spec set(
+          cache_client :: t(),
+          cache_name :: String.t(),
+          key :: binary(),
+          value :: binary(),
+          ttl_seconds :: float()
+        ) ::
           Momento.Responses.Set.t()
   def set(cache_client, cache_name, key, value, ttl_seconds) do
-    Momento.Internal.ScsDataClient.set(cache_client, cache_name, key, value, ttl_seconds)
+    ScsDataClient.set(cache_client.data_client, cache_name, key, value, ttl_seconds)
   end
 
   @doc """
@@ -54,8 +74,9 @@ defmodule Momento.CacheClient do
       TODO
 
   """
-  @spec get(Momento.CacheClient.t(), String.t(), binary) :: Momento.Responses.Get.t()
+  @spec get(cache_client :: t(), cache_name :: String.t(), key :: binary) ::
+          Momento.Responses.Get.t()
   def get(cache_client, cache_name, key) do
-    Momento.Internal.ScsDataClient.get(cache_client, cache_name, key)
+    ScsDataClient.get(cache_client.data_client, cache_name, key)
   end
 end

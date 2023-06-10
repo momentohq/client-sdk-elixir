@@ -1,4 +1,4 @@
-defmodule CacheClient.HttpGetRequest do
+defmodule Momento.Protos.CacheClient.HttpGetRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -68,7 +68,7 @@ defmodule CacheClient.HttpGetRequest do
   field :token, 3, type: :string
 end
 
-defmodule CacheClient.HttpSetRequest do
+defmodule Momento.Protos.CacheClient.HttpSetRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -168,7 +168,7 @@ defmodule CacheClient.HttpSetRequest do
   field :cache_body, 5, type: Google.Api.HttpBody, json_name: "cacheBody"
 end
 
-defmodule CacheClient.HttpCache.Service do
+defmodule Momento.Protos.CacheClient.HttpCache.Service do
   @moduledoc false
 
   use GRPC.Service, name: "cache_client.HttpCache", protoc_gen_elixir_version: "0.12.0"
@@ -241,15 +241,15 @@ defmodule CacheClient.HttpCache.Service do
     }
   end
 
-  rpc :Get, CacheClient.HttpGetRequest, Google.Api.HttpBody
+  rpc :Get, Momento.Protos.CacheClient.HttpGetRequest, Google.Api.HttpBody
 
-  rpc :Set, CacheClient.HttpSetRequest, CacheClient.SetResponse
+  rpc :Set, Momento.Protos.CacheClient.HttpSetRequest, CacheClient.SetResponse
 
-  rpc :SetButItsAPut, CacheClient.HttpSetRequest, CacheClient.SetResponse
+  rpc :SetButItsAPut, Momento.Protos.CacheClient.HttpSetRequest, CacheClient.SetResponse
 end
 
-defmodule CacheClient.HttpCache.Stub do
+defmodule Momento.Protos.CacheClient.HttpCache.Stub do
   @moduledoc false
 
-  use GRPC.Stub, service: CacheClient.HttpCache.Service
+  use GRPC.Stub, service: Momento.Protos.CacheClient.HttpCache.Service
 end

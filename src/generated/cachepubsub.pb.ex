@@ -1,4 +1,4 @@
-defmodule CacheClient.Pubsub.Empty do
+defmodule Momento.Protos.CacheClient.Pubsub.Empty do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -21,7 +21,7 @@ defmodule CacheClient.Pubsub.Empty do
   end
 end
 
-defmodule CacheClient.Pubsub.PublishRequest do
+defmodule Momento.Protos.CacheClient.Pubsub.PublishRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -97,10 +97,10 @@ defmodule CacheClient.Pubsub.PublishRequest do
 
   field :cache_name, 1, type: :string, json_name: "cacheName"
   field :topic, 2, type: :string
-  field :value, 3, type: CacheClient.Pubsub.TopicValue
+  field :value, 3, type: Momento.Protos.CacheClient.Pubsub.TopicValue
 end
 
-defmodule CacheClient.Pubsub.SubscriptionRequest do
+defmodule Momento.Protos.CacheClient.Pubsub.SubscriptionRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -182,7 +182,7 @@ defmodule CacheClient.Pubsub.SubscriptionRequest do
     json_name: "resumeAtTopicSequenceNumber"
 end
 
-defmodule CacheClient.Pubsub.SubscriptionItem do
+defmodule Momento.Protos.CacheClient.Pubsub.SubscriptionItem do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -251,12 +251,12 @@ defmodule CacheClient.Pubsub.SubscriptionItem do
 
   oneof :kind, 0
 
-  field :item, 1, type: CacheClient.Pubsub.TopicItem, oneof: 0
-  field :discontinuity, 2, type: CacheClient.Pubsub.Discontinuity, oneof: 0
-  field :heartbeat, 3, type: CacheClient.Pubsub.Heartbeat, oneof: 0
+  field :item, 1, type: Momento.Protos.CacheClient.Pubsub.TopicItem, oneof: 0
+  field :discontinuity, 2, type: Momento.Protos.CacheClient.Pubsub.Discontinuity, oneof: 0
+  field :heartbeat, 3, type: Momento.Protos.CacheClient.Pubsub.Heartbeat, oneof: 0
 end
 
-defmodule CacheClient.Pubsub.TopicItem do
+defmodule Momento.Protos.CacheClient.Pubsub.TopicItem do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -308,10 +308,10 @@ defmodule CacheClient.Pubsub.TopicItem do
   end
 
   field :topic_sequence_number, 1, type: :uint64, json_name: "topicSequenceNumber"
-  field :value, 2, type: CacheClient.Pubsub.TopicValue
+  field :value, 2, type: Momento.Protos.CacheClient.Pubsub.TopicValue
 end
 
-defmodule CacheClient.Pubsub.TopicValue do
+defmodule Momento.Protos.CacheClient.Pubsub.TopicValue do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -370,7 +370,7 @@ defmodule CacheClient.Pubsub.TopicValue do
   field :binary, 2, type: :bytes, oneof: 0
 end
 
-defmodule CacheClient.Pubsub.Discontinuity do
+defmodule Momento.Protos.CacheClient.Pubsub.Discontinuity do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -425,7 +425,7 @@ defmodule CacheClient.Pubsub.Discontinuity do
   field :new_topic_sequence, 2, type: :uint64, json_name: "newTopicSequence"
 end
 
-defmodule CacheClient.Pubsub.Heartbeat do
+defmodule Momento.Protos.CacheClient.Pubsub.Heartbeat do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -448,7 +448,7 @@ defmodule CacheClient.Pubsub.Heartbeat do
   end
 end
 
-defmodule CacheClient.Pubsub.Pubsub.Service do
+defmodule Momento.Protos.CacheClient.Pubsub.Pubsub.Service do
   @moduledoc false
 
   use GRPC.Service, name: "cache_client.pubsub.Pubsub", protoc_gen_elixir_version: "0.12.0"
@@ -482,15 +482,17 @@ defmodule CacheClient.Pubsub.Pubsub.Service do
     }
   end
 
-  rpc :Publish, CacheClient.Pubsub.PublishRequest, CacheClient.Pubsub.Empty
+  rpc :Publish,
+      Momento.Protos.CacheClient.Pubsub.PublishRequest,
+      Momento.Protos.CacheClient.Pubsub.Empty
 
   rpc :Subscribe,
-      CacheClient.Pubsub.SubscriptionRequest,
-      stream(CacheClient.Pubsub.SubscriptionItem)
+      Momento.Protos.CacheClient.Pubsub.SubscriptionRequest,
+      stream(Momento.Protos.CacheClient.Pubsub.SubscriptionItem)
 end
 
-defmodule CacheClient.Pubsub.Pubsub.Stub do
+defmodule Momento.Protos.CacheClient.Pubsub.Pubsub.Stub do
   @moduledoc false
 
-  use GRPC.Stub, service: CacheClient.Pubsub.Pubsub.Service
+  use GRPC.Stub, service: Momento.Protos.CacheClient.Pubsub.Pubsub.Service
 end

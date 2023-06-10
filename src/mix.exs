@@ -29,7 +29,8 @@ defmodule Momento.MixProject do
       {:protobuf, "~> 0.12.0"},
       {:google_protos, "~> 0.3"},
       {:joken, "~> 2.5"},
-      {:jason, "~> 1.4"}
+      {:jason, "~> 1.4"},
+      {:tls_certificate_check, "~> 1.19"}
     ]
   end
 end

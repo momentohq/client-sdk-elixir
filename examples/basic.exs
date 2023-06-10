@@ -53,7 +53,7 @@ Logger.info("Hello logging world!")
 
 config = %Momento.Configuration{}
 credential_provider = Momento.Auth.CredentialProvider.from_env_var!("MOMENTO_AUTH_TOKEN")
-{:ok, cache_client} = Momento.CacheClient.create_client(config, credential_provider)
+cache_client = Momento.CacheClient.create_client!(config, credential_provider)
 
 1..20
 |> Enum.map(&Momento.Examples.Basic.generate_key(&1))

@@ -1,4 +1,4 @@
-defmodule CacheClient.PingRequest do
+defmodule Momento.Protos.CacheClient.PingRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -21,7 +21,7 @@ defmodule CacheClient.PingRequest do
   end
 end
 
-defmodule CacheClient.PingResponse do
+defmodule Momento.Protos.CacheClient.PingResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -44,7 +44,7 @@ defmodule CacheClient.PingResponse do
   end
 end
 
-defmodule CacheClient.Ping.Service do
+defmodule Momento.Protos.CacheClient.Ping.Service do
   @moduledoc false
 
   use GRPC.Service, name: "cache_client.Ping", protoc_gen_elixir_version: "0.12.0"
@@ -75,11 +75,11 @@ defmodule CacheClient.Ping.Service do
     }
   end
 
-  rpc :Ping, CacheClient.PingRequest, CacheClient.PingResponse
+  rpc :Ping, Momento.Protos.CacheClient.PingRequest, Momento.Protos.CacheClient.PingResponse
 end
 
-defmodule CacheClient.Ping.Stub do
+defmodule Momento.Protos.CacheClient.Ping.Stub do
   @moduledoc false
 
-  use GRPC.Stub, service: CacheClient.Ping.Service
+  use GRPC.Stub, service: Momento.Protos.CacheClient.Ping.Service
 end

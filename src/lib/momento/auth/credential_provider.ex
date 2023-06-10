@@ -1,5 +1,6 @@
 defmodule Momento.Auth.CredentialProvider do
   require Joken
+  alias Momento.Auth.CredentialProvider
 
   @moduledoc """
   Handles decoding and managing Momento authentication credentials.
@@ -22,8 +23,8 @@ defmodule Momento.Auth.CredentialProvider do
             auth_token: String.t()
           }
 
-  defimpl Inspect, for: Momento.Auth.CredentialProvider do
-    def inspect(%Momento.Auth.CredentialProvider{} = credential_provider, _opts) do
+  defimpl Inspect, for: CredentialProvider do
+    def inspect(%CredentialProvider{} = credential_provider, _opts) do
       "#CredentialProvider<control_endpoint: #{credential_provider.control_endpoint}, control_endpoint: #{credential_provider.cache_endpoint}, auth_token: [hidden]>"
     end
   end
@@ -37,11 +38,11 @@ defmodule Momento.Auth.CredentialProvider do
 
   ## Examples
 
-      iex> Momento.Auth.Credential.from_env_var!("MOMENTO_AUTH_TOKEN")
-      %Momento.Auth.Credential{}
+      iex> Momento.Auth.CredentialProvider.from_env_var!("MOMENTO_AUTH_TOKEN")
+      %Momento.Auth.CredentialProvider{}
 
   """
-  @spec from_env_var!(String.t(), keyword()) :: t()
+  @spec from_env_var!(env_var :: String.t(), opts :: [control_endpoint: String.t(), cache_endpoint: String.t()]) :: t()
   def from_env_var!(env_var, opts \\ [])
 
   def from_env_var!(nil, _opts),
@@ -76,8 +77,11 @@ defmodule Momento.Auth.CredentialProvider do
     case decode_v1_token(token) do
       {:error, _} ->
         case decode_legacy_token(token) do
-          {:error, _} -> raise "Failed to decode auth token"
-          {:ok, result} -> override_endpoints(result, opts)
+          {:error, _} ->
+            raise "Failed to decode auth token"
+
+          {:ok, result} ->
+            override_endpoints(result, opts)
         end
 
       {:ok, result} ->
@@ -85,39 +89,29 @@ defmodule Momento.Auth.CredentialProvider do
     end
   end
 
-  @doc """
-  Returns a new credential with its control_endpoint replaced by the given one.
-
-  Returns the original credential if the new endpoint is nil.
-  """
-  @spec replace_control_endpoint(t(), String.t()) :: t()
-  def replace_control_endpoint(%Momento.Auth.CredentialProvider{} = credential, nil),
-    do: credential
-
-  def replace_control_endpoint(
-        %Momento.Auth.CredentialProvider{} = credential,
-        new_control_endpoint
-      ) do
-    %{credential | control_endpoint: new_control_endpoint}
+  @spec auth_token(credential_provider :: CredentialProvider.t()) :: String.t()
+  def auth_token(%__MODULE__{} = credential_provider) do
+    credential_provider.auth_token
   end
 
-  @doc """
-  Returns a new credential with its cache_endpoint replaced by the given one.
-
-  Returns the original credential if the new endpoint is nil.
-  """
-  @spec replace_cache_endpoint(t(), String.t()) :: t()
-  def replace_cache_endpoint(%Momento.Auth.CredentialProvider{} = credential, nil), do: credential
-
-  def replace_cache_endpoint(%Momento.Auth.CredentialProvider{} = credential, new_cache_endpoint) do
-    %{credential | cache_endpoint: new_cache_endpoint}
+  @spec control_endpoint(credential_provider :: CredentialProvider.t()) :: String.t()
+  def control_endpoint(%__MODULE__{} = credential_provider) do
+    credential_provider.control_endpoint
   end
 
-  @spec override_endpoints(t(), keyword()) :: t()
-  defp override_endpoints(credentialProvider, opts) do
-    credentialProvider
-    |> replace_control_endpoint(Keyword.get(opts, :control_endpoint))
-    |> replace_cache_endpoint(Keyword.get(opts, :cache_endpoint))
+  @spec cache_endpoint(credential_provider :: CredentialProvider.t()) :: String.t()
+  def cache_endpoint(%__MODULE__{} = credential_provider) do
+    credential_provider.cache_endpoint
+  end
+
+  @spec override_endpoints(credential_provider :: t(), opts :: keyword()) :: t()
+  defp override_endpoints(credential_provider, opts) do
+    %{
+      credential_provider
+      | control_endpoint:
+          Keyword.get(opts, :control_endpoint) || credential_provider.control_endpoint,
+        cache_endpoint: Keyword.get(opts, :cache_endpoint) || credential_provider.cache_endpoint
+    }
   end
 
   @spec decode_v1_token(String.t()) :: {:ok, t()} | {:error, String.t()}
