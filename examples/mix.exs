@@ -21,7 +21,8 @@ defmodule Examples.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:momento, path: "../src"}
+      {:momento, path: "../src"},
+      {:tls_certificate_check, "~> 1.19"}
     ]
   end
 end
