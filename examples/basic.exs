@@ -39,7 +39,7 @@ defmodule Momento.Examples.Basic do
     response = Task.await(get_task)
 
     case response do
-      :hit -> Logger.info("'get' resulted in a 'hit' for key #{key}: #{inspect(response)}")
+      {:hit, value} -> Logger.info("'get' resulted in a 'hit' for key #{key}: #{inspect(response)}")
       :miss -> Logger.info("'get' resulted in a 'miss' for key #{key}.")
       {:error, error} -> Logger.info("Got an error for key #{key}: #{inspect(response)}")
     end
@@ -52,7 +52,8 @@ Logger.info("Hello world")
 Logger.info("Hello logging world!")
 
 config = %Momento.Configuration{}
-cache_client = %Momento.CacheClient{config: config}
+credential_provider = Momento.Auth.CredentialProvider.from_env_var!("MOMENTO_AUTH_TOKEN")
+{:ok, cache_client} = Momento.CacheClient.create_client(config, credential_provider)
 
 1..20
 |> Enum.map(&Momento.Examples.Basic.generate_key(&1))

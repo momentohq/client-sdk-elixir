@@ -22,6 +22,12 @@ defmodule Momento.Auth.CredentialProvider do
             auth_token: String.t()
           }
 
+  defimpl Inspect, for: Momento.Auth.CredentialProvider do
+    def inspect(%Momento.Auth.CredentialProvider{} = credential_provider, _opts) do
+      "#CredentialProvider<control_endpoint: #{credential_provider.control_endpoint}, control_endpoint: #{credential_provider.cache_endpoint}, auth_token: [hidden]>"
+    end
+  end
+
   @doc """
   Fetches the given environment variable and parses it into a credential.
 
