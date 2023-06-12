@@ -1,4 +1,6 @@
 defmodule Momento.CacheClient do
+  require Logger
+
   @moduledoc """
   Documentation for `Momento.CacheClient`.
   """
@@ -20,7 +22,7 @@ defmodule Momento.CacheClient do
   def set(cache_client, cache_name, key, value, ttl_seconds) do
     time_to_sleep = :rand.uniform(100)
     :timer.sleep(time_to_sleep)
-    IO.puts("Completed 'set' for key #{key}")
+    Logger.info("Completed 'set' for key #{key}")
     rand = :rand.uniform(2)
 
     case rand do
@@ -41,7 +43,7 @@ defmodule Momento.CacheClient do
   def get(cache_client, cache_name, key) do
     time_to_sleep = :rand.uniform(100)
     :timer.sleep(time_to_sleep)
-    IO.puts("Completed 'get' for key #{key}")
+    Logger.info("Completed 'get' for key #{key}")
     rand = :rand.uniform(3)
 
     case rand do
