@@ -5,9 +5,11 @@ metadata = %{cache: "cache", Authorization: credential_provider.auth_token}
 
 IO.inspect(credential_provider.cache_endpoint)
 
+options = :tls_certificate_check.options(credential_provider.cache_endpoint)
+
 {:ok, channel} =
   GRPC.Stub.connect(credential_provider.cache_endpoint <> ":443",
-    cred: GRPC.Credential.new([])
+    cred: GRPC.Credential.new(ssl: options)
   )
 
 IO.puts("Setting key 'key' in cache 'cache'")
