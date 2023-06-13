@@ -130,7 +130,7 @@ defmodule Momento.Auth.CredentialProviderTest do
   end
 
   test "from_string!/2 with invalid token raises an exception" do
-    assert_raise RuntimeError, "Failed to decode auth token", fn ->
+    assert_raise RuntimeError, ~r/Invalid JWT/, fn ->
       CredentialProvider.from_string!(@invalid_token)
     end
   end
@@ -142,25 +142,25 @@ defmodule Momento.Auth.CredentialProviderTest do
   end
 
   test "from_string!/2 with v1 token that is missing an endpoint raises an exception" do
-    assert_raise RuntimeError, "Failed to decode auth token", fn ->
+    assert_raise RuntimeError, ~r/endpoint not found in JSON/, fn ->
       CredentialProvider.from_string!(@v1_missing_endpoint)
     end
   end
 
   test "from_string!/2 with v1 token that is missing an api key raises an exception" do
-    assert_raise RuntimeError, "Failed to decode auth token", fn ->
+    assert_raise RuntimeError, ~r/api_key not found in JSON/, fn ->
       CredentialProvider.from_string!(@v1_missing_api_key)
     end
   end
 
   test "from_string!/2 with legacy token that is missing a control endpoint raises an exception" do
-    assert_raise RuntimeError, "Failed to decode auth token", fn ->
+    assert_raise RuntimeError, ~r/cp not found/, fn ->
       CredentialProvider.from_string!(@legacy_missing_control)
     end
   end
 
   test "from_string!/2 with legacy token that is missing a cache endpoint raises an exception" do
-    assert_raise RuntimeError, "Failed to decode auth token", fn ->
+    assert_raise RuntimeError, ~r/c not found/, fn ->
       CredentialProvider.from_string!(@legacy_missing_cache)
     end
   end

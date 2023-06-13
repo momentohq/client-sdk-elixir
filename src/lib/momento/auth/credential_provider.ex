@@ -78,13 +78,17 @@ defmodule Momento.Auth.CredentialProvider do
 
   def from_string!(token, opts) do
     case decode_v1_token(token) do
-      {:error, _} ->
-        case decode_legacy_token(token) do
-          {:error, _} ->
-            raise "Failed to decode auth token"
+      {:error, v1_error} ->
+        if String.contains?(v1_error, "base64") do
+          case decode_legacy_token(token) do
+            {:error, legacy_error} ->
+              raise "Failed to decode auth token: " <> legacy_error
 
-          {:ok, result} ->
-            override_endpoints(result, opts)
+            {:ok, result} ->
+              override_endpoints(result, opts)
+          end
+        else
+          raise "Failed to decode auth token: " <> v1_error
         end
 
       {:ok, result} ->
@@ -136,10 +140,15 @@ defmodule Momento.Auth.CredentialProvider do
 
   @spec decode_base64_to_json(String.t()) :: {:ok, map()} | {:error, String.t()}
   defp decode_base64_to_json(base64_string) do
-    try do
-      {:ok, Base.decode64!(base64_string) |> Jason.decode!()}
-    rescue
-      _ -> {:error, "Failed to decode base64 string or parse JSON"}
+    case Base.decode64(base64_string) do
+      {:ok, decoded} ->
+        case Jason.decode(decoded) do
+          {:ok, json} -> {:ok, json}
+          _ -> {:error, "Failed to parse JSON"}
+        end
+
+      _ ->
+        {:error, "Failed to decode base64 string"}
     end
   end
 
