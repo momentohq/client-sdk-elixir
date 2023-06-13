@@ -4,7 +4,7 @@ defmodule Momento.Error do
 
   @type t() :: %__MODULE__{
           error_code: Momento.Error.Code.t(),
-          cause: String.t(),
+          cause: String.t() | nil,
           message: String.t()
         }
 
@@ -147,5 +147,14 @@ defmodule Momento.Error do
           message: "Invalid authentication credentials to connect to the cache service."
         }
     end
+  end
+
+  @spec invalid_argument(String.t()) :: Momento.Error.t()
+  def invalid_argument(message) do
+    %Momento.Error{
+      error_code: Momento.Error.Code.invalid_argument_error(),
+      cause: nil,
+      message: "Invalid argument passed to Momento client: " <> message
+    }
   end
 end

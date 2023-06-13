@@ -42,7 +42,10 @@ defmodule Momento.Auth.CredentialProvider do
       %Momento.Auth.CredentialProvider{}
 
   """
-  @spec from_env_var!(env_var :: String.t(), opts :: [control_endpoint: String.t(), cache_endpoint: String.t()]) :: t()
+  @spec from_env_var!(
+          env_var :: String.t(),
+          opts :: [control_endpoint: String.t(), cache_endpoint: String.t()]
+        ) :: t()
   def from_env_var!(env_var, opts \\ [])
 
   def from_env_var!(nil, _opts),

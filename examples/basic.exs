@@ -1,7 +1,7 @@
 require Logger
 
 defmodule Momento.Examples.Basic do
-  @cache_name 'test-cache'
+  @cache_name "test-cache"
 
   @spec generate_key(integer) :: String.t()
   def generate_key(i) do
@@ -39,9 +39,9 @@ defmodule Momento.Examples.Basic do
     response = Task.await(get_task)
 
     case response do
-      {:hit, value} -> Logger.info("'get' resulted in a 'hit' for key #{key}: #{inspect(response)}")
+      {:hit, value} -> Logger.info("'get' resulted in a 'hit' for key #{key}: #{inspect(value)}")
       :miss -> Logger.info("'get' resulted in a 'miss' for key #{key}.")
-      {:error, error} -> Logger.info("Got an error for key #{key}: #{inspect(response)}")
+      {:error, error} -> Logger.info("Got an error for key #{key}: #{inspect(error)}")
     end
 
     key
