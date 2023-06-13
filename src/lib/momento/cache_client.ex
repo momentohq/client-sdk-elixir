@@ -42,11 +42,11 @@ defmodule Momento.CacheClient do
 
   - A `%Momento.CacheClient{}` struct representing the connected client.
   """
-  @spec create_client!(
+  @spec create!(
           config :: Momento.Configuration.t(),
           credential_provider :: CredentialProvider.t()
         ) :: t()
-  def create_client!(config, credential_provider) do
+  def create!(config, credential_provider) do
     with control_client <- ScsControlClient.create!(credential_provider),
          data_client <- ScsDataClient.create!(credential_provider) do
       %__MODULE__{
@@ -59,11 +59,71 @@ defmodule Momento.CacheClient do
   end
 
   @doc """
+  List all caches.
+
+  ## Parameters
+
+  - `client`: A `%Momento.CacheClient{}` struct representing the connected client.
+
+  ## Returns
+
+  - `:success` on a successful create.
+  - `{:error, error}` tuple if an error occurs.
+  """
+  @spec list_caches(client :: t()) :: Momento.Responses.ListCaches.t()
+  def list_caches(client) do
+    ScsControlClient.list_caches(client.control_client)
+  end
+
+  @doc """
+  Creates a cache if it does not exist.
+
+  ## Parameters
+
+  - `client`: A `%Momento.CacheClient{}` struct representing the connected client.
+  - `cache_name`: The name of the cache to create. Must be a string.
+
+  ## Returns
+
+  - `:success` on a successful create.
+  - `:already_exists` if a cache with the specified name already exists.
+  - `{:error, error}` tuple if an error occurs.
+  """
+  @spec create_cache(
+          client :: t(),
+          cache_name :: String.t()
+        ) :: Momento.Responses.DeleteCache.t()
+  def create_cache(client, cache_name) do
+    ScsControlClient.create_cache(client.control_client, cache_name)
+  end
+
+  @doc """
+  Deletes a cache and all items stored in it.
+
+  ## Parameters
+
+  - `client`: A `%Momento.CacheClient{}` struct representing the connected client.
+  - `cache_name`: The name of the cache to delete. Must be a string.
+
+  ## Returns
+
+  - `:success` on a successful delete.
+  - `{:error, error}` tuple if an error occurs.
+  """
+  @spec delete_cache(
+          client :: t(),
+          cache_name :: String.t()
+        ) :: Momento.Responses.DeleteCache.t()
+  def delete_cache(client, cache_name) do
+    ScsControlClient.delete_cache(client.control_client, cache_name)
+  end
+
+  @doc """
   Set the value in cache with a given time to live (TTL) seconds.
 
   ## Parameters
 
-  - `data_client`: A `%Momento.CacheClient{}` struct representing the connected client.
+  - `client`: A `%Momento.CacheClient{}` struct representing the connected client.
   - `cache_name`: The name of the cache to store the value in. Must be a string.
   - `key`: The key to store the value under. Must be a binary.
   - `value`: The value to be stored. Must be a binary.
@@ -75,15 +135,15 @@ defmodule Momento.CacheClient do
   - `{:error, error}` tuple if an error occurs.
   """
   @spec set(
-          cache_client :: t(),
+          client :: t(),
           cache_name :: String.t(),
           key :: binary(),
           value :: binary(),
           ttl_seconds :: float()
         ) ::
           Momento.Responses.Set.t()
-  def set(cache_client, cache_name, key, value, ttl_seconds) do
-    ScsDataClient.set(cache_client.data_client, cache_name, key, value, ttl_seconds)
+  def set(client, cache_name, key, value, ttl_seconds) do
+    ScsDataClient.set(client.data_client, cache_name, key, value, ttl_seconds)
   end
 
   @doc """
@@ -91,7 +151,7 @@ defmodule Momento.CacheClient do
 
   ## Parameters
 
-  - `data_client`: A `%Momento.CacheClient{}` struct representing the connected client.
+  - `client`: A `%Momento.CacheClient{}` struct representing the connected client.
   - `cache_name`: The name of the cache to fetch the value from. Must be a string.
   - `key`: The key of the value to fetch. Must be a binary.
 
@@ -101,10 +161,10 @@ defmodule Momento.CacheClient do
   - `:miss` if the key does not exist.
   - `{:error, error}` tuple if an error occurs.
   """
-  @spec get(cache_client :: t(), cache_name :: String.t(), key :: binary) ::
+  @spec get(client :: t(), cache_name :: String.t(), key :: binary) ::
           Momento.Responses.Get.t()
-  def get(cache_client, cache_name, key) do
-    ScsDataClient.get(cache_client.data_client, cache_name, key)
+  def get(client, cache_name, key) do
+    ScsDataClient.get(client.data_client, cache_name, key)
   end
 
   @doc """
@@ -112,7 +172,7 @@ defmodule Momento.CacheClient do
 
   ## Parameters
 
-  - `data_client`: A `%Momento.CacheClient{}` struct representing the connected client.
+  - `client`: A `%Momento.CacheClient{}` struct representing the connected client.
   - `cache_name`: The name of the cache to fetch the value from. Must be a string.
   - `key`: The key of the value to fetch. Must be a binary.
 
@@ -121,9 +181,9 @@ defmodule Momento.CacheClient do
   - `:success` on a successful deletion.
   - `{:error, error}` tuple if an error occurs.
   """
-  @spec delete(cache_client :: t(), cache_name :: String.t(), key :: binary) ::
+  @spec delete(client :: t(), cache_name :: String.t(), key :: binary) ::
           Momento.Responses.Get.t()
-  def delete(cache_client, cache_name, key) do
-    ScsDataClient.delete(cache_client.data_client, cache_name, key)
+  def delete(client, cache_name, key) do
+    ScsDataClient.delete(client.data_client, cache_name, key)
   end
 end
