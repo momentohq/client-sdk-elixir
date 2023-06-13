@@ -1,4 +1,4 @@
-defmodule Auth.GenerateApiTokenRequest.CacheRole do
+defmodule Momento.Protos.Auth.GenerateApiTokenRequest.CacheRole do
   @moduledoc false
 
   use Protobuf, enum: true, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -32,7 +32,7 @@ defmodule Auth.GenerateApiTokenRequest.CacheRole do
   field :CacheReadWrite, 1
 end
 
-defmodule Auth.GenerateApiTokenRequest.TopicRole do
+defmodule Momento.Protos.Auth.GenerateApiTokenRequest.TopicRole do
   @moduledoc false
 
   use Protobuf, enum: true, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -66,7 +66,7 @@ defmodule Auth.GenerateApiTokenRequest.TopicRole do
   field :TopicReadWrite, 1
 end
 
-defmodule Auth.GenerateApiTokenRequest.SuperUserPermissions do
+defmodule Momento.Protos.Auth.GenerateApiTokenRequest.SuperUserPermissions do
   @moduledoc false
 
   use Protobuf, enum: true, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -93,7 +93,7 @@ defmodule Auth.GenerateApiTokenRequest.SuperUserPermissions do
   field :SuperUser, 0
 end
 
-defmodule Auth.LoginRequest do
+defmodule Momento.Protos.Auth.LoginRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -116,7 +116,7 @@ defmodule Auth.LoginRequest do
   end
 end
 
-defmodule Auth.LoginResponse.LoggedIn do
+defmodule Momento.Protos.Auth.LoginResponse.LoggedIn do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -171,7 +171,7 @@ defmodule Auth.LoginResponse.LoggedIn do
   field :valid_for_seconds, 2, type: :uint32, json_name: "validForSeconds"
 end
 
-defmodule Auth.LoginResponse.Error do
+defmodule Momento.Protos.Auth.LoginResponse.Error do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -211,7 +211,7 @@ defmodule Auth.LoginResponse.Error do
   field :description, 1, type: :string
 end
 
-defmodule Auth.LoginResponse.DirectBrowser do
+defmodule Momento.Protos.Auth.LoginResponse.DirectBrowser do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -251,7 +251,7 @@ defmodule Auth.LoginResponse.DirectBrowser do
   field :url, 1, type: :string
 end
 
-defmodule Auth.LoginResponse.Message do
+defmodule Momento.Protos.Auth.LoginResponse.Message do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -291,7 +291,7 @@ defmodule Auth.LoginResponse.Message do
   field :text, 1, type: :string
 end
 
-defmodule Auth.LoginResponse do
+defmodule Momento.Protos.Auth.LoginResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -502,16 +502,20 @@ defmodule Auth.LoginResponse do
   oneof :state, 0
 
   field :direct_browser, 1,
-    type: Auth.LoginResponse.DirectBrowser,
+    type: Momento.Protos.Auth.LoginResponse.DirectBrowser,
     json_name: "directBrowser",
     oneof: 0
 
-  field :logged_in, 2, type: Auth.LoginResponse.LoggedIn, json_name: "loggedIn", oneof: 0
-  field :message, 3, type: Auth.LoginResponse.Message, oneof: 0
-  field :error, 4, type: Auth.LoginResponse.Error, oneof: 0
+  field :logged_in, 2,
+    type: Momento.Protos.Auth.LoginResponse.LoggedIn,
+    json_name: "loggedIn",
+    oneof: 0
+
+  field :message, 3, type: Momento.Protos.Auth.LoginResponse.Message, oneof: 0
+  field :error, 4, type: Momento.Protos.Auth.LoginResponse.Error, oneof: 0
 end
 
-defmodule Auth.GenerateApiTokenRequest.Never do
+defmodule Momento.Protos.Auth.GenerateApiTokenRequest.Never do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -534,7 +538,7 @@ defmodule Auth.GenerateApiTokenRequest.Never do
   end
 end
 
-defmodule Auth.GenerateApiTokenRequest.Expires do
+defmodule Momento.Protos.Auth.GenerateApiTokenRequest.Expires do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -574,7 +578,7 @@ defmodule Auth.GenerateApiTokenRequest.Expires do
   field :valid_for_seconds, 1, type: :uint32, json_name: "validForSeconds"
 end
 
-defmodule Auth.GenerateApiTokenRequest.Permissions do
+defmodule Momento.Protos.Auth.GenerateApiTokenRequest.Permissions do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -630,15 +634,17 @@ defmodule Auth.GenerateApiTokenRequest.Permissions do
   oneof :kind, 0
 
   field :super_user, 1,
-    type: Auth.GenerateApiTokenRequest.SuperUserPermissions,
+    type: Momento.Protos.Auth.GenerateApiTokenRequest.SuperUserPermissions,
     json_name: "superUser",
     enum: true,
     oneof: 0
 
-  field :explicit, 2, type: Auth.GenerateApiTokenRequest.ExplicitPermissions, oneof: 0
+  field :explicit, 2,
+    type: Momento.Protos.Auth.GenerateApiTokenRequest.ExplicitPermissions,
+    oneof: 0
 end
 
-defmodule Auth.GenerateApiTokenRequest.ExplicitPermissions do
+defmodule Momento.Protos.Auth.GenerateApiTokenRequest.ExplicitPermissions do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -675,10 +681,12 @@ defmodule Auth.GenerateApiTokenRequest.ExplicitPermissions do
     }
   end
 
-  field :permissions, 1, repeated: true, type: Auth.GenerateApiTokenRequest.PermissionsType
+  field :permissions, 1,
+    repeated: true,
+    type: Momento.Protos.Auth.GenerateApiTokenRequest.PermissionsType
 end
 
-defmodule Auth.GenerateApiTokenRequest.PermissionsType.CachePermissions do
+defmodule Momento.Protos.Auth.GenerateApiTokenRequest.PermissionsType.CachePermissions do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -715,10 +723,10 @@ defmodule Auth.GenerateApiTokenRequest.PermissionsType.CachePermissions do
     }
   end
 
-  field :role, 1, type: Auth.GenerateApiTokenRequest.CacheRole, enum: true
+  field :role, 1, type: Momento.Protos.Auth.GenerateApiTokenRequest.CacheRole, enum: true
 end
 
-defmodule Auth.GenerateApiTokenRequest.PermissionsType.TopicPermissions do
+defmodule Momento.Protos.Auth.GenerateApiTokenRequest.PermissionsType.TopicPermissions do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -755,10 +763,10 @@ defmodule Auth.GenerateApiTokenRequest.PermissionsType.TopicPermissions do
     }
   end
 
-  field :role, 1, type: Auth.GenerateApiTokenRequest.TopicRole, enum: true
+  field :role, 1, type: Momento.Protos.Auth.GenerateApiTokenRequest.TopicRole, enum: true
 end
 
-defmodule Auth.GenerateApiTokenRequest.PermissionsType do
+defmodule Momento.Protos.Auth.GenerateApiTokenRequest.PermissionsType do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -871,17 +879,17 @@ defmodule Auth.GenerateApiTokenRequest.PermissionsType do
   oneof :kind, 0
 
   field :cache_permissions, 1,
-    type: Auth.GenerateApiTokenRequest.PermissionsType.CachePermissions,
+    type: Momento.Protos.Auth.GenerateApiTokenRequest.PermissionsType.CachePermissions,
     json_name: "cachePermissions",
     oneof: 0
 
   field :topic_permissions, 2,
-    type: Auth.GenerateApiTokenRequest.PermissionsType.TopicPermissions,
+    type: Momento.Protos.Auth.GenerateApiTokenRequest.PermissionsType.TopicPermissions,
     json_name: "topicPermissions",
     oneof: 0
 end
 
-defmodule Auth.GenerateApiTokenRequest do
+defmodule Momento.Protos.Auth.GenerateApiTokenRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -1249,13 +1257,13 @@ defmodule Auth.GenerateApiTokenRequest do
 
   oneof :expiry, 0
 
-  field :never, 1, type: Auth.GenerateApiTokenRequest.Never, oneof: 0
-  field :expires, 2, type: Auth.GenerateApiTokenRequest.Expires, oneof: 0
+  field :never, 1, type: Momento.Protos.Auth.GenerateApiTokenRequest.Never, oneof: 0
+  field :expires, 2, type: Momento.Protos.Auth.GenerateApiTokenRequest.Expires, oneof: 0
   field :auth_token, 3, type: :string, json_name: "authToken"
-  field :permissions, 4, type: Auth.GenerateApiTokenRequest.Permissions
+  field :permissions, 4, type: Momento.Protos.Auth.GenerateApiTokenRequest.Permissions
 end
 
-defmodule Auth.GenerateApiTokenResponse do
+defmodule Momento.Protos.Auth.GenerateApiTokenResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -1340,7 +1348,7 @@ defmodule Auth.GenerateApiTokenResponse do
   field :valid_until, 4, type: :uint64, json_name: "validUntil"
 end
 
-defmodule Auth.RefreshApiTokenRequest do
+defmodule Momento.Protos.Auth.RefreshApiTokenRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -1395,7 +1403,7 @@ defmodule Auth.RefreshApiTokenRequest do
   field :refresh_token, 2, type: :string, json_name: "refreshToken"
 end
 
-defmodule Auth.RefreshApiTokenResponse do
+defmodule Momento.Protos.Auth.RefreshApiTokenResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -1480,7 +1488,7 @@ defmodule Auth.RefreshApiTokenResponse do
   field :valid_until, 4, type: :uint64, json_name: "validUntil"
 end
 
-defmodule Auth.Auth.Service do
+defmodule Momento.Protos.Auth.Auth.Service do
   @moduledoc false
 
   use GRPC.Service, name: "auth.Auth", protoc_gen_elixir_version: "0.12.0"
@@ -1541,15 +1549,19 @@ defmodule Auth.Auth.Service do
     }
   end
 
-  rpc :Login, Auth.LoginRequest, stream(Auth.LoginResponse)
+  rpc :Login, Momento.Protos.Auth.LoginRequest, stream(Momento.Protos.Auth.LoginResponse)
 
-  rpc :GenerateApiToken, Auth.GenerateApiTokenRequest, Auth.GenerateApiTokenResponse
+  rpc :GenerateApiToken,
+      Momento.Protos.Auth.GenerateApiTokenRequest,
+      Momento.Protos.Auth.GenerateApiTokenResponse
 
-  rpc :RefreshApiToken, Auth.RefreshApiTokenRequest, Auth.RefreshApiTokenResponse
+  rpc :RefreshApiToken,
+      Momento.Protos.Auth.RefreshApiTokenRequest,
+      Momento.Protos.Auth.RefreshApiTokenResponse
 end
 
-defmodule Auth.Auth.Stub do
+defmodule Momento.Protos.Auth.Auth.Stub do
   @moduledoc false
 
-  use GRPC.Stub, service: Auth.Auth.Service
+  use GRPC.Stub, service: Momento.Protos.Auth.Auth.Service
 end

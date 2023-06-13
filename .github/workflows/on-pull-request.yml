@@ -7,6 +7,11 @@ on:
 jobs:
   test:
     runs-on: ubuntu-20.04
+    env:
+      TEST_AUTH_TOKEN: ${{ secrets.ALPHA_TEST_AUTH_TOKEN }}
+      MOMENTO_AUTH_TOKEN: ${{ secrets.ALPHA_TEST_AUTH_TOKEN }}
+#      TEST_CACHE_NAME: elixir-integration-test-ci-${{ github.sha }}
+      TEST_CACHE_NAME: elixir-integration-test-ci
 
     steps:
       - uses: actions/checkout@v3

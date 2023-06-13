@@ -1,4 +1,4 @@
-defmodule Google.Api.PbExtension do
+defmodule Momento.Protos.Google.Api.PbExtension do
   @moduledoc false
   use Protobuf, protoc_gen_elixir_version: "0.12.0"
 

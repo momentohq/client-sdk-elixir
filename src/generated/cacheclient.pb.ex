@@ -1,4 +1,4 @@
-defmodule CacheClient.ECacheResult do
+defmodule Momento.Protos.CacheClient.ECacheResult do
   @moduledoc false
 
   use Protobuf, enum: true, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -52,7 +52,7 @@ defmodule CacheClient.ECacheResult do
   field :Miss, 3
 end
 
-defmodule CacheClient.ItemGetTypeResponse.ItemType do
+defmodule Momento.Protos.CacheClient.ItemGetTypeResponse.ItemType do
   @moduledoc false
 
   use Protobuf, enum: true, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -107,7 +107,7 @@ defmodule CacheClient.ItemGetTypeResponse.ItemType do
   field :SORTED_SET, 4
 end
 
-defmodule CacheClient.SortedSetFetchRequest.Order do
+defmodule Momento.Protos.CacheClient.SortedSetFetchRequest.Order do
   @moduledoc false
 
   use Protobuf, enum: true, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -141,7 +141,7 @@ defmodule CacheClient.SortedSetFetchRequest.Order do
   field :DESCENDING, 1
 end
 
-defmodule CacheClient.SortedSetGetRankRequest.Order do
+defmodule Momento.Protos.CacheClient.SortedSetGetRankRequest.Order do
   @moduledoc false
 
   use Protobuf, enum: true, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -175,7 +175,7 @@ defmodule CacheClient.SortedSetGetRankRequest.Order do
   field :DESCENDING, 1
 end
 
-defmodule CacheClient.GetRequest do
+defmodule Momento.Protos.CacheClient.GetRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -215,7 +215,7 @@ defmodule CacheClient.GetRequest do
   field :cache_key, 1, type: :bytes, json_name: "cacheKey"
 end
 
-defmodule CacheClient.GetResponse do
+defmodule Momento.Protos.CacheClient.GetResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -280,12 +280,12 @@ defmodule CacheClient.GetResponse do
     }
   end
 
-  field :result, 1, type: CacheClient.ECacheResult, enum: true
+  field :result, 1, type: Momento.Protos.CacheClient.ECacheResult, enum: true
   field :cache_body, 2, type: :bytes, json_name: "cacheBody"
   field :message, 3, type: :string
 end
 
-defmodule CacheClient.DeleteRequest do
+defmodule Momento.Protos.CacheClient.DeleteRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -325,7 +325,7 @@ defmodule CacheClient.DeleteRequest do
   field :cache_key, 1, type: :bytes, json_name: "cacheKey"
 end
 
-defmodule CacheClient.DeleteResponse do
+defmodule Momento.Protos.CacheClient.DeleteResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -348,7 +348,7 @@ defmodule CacheClient.DeleteResponse do
   end
 end
 
-defmodule CacheClient.SetRequest do
+defmodule Momento.Protos.CacheClient.SetRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -418,7 +418,7 @@ defmodule CacheClient.SetRequest do
   field :ttl_milliseconds, 3, type: :uint64, json_name: "ttlMilliseconds"
 end
 
-defmodule CacheClient.SetResponse do
+defmodule Momento.Protos.CacheClient.SetResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -469,11 +469,11 @@ defmodule CacheClient.SetResponse do
     }
   end
 
-  field :result, 1, type: CacheClient.ECacheResult, enum: true
+  field :result, 1, type: Momento.Protos.CacheClient.ECacheResult, enum: true
   field :message, 2, type: :string
 end
 
-defmodule CacheClient.SetIfNotExistsRequest do
+defmodule Momento.Protos.CacheClient.SetIfNotExistsRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -543,7 +543,7 @@ defmodule CacheClient.SetIfNotExistsRequest do
   field :ttl_milliseconds, 3, type: :uint64, json_name: "ttlMilliseconds"
 end
 
-defmodule CacheClient.SetIfNotExistsResponse.Stored do
+defmodule Momento.Protos.CacheClient.SetIfNotExistsResponse.Stored do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -566,7 +566,7 @@ defmodule CacheClient.SetIfNotExistsResponse.Stored do
   end
 end
 
-defmodule CacheClient.SetIfNotExistsResponse.NotStored do
+defmodule Momento.Protos.CacheClient.SetIfNotExistsResponse.NotStored do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -589,7 +589,7 @@ defmodule CacheClient.SetIfNotExistsResponse.NotStored do
   end
 end
 
-defmodule CacheClient.SetIfNotExistsResponse do
+defmodule Momento.Protos.CacheClient.SetIfNotExistsResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -675,15 +675,15 @@ defmodule CacheClient.SetIfNotExistsResponse do
 
   oneof :result, 0
 
-  field :stored, 1, type: CacheClient.SetIfNotExistsResponse.Stored, oneof: 0
+  field :stored, 1, type: Momento.Protos.CacheClient.SetIfNotExistsResponse.Stored, oneof: 0
 
   field :not_stored, 2,
-    type: CacheClient.SetIfNotExistsResponse.NotStored,
+    type: Momento.Protos.CacheClient.SetIfNotExistsResponse.NotStored,
     json_name: "notStored",
     oneof: 0
 end
 
-defmodule CacheClient.KeysExistRequest do
+defmodule Momento.Protos.CacheClient.KeysExistRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -723,7 +723,7 @@ defmodule CacheClient.KeysExistRequest do
   field :cache_keys, 1, repeated: true, type: :bytes, json_name: "cacheKeys"
 end
 
-defmodule CacheClient.KeysExistResponse do
+defmodule Momento.Protos.CacheClient.KeysExistResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -763,7 +763,7 @@ defmodule CacheClient.KeysExistResponse do
   field :exists, 1, repeated: true, type: :bool
 end
 
-defmodule CacheClient.IncrementRequest do
+defmodule Momento.Protos.CacheClient.IncrementRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -833,7 +833,7 @@ defmodule CacheClient.IncrementRequest do
   field :ttl_milliseconds, 3, type: :uint64, json_name: "ttlMilliseconds"
 end
 
-defmodule CacheClient.IncrementResponse do
+defmodule Momento.Protos.CacheClient.IncrementResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -873,7 +873,7 @@ defmodule CacheClient.IncrementResponse do
   field :value, 1, type: :int64
 end
 
-defmodule CacheClient.UpdateTtlRequest do
+defmodule Momento.Protos.CacheClient.UpdateTtlRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -970,7 +970,7 @@ defmodule CacheClient.UpdateTtlRequest do
     oneof: 0
 end
 
-defmodule CacheClient.UpdateTtlResponse.Set do
+defmodule Momento.Protos.CacheClient.UpdateTtlResponse.Set do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -993,7 +993,7 @@ defmodule CacheClient.UpdateTtlResponse.Set do
   end
 end
 
-defmodule CacheClient.UpdateTtlResponse.NotSet do
+defmodule Momento.Protos.CacheClient.UpdateTtlResponse.NotSet do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -1016,7 +1016,7 @@ defmodule CacheClient.UpdateTtlResponse.NotSet do
   end
 end
 
-defmodule CacheClient.UpdateTtlResponse.Missing do
+defmodule Momento.Protos.CacheClient.UpdateTtlResponse.Missing do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -1039,7 +1039,7 @@ defmodule CacheClient.UpdateTtlResponse.Missing do
   end
 end
 
-defmodule CacheClient.UpdateTtlResponse do
+defmodule Momento.Protos.CacheClient.UpdateTtlResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -1152,12 +1152,17 @@ defmodule CacheClient.UpdateTtlResponse do
 
   oneof :result, 0
 
-  field :set, 1, type: CacheClient.UpdateTtlResponse.Set, oneof: 0
-  field :not_set, 2, type: CacheClient.UpdateTtlResponse.NotSet, json_name: "notSet", oneof: 0
-  field :missing, 3, type: CacheClient.UpdateTtlResponse.Missing, oneof: 0
+  field :set, 1, type: Momento.Protos.CacheClient.UpdateTtlResponse.Set, oneof: 0
+
+  field :not_set, 2,
+    type: Momento.Protos.CacheClient.UpdateTtlResponse.NotSet,
+    json_name: "notSet",
+    oneof: 0
+
+  field :missing, 3, type: Momento.Protos.CacheClient.UpdateTtlResponse.Missing, oneof: 0
 end
 
-defmodule CacheClient.ItemGetTtlRequest do
+defmodule Momento.Protos.CacheClient.ItemGetTtlRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -1197,7 +1202,7 @@ defmodule CacheClient.ItemGetTtlRequest do
   field :cache_key, 1, type: :bytes, json_name: "cacheKey"
 end
 
-defmodule CacheClient.ItemGetTtlResponse.Found do
+defmodule Momento.Protos.CacheClient.ItemGetTtlResponse.Found do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -1237,7 +1242,7 @@ defmodule CacheClient.ItemGetTtlResponse.Found do
   field :remaining_ttl_millis, 1, type: :uint64, json_name: "remainingTtlMillis"
 end
 
-defmodule CacheClient.ItemGetTtlResponse.Missing do
+defmodule Momento.Protos.CacheClient.ItemGetTtlResponse.Missing do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -1260,7 +1265,7 @@ defmodule CacheClient.ItemGetTtlResponse.Missing do
   end
 end
 
-defmodule CacheClient.ItemGetTtlResponse do
+defmodule Momento.Protos.CacheClient.ItemGetTtlResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -1361,11 +1366,11 @@ defmodule CacheClient.ItemGetTtlResponse do
 
   oneof :result, 0
 
-  field :found, 1, type: CacheClient.ItemGetTtlResponse.Found, oneof: 0
-  field :missing, 2, type: CacheClient.ItemGetTtlResponse.Missing, oneof: 0
+  field :found, 1, type: Momento.Protos.CacheClient.ItemGetTtlResponse.Found, oneof: 0
+  field :missing, 2, type: Momento.Protos.CacheClient.ItemGetTtlResponse.Missing, oneof: 0
 end
 
-defmodule CacheClient.ItemGetTypeRequest do
+defmodule Momento.Protos.CacheClient.ItemGetTypeRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -1405,7 +1410,7 @@ defmodule CacheClient.ItemGetTypeRequest do
   field :cache_key, 1, type: :bytes, json_name: "cacheKey"
 end
 
-defmodule CacheClient.ItemGetTypeResponse.Found do
+defmodule Momento.Protos.CacheClient.ItemGetTypeResponse.Found do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -1443,12 +1448,12 @@ defmodule CacheClient.ItemGetTypeResponse.Found do
   end
 
   field :item_type, 1,
-    type: CacheClient.ItemGetTypeResponse.ItemType,
+    type: Momento.Protos.CacheClient.ItemGetTypeResponse.ItemType,
     json_name: "itemType",
     enum: true
 end
 
-defmodule CacheClient.ItemGetTypeResponse.Missing do
+defmodule Momento.Protos.CacheClient.ItemGetTypeResponse.Missing do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -1471,7 +1476,7 @@ defmodule CacheClient.ItemGetTypeResponse.Missing do
   end
 end
 
-defmodule CacheClient.ItemGetTypeResponse do
+defmodule Momento.Protos.CacheClient.ItemGetTypeResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -1612,11 +1617,11 @@ defmodule CacheClient.ItemGetTypeResponse do
 
   oneof :result, 0
 
-  field :found, 1, type: CacheClient.ItemGetTypeResponse.Found, oneof: 0
-  field :missing, 2, type: CacheClient.ItemGetTypeResponse.Missing, oneof: 0
+  field :found, 1, type: Momento.Protos.CacheClient.ItemGetTypeResponse.Found, oneof: 0
+  field :missing, 2, type: Momento.Protos.CacheClient.ItemGetTypeResponse.Missing, oneof: 0
 end
 
-defmodule CacheClient.DictionaryGetRequest do
+defmodule Momento.Protos.CacheClient.DictionaryGetRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -1671,7 +1676,7 @@ defmodule CacheClient.DictionaryGetRequest do
   field :fields, 2, repeated: true, type: :bytes
 end
 
-defmodule CacheClient.DictionaryGetResponse.DictionaryGetResponsePart do
+defmodule Momento.Protos.CacheClient.DictionaryGetResponse.DictionaryGetResponsePart do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -1722,11 +1727,11 @@ defmodule CacheClient.DictionaryGetResponse.DictionaryGetResponsePart do
     }
   end
 
-  field :result, 1, type: CacheClient.ECacheResult, enum: true
+  field :result, 1, type: Momento.Protos.CacheClient.ECacheResult, enum: true
   field :cache_body, 2, type: :bytes, json_name: "cacheBody"
 end
 
-defmodule CacheClient.DictionaryGetResponse.Found do
+defmodule Momento.Protos.CacheClient.DictionaryGetResponse.Found do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -1765,10 +1770,10 @@ defmodule CacheClient.DictionaryGetResponse.Found do
 
   field :items, 1,
     repeated: true,
-    type: CacheClient.DictionaryGetResponse.DictionaryGetResponsePart
+    type: Momento.Protos.CacheClient.DictionaryGetResponse.DictionaryGetResponsePart
 end
 
-defmodule CacheClient.DictionaryGetResponse.Missing do
+defmodule Momento.Protos.CacheClient.DictionaryGetResponse.Missing do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -1791,7 +1796,7 @@ defmodule CacheClient.DictionaryGetResponse.Missing do
   end
 end
 
-defmodule CacheClient.DictionaryGetResponse do
+defmodule Momento.Protos.CacheClient.DictionaryGetResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -1934,11 +1939,11 @@ defmodule CacheClient.DictionaryGetResponse do
 
   oneof :dictionary, 0
 
-  field :found, 1, type: CacheClient.DictionaryGetResponse.Found, oneof: 0
-  field :missing, 2, type: CacheClient.DictionaryGetResponse.Missing, oneof: 0
+  field :found, 1, type: Momento.Protos.CacheClient.DictionaryGetResponse.Found, oneof: 0
+  field :missing, 2, type: Momento.Protos.CacheClient.DictionaryGetResponse.Missing, oneof: 0
 end
 
-defmodule CacheClient.DictionaryFetchRequest do
+defmodule Momento.Protos.CacheClient.DictionaryFetchRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -1978,7 +1983,7 @@ defmodule CacheClient.DictionaryFetchRequest do
   field :dictionary_name, 1, type: :bytes, json_name: "dictionaryName"
 end
 
-defmodule CacheClient.DictionaryFieldValuePair do
+defmodule Momento.Protos.CacheClient.DictionaryFieldValuePair do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -2033,7 +2038,7 @@ defmodule CacheClient.DictionaryFieldValuePair do
   field :value, 2, type: :bytes
 end
 
-defmodule CacheClient.DictionaryFetchResponse.Found do
+defmodule Momento.Protos.CacheClient.DictionaryFetchResponse.Found do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -2070,10 +2075,10 @@ defmodule CacheClient.DictionaryFetchResponse.Found do
     }
   end
 
-  field :items, 1, repeated: true, type: CacheClient.DictionaryFieldValuePair
+  field :items, 1, repeated: true, type: Momento.Protos.CacheClient.DictionaryFieldValuePair
 end
 
-defmodule CacheClient.DictionaryFetchResponse.Missing do
+defmodule Momento.Protos.CacheClient.DictionaryFetchResponse.Missing do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -2096,7 +2101,7 @@ defmodule CacheClient.DictionaryFetchResponse.Missing do
   end
 end
 
-defmodule CacheClient.DictionaryFetchResponse do
+defmodule Momento.Protos.CacheClient.DictionaryFetchResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -2197,11 +2202,11 @@ defmodule CacheClient.DictionaryFetchResponse do
 
   oneof :dictionary, 0
 
-  field :found, 1, type: CacheClient.DictionaryFetchResponse.Found, oneof: 0
-  field :missing, 2, type: CacheClient.DictionaryFetchResponse.Missing, oneof: 0
+  field :found, 1, type: Momento.Protos.CacheClient.DictionaryFetchResponse.Found, oneof: 0
+  field :missing, 2, type: Momento.Protos.CacheClient.DictionaryFetchResponse.Missing, oneof: 0
 end
 
-defmodule CacheClient.DictionarySetRequest do
+defmodule Momento.Protos.CacheClient.DictionarySetRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -2281,12 +2286,12 @@ defmodule CacheClient.DictionarySetRequest do
   end
 
   field :dictionary_name, 1, type: :bytes, json_name: "dictionaryName"
-  field :items, 2, repeated: true, type: CacheClient.DictionaryFieldValuePair
+  field :items, 2, repeated: true, type: Momento.Protos.CacheClient.DictionaryFieldValuePair
   field :ttl_milliseconds, 3, type: :uint64, json_name: "ttlMilliseconds"
   field :refresh_ttl, 4, type: :bool, json_name: "refreshTtl"
 end
 
-defmodule CacheClient.DictionarySetResponse do
+defmodule Momento.Protos.CacheClient.DictionarySetResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -2309,7 +2314,7 @@ defmodule CacheClient.DictionarySetResponse do
   end
 end
 
-defmodule CacheClient.DictionaryIncrementRequest do
+defmodule Momento.Protos.CacheClient.DictionaryIncrementRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -2409,7 +2414,7 @@ defmodule CacheClient.DictionaryIncrementRequest do
   field :refresh_ttl, 5, type: :bool, json_name: "refreshTtl"
 end
 
-defmodule CacheClient.DictionaryIncrementResponse do
+defmodule Momento.Protos.CacheClient.DictionaryIncrementResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -2449,7 +2454,7 @@ defmodule CacheClient.DictionaryIncrementResponse do
   field :value, 1, type: :int64
 end
 
-defmodule CacheClient.DictionaryDeleteRequest.Some do
+defmodule Momento.Protos.CacheClient.DictionaryDeleteRequest.Some do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -2489,7 +2494,7 @@ defmodule CacheClient.DictionaryDeleteRequest.Some do
   field :fields, 1, repeated: true, type: :bytes
 end
 
-defmodule CacheClient.DictionaryDeleteRequest.All do
+defmodule Momento.Protos.CacheClient.DictionaryDeleteRequest.All do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -2512,7 +2517,7 @@ defmodule CacheClient.DictionaryDeleteRequest.All do
   end
 end
 
-defmodule CacheClient.DictionaryDeleteRequest do
+defmodule Momento.Protos.CacheClient.DictionaryDeleteRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -2628,11 +2633,11 @@ defmodule CacheClient.DictionaryDeleteRequest do
   oneof :delete, 0
 
   field :dictionary_name, 1, type: :bytes, json_name: "dictionaryName"
-  field :some, 2, type: CacheClient.DictionaryDeleteRequest.Some, oneof: 0
-  field :all, 3, type: CacheClient.DictionaryDeleteRequest.All, oneof: 0
+  field :some, 2, type: Momento.Protos.CacheClient.DictionaryDeleteRequest.Some, oneof: 0
+  field :all, 3, type: Momento.Protos.CacheClient.DictionaryDeleteRequest.All, oneof: 0
 end
 
-defmodule CacheClient.DictionaryDeleteResponse do
+defmodule Momento.Protos.CacheClient.DictionaryDeleteResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -2655,7 +2660,7 @@ defmodule CacheClient.DictionaryDeleteResponse do
   end
 end
 
-defmodule CacheClient.DictionaryLengthRequest do
+defmodule Momento.Protos.CacheClient.DictionaryLengthRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -2695,7 +2700,7 @@ defmodule CacheClient.DictionaryLengthRequest do
   field :dictionary_name, 1, type: :bytes, json_name: "dictionaryName"
 end
 
-defmodule CacheClient.DictionaryLengthResponse.Found do
+defmodule Momento.Protos.CacheClient.DictionaryLengthResponse.Found do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -2735,7 +2740,7 @@ defmodule CacheClient.DictionaryLengthResponse.Found do
   field :length, 1, type: :uint32
 end
 
-defmodule CacheClient.DictionaryLengthResponse.Missing do
+defmodule Momento.Protos.CacheClient.DictionaryLengthResponse.Missing do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -2758,7 +2763,7 @@ defmodule CacheClient.DictionaryLengthResponse.Missing do
   end
 end
 
-defmodule CacheClient.DictionaryLengthResponse do
+defmodule Momento.Protos.CacheClient.DictionaryLengthResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -2859,11 +2864,11 @@ defmodule CacheClient.DictionaryLengthResponse do
 
   oneof :dictionary, 0
 
-  field :found, 1, type: CacheClient.DictionaryLengthResponse.Found, oneof: 0
-  field :missing, 2, type: CacheClient.DictionaryLengthResponse.Missing, oneof: 0
+  field :found, 1, type: Momento.Protos.CacheClient.DictionaryLengthResponse.Found, oneof: 0
+  field :missing, 2, type: Momento.Protos.CacheClient.DictionaryLengthResponse.Missing, oneof: 0
 end
 
-defmodule CacheClient.SetFetchRequest do
+defmodule Momento.Protos.CacheClient.SetFetchRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -2903,7 +2908,7 @@ defmodule CacheClient.SetFetchRequest do
   field :set_name, 1, type: :bytes, json_name: "setName"
 end
 
-defmodule CacheClient.SetFetchResponse.Found do
+defmodule Momento.Protos.CacheClient.SetFetchResponse.Found do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -2943,7 +2948,7 @@ defmodule CacheClient.SetFetchResponse.Found do
   field :elements, 1, repeated: true, type: :bytes
 end
 
-defmodule CacheClient.SetFetchResponse.Missing do
+defmodule Momento.Protos.CacheClient.SetFetchResponse.Missing do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -2966,7 +2971,7 @@ defmodule CacheClient.SetFetchResponse.Missing do
   end
 end
 
-defmodule CacheClient.SetFetchResponse do
+defmodule Momento.Protos.CacheClient.SetFetchResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -3063,11 +3068,11 @@ defmodule CacheClient.SetFetchResponse do
 
   oneof :set, 0
 
-  field :found, 1, type: CacheClient.SetFetchResponse.Found, oneof: 0
-  field :missing, 2, type: CacheClient.SetFetchResponse.Missing, oneof: 0
+  field :found, 1, type: Momento.Protos.CacheClient.SetFetchResponse.Found, oneof: 0
+  field :missing, 2, type: Momento.Protos.CacheClient.SetFetchResponse.Missing, oneof: 0
 end
 
-defmodule CacheClient.SetUnionRequest do
+defmodule Momento.Protos.CacheClient.SetUnionRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -3152,7 +3157,7 @@ defmodule CacheClient.SetUnionRequest do
   field :refresh_ttl, 4, type: :bool, json_name: "refreshTtl"
 end
 
-defmodule CacheClient.SetUnionResponse do
+defmodule Momento.Protos.CacheClient.SetUnionResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -3175,7 +3180,7 @@ defmodule CacheClient.SetUnionResponse do
   end
 end
 
-defmodule CacheClient.SetDifferenceRequest.Minuend do
+defmodule Momento.Protos.CacheClient.SetDifferenceRequest.Minuend do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -3215,7 +3220,7 @@ defmodule CacheClient.SetDifferenceRequest.Minuend do
   field :elements, 1, repeated: true, type: :bytes
 end
 
-defmodule CacheClient.SetDifferenceRequest.Subtrahend.Set do
+defmodule Momento.Protos.CacheClient.SetDifferenceRequest.Subtrahend.Set do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -3255,7 +3260,7 @@ defmodule CacheClient.SetDifferenceRequest.Subtrahend.Set do
   field :elements, 1, repeated: true, type: :bytes
 end
 
-defmodule CacheClient.SetDifferenceRequest.Subtrahend.Identity do
+defmodule Momento.Protos.CacheClient.SetDifferenceRequest.Subtrahend.Identity do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -3278,7 +3283,7 @@ defmodule CacheClient.SetDifferenceRequest.Subtrahend.Identity do
   end
 end
 
-defmodule CacheClient.SetDifferenceRequest.Subtrahend do
+defmodule Momento.Protos.CacheClient.SetDifferenceRequest.Subtrahend do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -3379,11 +3384,14 @@ defmodule CacheClient.SetDifferenceRequest.Subtrahend do
 
   oneof :subtrahend_set, 0
 
-  field :set, 1, type: CacheClient.SetDifferenceRequest.Subtrahend.Set, oneof: 0
-  field :identity, 2, type: CacheClient.SetDifferenceRequest.Subtrahend.Identity, oneof: 0
+  field :set, 1, type: Momento.Protos.CacheClient.SetDifferenceRequest.Subtrahend.Set, oneof: 0
+
+  field :identity, 2,
+    type: Momento.Protos.CacheClient.SetDifferenceRequest.Subtrahend.Identity,
+    oneof: 0
 end
 
-defmodule CacheClient.SetDifferenceRequest do
+defmodule Momento.Protos.CacheClient.SetDifferenceRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -3576,11 +3584,11 @@ defmodule CacheClient.SetDifferenceRequest do
   oneof :difference, 0
 
   field :set_name, 1, type: :bytes, json_name: "setName"
-  field :minuend, 2, type: CacheClient.SetDifferenceRequest.Minuend, oneof: 0
-  field :subtrahend, 3, type: CacheClient.SetDifferenceRequest.Subtrahend, oneof: 0
+  field :minuend, 2, type: Momento.Protos.CacheClient.SetDifferenceRequest.Minuend, oneof: 0
+  field :subtrahend, 3, type: Momento.Protos.CacheClient.SetDifferenceRequest.Subtrahend, oneof: 0
 end
 
-defmodule CacheClient.SetDifferenceResponse.Found do
+defmodule Momento.Protos.CacheClient.SetDifferenceResponse.Found do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -3603,7 +3611,7 @@ defmodule CacheClient.SetDifferenceResponse.Found do
   end
 end
 
-defmodule CacheClient.SetDifferenceResponse.Missing do
+defmodule Momento.Protos.CacheClient.SetDifferenceResponse.Missing do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -3626,7 +3634,7 @@ defmodule CacheClient.SetDifferenceResponse.Missing do
   end
 end
 
-defmodule CacheClient.SetDifferenceResponse do
+defmodule Momento.Protos.CacheClient.SetDifferenceResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -3708,11 +3716,11 @@ defmodule CacheClient.SetDifferenceResponse do
 
   oneof :set, 0
 
-  field :found, 1, type: CacheClient.SetDifferenceResponse.Found, oneof: 0
-  field :missing, 2, type: CacheClient.SetDifferenceResponse.Missing, oneof: 0
+  field :found, 1, type: Momento.Protos.CacheClient.SetDifferenceResponse.Found, oneof: 0
+  field :missing, 2, type: Momento.Protos.CacheClient.SetDifferenceResponse.Missing, oneof: 0
 end
 
-defmodule CacheClient.SetContainsRequest do
+defmodule Momento.Protos.CacheClient.SetContainsRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -3767,7 +3775,7 @@ defmodule CacheClient.SetContainsRequest do
   field :elements, 2, repeated: true, type: :bytes
 end
 
-defmodule CacheClient.SetContainsResponse.Found do
+defmodule Momento.Protos.CacheClient.SetContainsResponse.Found do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -3807,7 +3815,7 @@ defmodule CacheClient.SetContainsResponse.Found do
   field :contains, 1, repeated: true, type: :bool
 end
 
-defmodule CacheClient.SetContainsResponse.Missing do
+defmodule Momento.Protos.CacheClient.SetContainsResponse.Missing do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -3830,7 +3838,7 @@ defmodule CacheClient.SetContainsResponse.Missing do
   end
 end
 
-defmodule CacheClient.SetContainsResponse do
+defmodule Momento.Protos.CacheClient.SetContainsResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -3927,11 +3935,11 @@ defmodule CacheClient.SetContainsResponse do
 
   oneof :set, 0
 
-  field :found, 1, type: CacheClient.SetContainsResponse.Found, oneof: 0
-  field :missing, 2, type: CacheClient.SetContainsResponse.Missing, oneof: 0
+  field :found, 1, type: Momento.Protos.CacheClient.SetContainsResponse.Found, oneof: 0
+  field :missing, 2, type: Momento.Protos.CacheClient.SetContainsResponse.Missing, oneof: 0
 end
 
-defmodule CacheClient.SetLengthRequest do
+defmodule Momento.Protos.CacheClient.SetLengthRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -3971,7 +3979,7 @@ defmodule CacheClient.SetLengthRequest do
   field :set_name, 1, type: :bytes, json_name: "setName"
 end
 
-defmodule CacheClient.SetLengthResponse.Found do
+defmodule Momento.Protos.CacheClient.SetLengthResponse.Found do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -4011,7 +4019,7 @@ defmodule CacheClient.SetLengthResponse.Found do
   field :length, 1, type: :uint32
 end
 
-defmodule CacheClient.SetLengthResponse.Missing do
+defmodule Momento.Protos.CacheClient.SetLengthResponse.Missing do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -4034,7 +4042,7 @@ defmodule CacheClient.SetLengthResponse.Missing do
   end
 end
 
-defmodule CacheClient.SetLengthResponse do
+defmodule Momento.Protos.CacheClient.SetLengthResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -4131,11 +4139,11 @@ defmodule CacheClient.SetLengthResponse do
 
   oneof :set, 0
 
-  field :found, 1, type: CacheClient.SetLengthResponse.Found, oneof: 0
-  field :missing, 2, type: CacheClient.SetLengthResponse.Missing, oneof: 0
+  field :found, 1, type: Momento.Protos.CacheClient.SetLengthResponse.Found, oneof: 0
+  field :missing, 2, type: Momento.Protos.CacheClient.SetLengthResponse.Missing, oneof: 0
 end
 
-defmodule CacheClient.ListConcatenateFrontRequest do
+defmodule Momento.Protos.CacheClient.ListConcatenateFrontRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -4235,7 +4243,7 @@ defmodule CacheClient.ListConcatenateFrontRequest do
   field :truncate_back_to_size, 5, type: :uint32, json_name: "truncateBackToSize"
 end
 
-defmodule CacheClient.ListConcatenateFrontResponse do
+defmodule Momento.Protos.CacheClient.ListConcatenateFrontResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -4275,7 +4283,7 @@ defmodule CacheClient.ListConcatenateFrontResponse do
   field :list_length, 1, type: :uint32, json_name: "listLength"
 end
 
-defmodule CacheClient.ListConcatenateBackRequest do
+defmodule Momento.Protos.CacheClient.ListConcatenateBackRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -4375,7 +4383,7 @@ defmodule CacheClient.ListConcatenateBackRequest do
   field :truncate_front_to_size, 5, type: :uint32, json_name: "truncateFrontToSize"
 end
 
-defmodule CacheClient.ListConcatenateBackResponse do
+defmodule Momento.Protos.CacheClient.ListConcatenateBackResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -4415,7 +4423,7 @@ defmodule CacheClient.ListConcatenateBackResponse do
   field :list_length, 1, type: :uint32, json_name: "listLength"
 end
 
-defmodule CacheClient.ListPushFrontRequest do
+defmodule Momento.Protos.CacheClient.ListPushFrontRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -4515,7 +4523,7 @@ defmodule CacheClient.ListPushFrontRequest do
   field :truncate_back_to_size, 5, type: :uint32, json_name: "truncateBackToSize"
 end
 
-defmodule CacheClient.ListPushFrontResponse do
+defmodule Momento.Protos.CacheClient.ListPushFrontResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -4555,7 +4563,7 @@ defmodule CacheClient.ListPushFrontResponse do
   field :list_length, 1, type: :uint32, json_name: "listLength"
 end
 
-defmodule CacheClient.ListPushBackRequest do
+defmodule Momento.Protos.CacheClient.ListPushBackRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -4655,7 +4663,7 @@ defmodule CacheClient.ListPushBackRequest do
   field :truncate_front_to_size, 5, type: :uint32, json_name: "truncateFrontToSize"
 end
 
-defmodule CacheClient.ListPushBackResponse do
+defmodule Momento.Protos.CacheClient.ListPushBackResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -4695,7 +4703,7 @@ defmodule CacheClient.ListPushBackResponse do
   field :list_length, 1, type: :uint32, json_name: "listLength"
 end
 
-defmodule CacheClient.ListPopFrontRequest do
+defmodule Momento.Protos.CacheClient.ListPopFrontRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -4735,7 +4743,7 @@ defmodule CacheClient.ListPopFrontRequest do
   field :list_name, 1, type: :bytes, json_name: "listName"
 end
 
-defmodule CacheClient.ListPopFrontResponse.Found do
+defmodule Momento.Protos.CacheClient.ListPopFrontResponse.Found do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -4790,7 +4798,7 @@ defmodule CacheClient.ListPopFrontResponse.Found do
   field :list_length, 2, type: :uint32, json_name: "listLength"
 end
 
-defmodule CacheClient.ListPopFrontResponse.Missing do
+defmodule Momento.Protos.CacheClient.ListPopFrontResponse.Missing do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -4813,7 +4821,7 @@ defmodule CacheClient.ListPopFrontResponse.Missing do
   end
 end
 
-defmodule CacheClient.ListPopFrontResponse do
+defmodule Momento.Protos.CacheClient.ListPopFrontResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -4924,11 +4932,11 @@ defmodule CacheClient.ListPopFrontResponse do
 
   oneof :list, 0
 
-  field :found, 1, type: CacheClient.ListPopFrontResponse.Found, oneof: 0
-  field :missing, 2, type: CacheClient.ListPopFrontResponse.Missing, oneof: 0
+  field :found, 1, type: Momento.Protos.CacheClient.ListPopFrontResponse.Found, oneof: 0
+  field :missing, 2, type: Momento.Protos.CacheClient.ListPopFrontResponse.Missing, oneof: 0
 end
 
-defmodule CacheClient.ListPopBackRequest do
+defmodule Momento.Protos.CacheClient.ListPopBackRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -4968,7 +4976,7 @@ defmodule CacheClient.ListPopBackRequest do
   field :list_name, 1, type: :bytes, json_name: "listName"
 end
 
-defmodule CacheClient.ListPopBackResponse.Found do
+defmodule Momento.Protos.CacheClient.ListPopBackResponse.Found do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -5023,7 +5031,7 @@ defmodule CacheClient.ListPopBackResponse.Found do
   field :list_length, 2, type: :uint32, json_name: "listLength"
 end
 
-defmodule CacheClient.ListPopBackResponse.Missing do
+defmodule Momento.Protos.CacheClient.ListPopBackResponse.Missing do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -5046,7 +5054,7 @@ defmodule CacheClient.ListPopBackResponse.Missing do
   end
 end
 
-defmodule CacheClient.ListPopBackResponse do
+defmodule Momento.Protos.CacheClient.ListPopBackResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -5157,11 +5165,11 @@ defmodule CacheClient.ListPopBackResponse do
 
   oneof :list, 0
 
-  field :found, 1, type: CacheClient.ListPopBackResponse.Found, oneof: 0
-  field :missing, 2, type: CacheClient.ListPopBackResponse.Missing, oneof: 0
+  field :found, 1, type: Momento.Protos.CacheClient.ListPopBackResponse.Found, oneof: 0
+  field :missing, 2, type: Momento.Protos.CacheClient.ListPopBackResponse.Missing, oneof: 0
 end
 
-defmodule CacheClient.ListRange do
+defmodule Momento.Protos.CacheClient.ListRange do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -5216,7 +5224,7 @@ defmodule CacheClient.ListRange do
   field :count, 2, type: :uint32
 end
 
-defmodule CacheClient.ListEraseRequest.All do
+defmodule Momento.Protos.CacheClient.ListEraseRequest.All do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -5239,7 +5247,7 @@ defmodule CacheClient.ListEraseRequest.All do
   end
 end
 
-defmodule CacheClient.ListEraseRequest.ListRanges do
+defmodule Momento.Protos.CacheClient.ListEraseRequest.ListRanges do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -5276,10 +5284,10 @@ defmodule CacheClient.ListEraseRequest.ListRanges do
     }
   end
 
-  field :ranges, 1, repeated: true, type: CacheClient.ListRange
+  field :ranges, 1, repeated: true, type: Momento.Protos.CacheClient.ListRange
 end
 
-defmodule CacheClient.ListEraseRequest do
+defmodule Momento.Protos.CacheClient.ListEraseRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -5391,11 +5399,11 @@ defmodule CacheClient.ListEraseRequest do
   oneof :erase, 0
 
   field :list_name, 1, type: :bytes, json_name: "listName"
-  field :some, 2, type: CacheClient.ListEraseRequest.ListRanges, oneof: 0
-  field :all, 3, type: CacheClient.ListEraseRequest.All, oneof: 0
+  field :some, 2, type: Momento.Protos.CacheClient.ListEraseRequest.ListRanges, oneof: 0
+  field :all, 3, type: Momento.Protos.CacheClient.ListEraseRequest.All, oneof: 0
 end
 
-defmodule CacheClient.ListEraseResponse.Found do
+defmodule Momento.Protos.CacheClient.ListEraseResponse.Found do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -5435,7 +5443,7 @@ defmodule CacheClient.ListEraseResponse.Found do
   field :list_length, 1, type: :uint32, json_name: "listLength"
 end
 
-defmodule CacheClient.ListEraseResponse.Missing do
+defmodule Momento.Protos.CacheClient.ListEraseResponse.Missing do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -5458,7 +5466,7 @@ defmodule CacheClient.ListEraseResponse.Missing do
   end
 end
 
-defmodule CacheClient.ListEraseResponse do
+defmodule Momento.Protos.CacheClient.ListEraseResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -5555,11 +5563,11 @@ defmodule CacheClient.ListEraseResponse do
 
   oneof :list, 0
 
-  field :found, 1, type: CacheClient.ListEraseResponse.Found, oneof: 0
-  field :missing, 2, type: CacheClient.ListEraseResponse.Missing, oneof: 0
+  field :found, 1, type: Momento.Protos.CacheClient.ListEraseResponse.Found, oneof: 0
+  field :missing, 2, type: Momento.Protos.CacheClient.ListEraseResponse.Missing, oneof: 0
 end
 
-defmodule CacheClient.ListRemoveRequest do
+defmodule Momento.Protos.CacheClient.ListRemoveRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -5622,7 +5630,7 @@ defmodule CacheClient.ListRemoveRequest do
   field :all_elements_with_value, 2, type: :bytes, json_name: "allElementsWithValue", oneof: 0
 end
 
-defmodule CacheClient.ListRemoveResponse.Found do
+defmodule Momento.Protos.CacheClient.ListRemoveResponse.Found do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -5662,7 +5670,7 @@ defmodule CacheClient.ListRemoveResponse.Found do
   field :list_length, 1, type: :uint32, json_name: "listLength"
 end
 
-defmodule CacheClient.ListRemoveResponse.Missing do
+defmodule Momento.Protos.CacheClient.ListRemoveResponse.Missing do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -5685,7 +5693,7 @@ defmodule CacheClient.ListRemoveResponse.Missing do
   end
 end
 
-defmodule CacheClient.ListRemoveResponse do
+defmodule Momento.Protos.CacheClient.ListRemoveResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -5782,11 +5790,11 @@ defmodule CacheClient.ListRemoveResponse do
 
   oneof :list, 0
 
-  field :found, 1, type: CacheClient.ListRemoveResponse.Found, oneof: 0
-  field :missing, 2, type: CacheClient.ListRemoveResponse.Missing, oneof: 0
+  field :found, 1, type: Momento.Protos.CacheClient.ListRemoveResponse.Found, oneof: 0
+  field :missing, 2, type: Momento.Protos.CacheClient.ListRemoveResponse.Missing, oneof: 0
 end
 
-defmodule CacheClient.Unbounded do
+defmodule Momento.Protos.CacheClient.Unbounded do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -5809,7 +5817,7 @@ defmodule CacheClient.Unbounded do
   end
 end
 
-defmodule CacheClient.ListFetchRequest do
+defmodule Momento.Protos.CacheClient.ListFetchRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -5918,13 +5926,23 @@ defmodule CacheClient.ListFetchRequest do
   oneof :end_index, 1
 
   field :list_name, 1, type: :bytes, json_name: "listName"
-  field :unbounded_start, 2, type: CacheClient.Unbounded, json_name: "unboundedStart", oneof: 0
+
+  field :unbounded_start, 2,
+    type: Momento.Protos.CacheClient.Unbounded,
+    json_name: "unboundedStart",
+    oneof: 0
+
   field :inclusive_start, 3, type: :sint32, json_name: "inclusiveStart", oneof: 0
-  field :unbounded_end, 4, type: CacheClient.Unbounded, json_name: "unboundedEnd", oneof: 1
+
+  field :unbounded_end, 4,
+    type: Momento.Protos.CacheClient.Unbounded,
+    json_name: "unboundedEnd",
+    oneof: 1
+
   field :exclusive_end, 5, type: :sint32, json_name: "exclusiveEnd", oneof: 1
 end
 
-defmodule CacheClient.ListRetainRequest do
+defmodule Momento.Protos.CacheClient.ListRetainRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -6061,15 +6079,25 @@ defmodule CacheClient.ListRetainRequest do
   oneof :end_index, 1
 
   field :list_name, 1, type: :bytes, json_name: "listName"
-  field :unbounded_start, 2, type: CacheClient.Unbounded, json_name: "unboundedStart", oneof: 0
+
+  field :unbounded_start, 2,
+    type: Momento.Protos.CacheClient.Unbounded,
+    json_name: "unboundedStart",
+    oneof: 0
+
   field :inclusive_start, 3, type: :sint32, json_name: "inclusiveStart", oneof: 0
-  field :unbounded_end, 4, type: CacheClient.Unbounded, json_name: "unboundedEnd", oneof: 1
+
+  field :unbounded_end, 4,
+    type: Momento.Protos.CacheClient.Unbounded,
+    json_name: "unboundedEnd",
+    oneof: 1
+
   field :exclusive_end, 5, type: :sint32, json_name: "exclusiveEnd", oneof: 1
   field :ttl_milliseconds, 6, type: :uint64, json_name: "ttlMilliseconds"
   field :refresh_ttl, 7, type: :bool, json_name: "refreshTtl"
 end
 
-defmodule CacheClient.ListRetainResponse.Found do
+defmodule Momento.Protos.CacheClient.ListRetainResponse.Found do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -6109,7 +6137,7 @@ defmodule CacheClient.ListRetainResponse.Found do
   field :list_length, 1, type: :uint32, json_name: "listLength"
 end
 
-defmodule CacheClient.ListRetainResponse.Missing do
+defmodule Momento.Protos.CacheClient.ListRetainResponse.Missing do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -6132,7 +6160,7 @@ defmodule CacheClient.ListRetainResponse.Missing do
   end
 end
 
-defmodule CacheClient.ListRetainResponse do
+defmodule Momento.Protos.CacheClient.ListRetainResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -6229,11 +6257,11 @@ defmodule CacheClient.ListRetainResponse do
 
   oneof :list, 0
 
-  field :found, 1, type: CacheClient.ListRetainResponse.Found, oneof: 0
-  field :missing, 2, type: CacheClient.ListRetainResponse.Missing, oneof: 0
+  field :found, 1, type: Momento.Protos.CacheClient.ListRetainResponse.Found, oneof: 0
+  field :missing, 2, type: Momento.Protos.CacheClient.ListRetainResponse.Missing, oneof: 0
 end
 
-defmodule CacheClient.ListFetchResponse.Found do
+defmodule Momento.Protos.CacheClient.ListFetchResponse.Found do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -6273,7 +6301,7 @@ defmodule CacheClient.ListFetchResponse.Found do
   field :values, 1, repeated: true, type: :bytes
 end
 
-defmodule CacheClient.ListFetchResponse.Missing do
+defmodule Momento.Protos.CacheClient.ListFetchResponse.Missing do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -6296,7 +6324,7 @@ defmodule CacheClient.ListFetchResponse.Missing do
   end
 end
 
-defmodule CacheClient.ListFetchResponse do
+defmodule Momento.Protos.CacheClient.ListFetchResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -6393,11 +6421,11 @@ defmodule CacheClient.ListFetchResponse do
 
   oneof :list, 0
 
-  field :found, 1, type: CacheClient.ListFetchResponse.Found, oneof: 0
-  field :missing, 2, type: CacheClient.ListFetchResponse.Missing, oneof: 0
+  field :found, 1, type: Momento.Protos.CacheClient.ListFetchResponse.Found, oneof: 0
+  field :missing, 2, type: Momento.Protos.CacheClient.ListFetchResponse.Missing, oneof: 0
 end
 
-defmodule CacheClient.ListLengthRequest do
+defmodule Momento.Protos.CacheClient.ListLengthRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -6437,7 +6465,7 @@ defmodule CacheClient.ListLengthRequest do
   field :list_name, 1, type: :bytes, json_name: "listName"
 end
 
-defmodule CacheClient.ListLengthResponse.Found do
+defmodule Momento.Protos.CacheClient.ListLengthResponse.Found do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -6477,7 +6505,7 @@ defmodule CacheClient.ListLengthResponse.Found do
   field :length, 1, type: :uint32
 end
 
-defmodule CacheClient.ListLengthResponse.Missing do
+defmodule Momento.Protos.CacheClient.ListLengthResponse.Missing do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -6500,7 +6528,7 @@ defmodule CacheClient.ListLengthResponse.Missing do
   end
 end
 
-defmodule CacheClient.ListLengthResponse do
+defmodule Momento.Protos.CacheClient.ListLengthResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -6597,11 +6625,11 @@ defmodule CacheClient.ListLengthResponse do
 
   oneof :list, 0
 
-  field :found, 1, type: CacheClient.ListLengthResponse.Found, oneof: 0
-  field :missing, 2, type: CacheClient.ListLengthResponse.Missing, oneof: 0
+  field :found, 1, type: Momento.Protos.CacheClient.ListLengthResponse.Found, oneof: 0
+  field :missing, 2, type: Momento.Protos.CacheClient.ListLengthResponse.Missing, oneof: 0
 end
 
-defmodule CacheClient.SortedSetElement do
+defmodule Momento.Protos.CacheClient.SortedSetElement do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -6656,7 +6684,7 @@ defmodule CacheClient.SortedSetElement do
   field :score, 2, type: :double
 end
 
-defmodule CacheClient.SortedSetPutRequest do
+defmodule Momento.Protos.CacheClient.SortedSetPutRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -6736,12 +6764,12 @@ defmodule CacheClient.SortedSetPutRequest do
   end
 
   field :set_name, 1, type: :bytes, json_name: "setName"
-  field :elements, 2, repeated: true, type: CacheClient.SortedSetElement
+  field :elements, 2, repeated: true, type: Momento.Protos.CacheClient.SortedSetElement
   field :ttl_milliseconds, 3, type: :uint64, json_name: "ttlMilliseconds"
   field :refresh_ttl, 4, type: :bool, json_name: "refreshTtl"
 end
 
-defmodule CacheClient.SortedSetPutResponse do
+defmodule Momento.Protos.CacheClient.SortedSetPutResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -6764,7 +6792,7 @@ defmodule CacheClient.SortedSetPutResponse do
   end
 end
 
-defmodule CacheClient.SortedSetFetchRequest.ByIndex do
+defmodule Momento.Protos.CacheClient.SortedSetFetchRequest.ByIndex do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -6854,13 +6882,22 @@ defmodule CacheClient.SortedSetFetchRequest.ByIndex do
 
   oneof :end, 1
 
-  field :unbounded_start, 1, type: CacheClient.Unbounded, json_name: "unboundedStart", oneof: 0
+  field :unbounded_start, 1,
+    type: Momento.Protos.CacheClient.Unbounded,
+    json_name: "unboundedStart",
+    oneof: 0
+
   field :inclusive_start_index, 2, type: :sint32, json_name: "inclusiveStartIndex", oneof: 0
-  field :unbounded_end, 3, type: CacheClient.Unbounded, json_name: "unboundedEnd", oneof: 1
+
+  field :unbounded_end, 3,
+    type: Momento.Protos.CacheClient.Unbounded,
+    json_name: "unboundedEnd",
+    oneof: 1
+
   field :exclusive_end_index, 4, type: :sint32, json_name: "exclusiveEndIndex", oneof: 1
 end
 
-defmodule CacheClient.SortedSetFetchRequest.ByScore.Score do
+defmodule Momento.Protos.CacheClient.SortedSetFetchRequest.ByScore.Score do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -6915,7 +6952,7 @@ defmodule CacheClient.SortedSetFetchRequest.ByScore.Score do
   field :exclusive, 2, type: :bool
 end
 
-defmodule CacheClient.SortedSetFetchRequest.ByScore do
+defmodule Momento.Protos.CacheClient.SortedSetFetchRequest.ByScore do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -7072,17 +7109,23 @@ defmodule CacheClient.SortedSetFetchRequest.ByScore do
 
   oneof :max, 1
 
-  field :unbounded_min, 1, type: CacheClient.Unbounded, json_name: "unboundedMin", oneof: 0
+  field :unbounded_min, 1,
+    type: Momento.Protos.CacheClient.Unbounded,
+    json_name: "unboundedMin",
+    oneof: 0
 
   field :min_score, 2,
-    type: CacheClient.SortedSetFetchRequest.ByScore.Score,
+    type: Momento.Protos.CacheClient.SortedSetFetchRequest.ByScore.Score,
     json_name: "minScore",
     oneof: 0
 
-  field :unbounded_max, 3, type: CacheClient.Unbounded, json_name: "unboundedMax", oneof: 1
+  field :unbounded_max, 3,
+    type: Momento.Protos.CacheClient.Unbounded,
+    json_name: "unboundedMax",
+    oneof: 1
 
   field :max_score, 4,
-    type: CacheClient.SortedSetFetchRequest.ByScore.Score,
+    type: Momento.Protos.CacheClient.SortedSetFetchRequest.ByScore.Score,
     json_name: "maxScore",
     oneof: 1
 
@@ -7090,7 +7133,7 @@ defmodule CacheClient.SortedSetFetchRequest.ByScore do
   field :count, 6, type: :sint32
 end
 
-defmodule CacheClient.SortedSetFetchRequest do
+defmodule Momento.Protos.CacheClient.SortedSetFetchRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -7444,21 +7487,21 @@ defmodule CacheClient.SortedSetFetchRequest do
   oneof :range, 0
 
   field :set_name, 1, type: :bytes, json_name: "setName"
-  field :order, 2, type: CacheClient.SortedSetFetchRequest.Order, enum: true
+  field :order, 2, type: Momento.Protos.CacheClient.SortedSetFetchRequest.Order, enum: true
   field :with_scores, 3, type: :bool, json_name: "withScores"
 
   field :by_index, 4,
-    type: CacheClient.SortedSetFetchRequest.ByIndex,
+    type: Momento.Protos.CacheClient.SortedSetFetchRequest.ByIndex,
     json_name: "byIndex",
     oneof: 0
 
   field :by_score, 5,
-    type: CacheClient.SortedSetFetchRequest.ByScore,
+    type: Momento.Protos.CacheClient.SortedSetFetchRequest.ByScore,
     json_name: "byScore",
     oneof: 0
 end
 
-defmodule CacheClient.SortedSetFetchResponse.Found.ValuesWithScores do
+defmodule Momento.Protos.CacheClient.SortedSetFetchResponse.Found.ValuesWithScores do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -7495,10 +7538,10 @@ defmodule CacheClient.SortedSetFetchResponse.Found.ValuesWithScores do
     }
   end
 
-  field :elements, 1, repeated: true, type: CacheClient.SortedSetElement
+  field :elements, 1, repeated: true, type: Momento.Protos.CacheClient.SortedSetElement
 end
 
-defmodule CacheClient.SortedSetFetchResponse.Found.Values do
+defmodule Momento.Protos.CacheClient.SortedSetFetchResponse.Found.Values do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -7538,7 +7581,7 @@ defmodule CacheClient.SortedSetFetchResponse.Found.Values do
   field :values, 1, repeated: true, type: :bytes
 end
 
-defmodule CacheClient.SortedSetFetchResponse.Found do
+defmodule Momento.Protos.CacheClient.SortedSetFetchResponse.Found do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -7655,14 +7698,14 @@ defmodule CacheClient.SortedSetFetchResponse.Found do
   oneof :elements, 0
 
   field :values_with_scores, 1,
-    type: CacheClient.SortedSetFetchResponse.Found.ValuesWithScores,
+    type: Momento.Protos.CacheClient.SortedSetFetchResponse.Found.ValuesWithScores,
     json_name: "valuesWithScores",
     oneof: 0
 
-  field :values, 2, type: CacheClient.SortedSetFetchResponse.Found.Values, oneof: 0
+  field :values, 2, type: Momento.Protos.CacheClient.SortedSetFetchResponse.Found.Values, oneof: 0
 end
 
-defmodule CacheClient.SortedSetFetchResponse.Missing do
+defmodule Momento.Protos.CacheClient.SortedSetFetchResponse.Missing do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -7685,7 +7728,7 @@ defmodule CacheClient.SortedSetFetchResponse.Missing do
   end
 end
 
-defmodule CacheClient.SortedSetFetchResponse do
+defmodule Momento.Protos.CacheClient.SortedSetFetchResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -7863,11 +7906,11 @@ defmodule CacheClient.SortedSetFetchResponse do
 
   oneof :sorted_set, 0
 
-  field :found, 1, type: CacheClient.SortedSetFetchResponse.Found, oneof: 0
-  field :missing, 2, type: CacheClient.SortedSetFetchResponse.Missing, oneof: 0
+  field :found, 1, type: Momento.Protos.CacheClient.SortedSetFetchResponse.Found, oneof: 0
+  field :missing, 2, type: Momento.Protos.CacheClient.SortedSetFetchResponse.Missing, oneof: 0
 end
 
-defmodule CacheClient.SortedSetGetScoreRequest do
+defmodule Momento.Protos.CacheClient.SortedSetGetScoreRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -7922,7 +7965,7 @@ defmodule CacheClient.SortedSetGetScoreRequest do
   field :values, 2, repeated: true, type: :bytes
 end
 
-defmodule CacheClient.SortedSetGetScoreResponse.SortedSetGetScoreResponsePart do
+defmodule Momento.Protos.CacheClient.SortedSetGetScoreResponse.SortedSetGetScoreResponsePart do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -7973,11 +8016,11 @@ defmodule CacheClient.SortedSetGetScoreResponse.SortedSetGetScoreResponsePart do
     }
   end
 
-  field :result, 1, type: CacheClient.ECacheResult, enum: true
+  field :result, 1, type: Momento.Protos.CacheClient.ECacheResult, enum: true
   field :score, 2, type: :double
 end
 
-defmodule CacheClient.SortedSetGetScoreResponse.SortedSetFound do
+defmodule Momento.Protos.CacheClient.SortedSetGetScoreResponse.SortedSetFound do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -8016,10 +8059,10 @@ defmodule CacheClient.SortedSetGetScoreResponse.SortedSetFound do
 
   field :elements, 1,
     repeated: true,
-    type: CacheClient.SortedSetGetScoreResponse.SortedSetGetScoreResponsePart
+    type: Momento.Protos.CacheClient.SortedSetGetScoreResponse.SortedSetGetScoreResponsePart
 end
 
-defmodule CacheClient.SortedSetGetScoreResponse.SortedSetMissing do
+defmodule Momento.Protos.CacheClient.SortedSetGetScoreResponse.SortedSetMissing do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -8042,7 +8085,7 @@ defmodule CacheClient.SortedSetGetScoreResponse.SortedSetMissing do
   end
 end
 
-defmodule CacheClient.SortedSetGetScoreResponse do
+defmodule Momento.Protos.CacheClient.SortedSetGetScoreResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -8186,11 +8229,16 @@ defmodule CacheClient.SortedSetGetScoreResponse do
 
   oneof :sorted_set, 0
 
-  field :found, 1, type: CacheClient.SortedSetGetScoreResponse.SortedSetFound, oneof: 0
-  field :missing, 2, type: CacheClient.SortedSetGetScoreResponse.SortedSetMissing, oneof: 0
+  field :found, 1,
+    type: Momento.Protos.CacheClient.SortedSetGetScoreResponse.SortedSetFound,
+    oneof: 0
+
+  field :missing, 2,
+    type: Momento.Protos.CacheClient.SortedSetGetScoreResponse.SortedSetMissing,
+    oneof: 0
 end
 
-defmodule CacheClient.SortedSetRemoveRequest.All do
+defmodule Momento.Protos.CacheClient.SortedSetRemoveRequest.All do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -8213,7 +8261,7 @@ defmodule CacheClient.SortedSetRemoveRequest.All do
   end
 end
 
-defmodule CacheClient.SortedSetRemoveRequest.Some do
+defmodule Momento.Protos.CacheClient.SortedSetRemoveRequest.Some do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -8253,7 +8301,7 @@ defmodule CacheClient.SortedSetRemoveRequest.Some do
   field :values, 1, repeated: true, type: :bytes
 end
 
-defmodule CacheClient.SortedSetRemoveRequest do
+defmodule Momento.Protos.CacheClient.SortedSetRemoveRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -8369,11 +8417,11 @@ defmodule CacheClient.SortedSetRemoveRequest do
   oneof :remove_elements, 0
 
   field :set_name, 1, type: :bytes, json_name: "setName"
-  field :all, 2, type: CacheClient.SortedSetRemoveRequest.All, oneof: 0
-  field :some, 3, type: CacheClient.SortedSetRemoveRequest.Some, oneof: 0
+  field :all, 2, type: Momento.Protos.CacheClient.SortedSetRemoveRequest.All, oneof: 0
+  field :some, 3, type: Momento.Protos.CacheClient.SortedSetRemoveRequest.Some, oneof: 0
 end
 
-defmodule CacheClient.SortedSetRemoveResponse do
+defmodule Momento.Protos.CacheClient.SortedSetRemoveResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -8396,7 +8444,7 @@ defmodule CacheClient.SortedSetRemoveResponse do
   end
 end
 
-defmodule CacheClient.SortedSetIncrementRequest do
+defmodule Momento.Protos.CacheClient.SortedSetIncrementRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -8496,7 +8544,7 @@ defmodule CacheClient.SortedSetIncrementRequest do
   field :refresh_ttl, 5, type: :bool, json_name: "refreshTtl"
 end
 
-defmodule CacheClient.SortedSetIncrementResponse do
+defmodule Momento.Protos.CacheClient.SortedSetIncrementResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -8536,7 +8584,7 @@ defmodule CacheClient.SortedSetIncrementResponse do
   field :score, 1, type: :double
 end
 
-defmodule CacheClient.SortedSetGetRankRequest do
+defmodule Momento.Protos.CacheClient.SortedSetGetRankRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -8625,10 +8673,10 @@ defmodule CacheClient.SortedSetGetRankRequest do
 
   field :set_name, 1, type: :bytes, json_name: "setName"
   field :value, 2, type: :bytes
-  field :order, 3, type: CacheClient.SortedSetGetRankRequest.Order, enum: true
+  field :order, 3, type: Momento.Protos.CacheClient.SortedSetGetRankRequest.Order, enum: true
 end
 
-defmodule CacheClient.SortedSetGetRankResponse.RankResponsePart do
+defmodule Momento.Protos.CacheClient.SortedSetGetRankResponse.RankResponsePart do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -8679,11 +8727,11 @@ defmodule CacheClient.SortedSetGetRankResponse.RankResponsePart do
     }
   end
 
-  field :result, 1, type: CacheClient.ECacheResult, enum: true
+  field :result, 1, type: Momento.Protos.CacheClient.ECacheResult, enum: true
   field :rank, 2, type: :uint64
 end
 
-defmodule CacheClient.SortedSetGetRankResponse.SortedSetMissing do
+defmodule Momento.Protos.CacheClient.SortedSetGetRankResponse.SortedSetMissing do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -8706,7 +8754,7 @@ defmodule CacheClient.SortedSetGetRankResponse.SortedSetMissing do
   end
 end
 
-defmodule CacheClient.SortedSetGetRankResponse do
+defmodule Momento.Protos.CacheClient.SortedSetGetRankResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -8818,14 +8866,541 @@ defmodule CacheClient.SortedSetGetRankResponse do
   oneof :rank, 0
 
   field :element_rank, 1,
-    type: CacheClient.SortedSetGetRankResponse.RankResponsePart,
+    type: Momento.Protos.CacheClient.SortedSetGetRankResponse.RankResponsePart,
     json_name: "elementRank",
     oneof: 0
 
-  field :missing, 2, type: CacheClient.SortedSetGetRankResponse.SortedSetMissing, oneof: 0
+  field :missing, 2,
+    type: Momento.Protos.CacheClient.SortedSetGetRankResponse.SortedSetMissing,
+    oneof: 0
 end
 
-defmodule CacheClient.Scs.Service do
+defmodule Momento.Protos.CacheClient.SortedSetLengthRequest do
+  @moduledoc false
+
+  use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
+
+  def descriptor do
+    # credo:disable-for-next-line
+    %Google.Protobuf.DescriptorProto{
+      name: "_SortedSetLengthRequest",
+      field: [
+        %Google.Protobuf.FieldDescriptorProto{
+          name: "set_name",
+          extendee: nil,
+          number: 1,
+          label: :LABEL_OPTIONAL,
+          type: :TYPE_BYTES,
+          type_name: nil,
+          default_value: nil,
+          options: nil,
+          oneof_index: nil,
+          json_name: "setName",
+          proto3_optional: nil,
+          __unknown_fields__: []
+        }
+      ],
+      nested_type: [],
+      enum_type: [],
+      extension_range: [],
+      extension: [],
+      options: nil,
+      oneof_decl: [],
+      reserved_range: [],
+      reserved_name: [],
+      __unknown_fields__: []
+    }
+  end
+
+  field :set_name, 1, type: :bytes, json_name: "setName"
+end
+
+defmodule Momento.Protos.CacheClient.SortedSetLengthResponse.Found do
+  @moduledoc false
+
+  use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
+
+  def descriptor do
+    # credo:disable-for-next-line
+    %Google.Protobuf.DescriptorProto{
+      name: "_Found",
+      field: [
+        %Google.Protobuf.FieldDescriptorProto{
+          name: "length",
+          extendee: nil,
+          number: 1,
+          label: :LABEL_OPTIONAL,
+          type: :TYPE_UINT32,
+          type_name: nil,
+          default_value: nil,
+          options: nil,
+          oneof_index: nil,
+          json_name: "length",
+          proto3_optional: nil,
+          __unknown_fields__: []
+        }
+      ],
+      nested_type: [],
+      enum_type: [],
+      extension_range: [],
+      extension: [],
+      options: nil,
+      oneof_decl: [],
+      reserved_range: [],
+      reserved_name: [],
+      __unknown_fields__: []
+    }
+  end
+
+  field :length, 1, type: :uint32
+end
+
+defmodule Momento.Protos.CacheClient.SortedSetLengthResponse.Missing do
+  @moduledoc false
+
+  use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
+
+  def descriptor do
+    # credo:disable-for-next-line
+    %Google.Protobuf.DescriptorProto{
+      name: "_Missing",
+      field: [],
+      nested_type: [],
+      enum_type: [],
+      extension_range: [],
+      extension: [],
+      options: nil,
+      oneof_decl: [],
+      reserved_range: [],
+      reserved_name: [],
+      __unknown_fields__: []
+    }
+  end
+end
+
+defmodule Momento.Protos.CacheClient.SortedSetLengthResponse do
+  @moduledoc false
+
+  use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
+
+  def descriptor do
+    # credo:disable-for-next-line
+    %Google.Protobuf.DescriptorProto{
+      name: "_SortedSetLengthResponse",
+      field: [
+        %Google.Protobuf.FieldDescriptorProto{
+          name: "found",
+          extendee: nil,
+          number: 1,
+          label: :LABEL_OPTIONAL,
+          type: :TYPE_MESSAGE,
+          type_name: ".cache_client._SortedSetLengthResponse._Found",
+          default_value: nil,
+          options: nil,
+          oneof_index: 0,
+          json_name: "found",
+          proto3_optional: nil,
+          __unknown_fields__: []
+        },
+        %Google.Protobuf.FieldDescriptorProto{
+          name: "missing",
+          extendee: nil,
+          number: 2,
+          label: :LABEL_OPTIONAL,
+          type: :TYPE_MESSAGE,
+          type_name: ".cache_client._SortedSetLengthResponse._Missing",
+          default_value: nil,
+          options: nil,
+          oneof_index: 0,
+          json_name: "missing",
+          proto3_optional: nil,
+          __unknown_fields__: []
+        }
+      ],
+      nested_type: [
+        %Google.Protobuf.DescriptorProto{
+          name: "_Found",
+          field: [
+            %Google.Protobuf.FieldDescriptorProto{
+              name: "length",
+              extendee: nil,
+              number: 1,
+              label: :LABEL_OPTIONAL,
+              type: :TYPE_UINT32,
+              type_name: nil,
+              default_value: nil,
+              options: nil,
+              oneof_index: nil,
+              json_name: "length",
+              proto3_optional: nil,
+              __unknown_fields__: []
+            }
+          ],
+          nested_type: [],
+          enum_type: [],
+          extension_range: [],
+          extension: [],
+          options: nil,
+          oneof_decl: [],
+          reserved_range: [],
+          reserved_name: [],
+          __unknown_fields__: []
+        },
+        %Google.Protobuf.DescriptorProto{
+          name: "_Missing",
+          field: [],
+          nested_type: [],
+          enum_type: [],
+          extension_range: [],
+          extension: [],
+          options: nil,
+          oneof_decl: [],
+          reserved_range: [],
+          reserved_name: [],
+          __unknown_fields__: []
+        }
+      ],
+      enum_type: [],
+      extension_range: [],
+      extension: [],
+      options: nil,
+      oneof_decl: [
+        %Google.Protobuf.OneofDescriptorProto{
+          name: "sorted_set",
+          options: nil,
+          __unknown_fields__: []
+        }
+      ],
+      reserved_range: [],
+      reserved_name: [],
+      __unknown_fields__: []
+    }
+  end
+
+  oneof :sorted_set, 0
+
+  field :found, 1, type: Momento.Protos.CacheClient.SortedSetLengthResponse.Found, oneof: 0
+  field :missing, 2, type: Momento.Protos.CacheClient.SortedSetLengthResponse.Missing, oneof: 0
+end
+
+defmodule Momento.Protos.CacheClient.SortedSetLengthByScoreRequest do
+  @moduledoc false
+
+  use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
+
+  def descriptor do
+    # credo:disable-for-next-line
+    %Google.Protobuf.DescriptorProto{
+      name: "_SortedSetLengthByScoreRequest",
+      field: [
+        %Google.Protobuf.FieldDescriptorProto{
+          name: "set_name",
+          extendee: nil,
+          number: 1,
+          label: :LABEL_OPTIONAL,
+          type: :TYPE_BYTES,
+          type_name: nil,
+          default_value: nil,
+          options: nil,
+          oneof_index: nil,
+          json_name: "setName",
+          proto3_optional: nil,
+          __unknown_fields__: []
+        },
+        %Google.Protobuf.FieldDescriptorProto{
+          name: "inclusive_min",
+          extendee: nil,
+          number: 2,
+          label: :LABEL_OPTIONAL,
+          type: :TYPE_DOUBLE,
+          type_name: nil,
+          default_value: nil,
+          options: nil,
+          oneof_index: 0,
+          json_name: "inclusiveMin",
+          proto3_optional: nil,
+          __unknown_fields__: []
+        },
+        %Google.Protobuf.FieldDescriptorProto{
+          name: "exclusive_min",
+          extendee: nil,
+          number: 3,
+          label: :LABEL_OPTIONAL,
+          type: :TYPE_DOUBLE,
+          type_name: nil,
+          default_value: nil,
+          options: nil,
+          oneof_index: 0,
+          json_name: "exclusiveMin",
+          proto3_optional: nil,
+          __unknown_fields__: []
+        },
+        %Google.Protobuf.FieldDescriptorProto{
+          name: "unbounded_min",
+          extendee: nil,
+          number: 4,
+          label: :LABEL_OPTIONAL,
+          type: :TYPE_MESSAGE,
+          type_name: ".cache_client._Unbounded",
+          default_value: nil,
+          options: nil,
+          oneof_index: 0,
+          json_name: "unboundedMin",
+          proto3_optional: nil,
+          __unknown_fields__: []
+        },
+        %Google.Protobuf.FieldDescriptorProto{
+          name: "inclusive_max",
+          extendee: nil,
+          number: 5,
+          label: :LABEL_OPTIONAL,
+          type: :TYPE_DOUBLE,
+          type_name: nil,
+          default_value: nil,
+          options: nil,
+          oneof_index: 1,
+          json_name: "inclusiveMax",
+          proto3_optional: nil,
+          __unknown_fields__: []
+        },
+        %Google.Protobuf.FieldDescriptorProto{
+          name: "exclusive_max",
+          extendee: nil,
+          number: 6,
+          label: :LABEL_OPTIONAL,
+          type: :TYPE_DOUBLE,
+          type_name: nil,
+          default_value: nil,
+          options: nil,
+          oneof_index: 1,
+          json_name: "exclusiveMax",
+          proto3_optional: nil,
+          __unknown_fields__: []
+        },
+        %Google.Protobuf.FieldDescriptorProto{
+          name: "unbounded_max",
+          extendee: nil,
+          number: 7,
+          label: :LABEL_OPTIONAL,
+          type: :TYPE_MESSAGE,
+          type_name: ".cache_client._Unbounded",
+          default_value: nil,
+          options: nil,
+          oneof_index: 1,
+          json_name: "unboundedMax",
+          proto3_optional: nil,
+          __unknown_fields__: []
+        }
+      ],
+      nested_type: [],
+      enum_type: [],
+      extension_range: [],
+      extension: [],
+      options: nil,
+      oneof_decl: [
+        %Google.Protobuf.OneofDescriptorProto{name: "min", options: nil, __unknown_fields__: []},
+        %Google.Protobuf.OneofDescriptorProto{name: "max", options: nil, __unknown_fields__: []}
+      ],
+      reserved_range: [],
+      reserved_name: [],
+      __unknown_fields__: []
+    }
+  end
+
+  oneof :min, 0
+
+  oneof :max, 1
+
+  field :set_name, 1, type: :bytes, json_name: "setName"
+  field :inclusive_min, 2, type: :double, json_name: "inclusiveMin", oneof: 0
+  field :exclusive_min, 3, type: :double, json_name: "exclusiveMin", oneof: 0
+
+  field :unbounded_min, 4,
+    type: Momento.Protos.CacheClient.Unbounded,
+    json_name: "unboundedMin",
+    oneof: 0
+
+  field :inclusive_max, 5, type: :double, json_name: "inclusiveMax", oneof: 1
+  field :exclusive_max, 6, type: :double, json_name: "exclusiveMax", oneof: 1
+
+  field :unbounded_max, 7,
+    type: Momento.Protos.CacheClient.Unbounded,
+    json_name: "unboundedMax",
+    oneof: 1
+end
+
+defmodule Momento.Protos.CacheClient.SortedSetLengthByScoreResponse.Found do
+  @moduledoc false
+
+  use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
+
+  def descriptor do
+    # credo:disable-for-next-line
+    %Google.Protobuf.DescriptorProto{
+      name: "_Found",
+      field: [
+        %Google.Protobuf.FieldDescriptorProto{
+          name: "length",
+          extendee: nil,
+          number: 1,
+          label: :LABEL_OPTIONAL,
+          type: :TYPE_UINT32,
+          type_name: nil,
+          default_value: nil,
+          options: nil,
+          oneof_index: nil,
+          json_name: "length",
+          proto3_optional: nil,
+          __unknown_fields__: []
+        }
+      ],
+      nested_type: [],
+      enum_type: [],
+      extension_range: [],
+      extension: [],
+      options: nil,
+      oneof_decl: [],
+      reserved_range: [],
+      reserved_name: [],
+      __unknown_fields__: []
+    }
+  end
+
+  field :length, 1, type: :uint32
+end
+
+defmodule Momento.Protos.CacheClient.SortedSetLengthByScoreResponse.Missing do
+  @moduledoc false
+
+  use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
+
+  def descriptor do
+    # credo:disable-for-next-line
+    %Google.Protobuf.DescriptorProto{
+      name: "_Missing",
+      field: [],
+      nested_type: [],
+      enum_type: [],
+      extension_range: [],
+      extension: [],
+      options: nil,
+      oneof_decl: [],
+      reserved_range: [],
+      reserved_name: [],
+      __unknown_fields__: []
+    }
+  end
+end
+
+defmodule Momento.Protos.CacheClient.SortedSetLengthByScoreResponse do
+  @moduledoc false
+
+  use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
+
+  def descriptor do
+    # credo:disable-for-next-line
+    %Google.Protobuf.DescriptorProto{
+      name: "_SortedSetLengthByScoreResponse",
+      field: [
+        %Google.Protobuf.FieldDescriptorProto{
+          name: "found",
+          extendee: nil,
+          number: 1,
+          label: :LABEL_OPTIONAL,
+          type: :TYPE_MESSAGE,
+          type_name: ".cache_client._SortedSetLengthByScoreResponse._Found",
+          default_value: nil,
+          options: nil,
+          oneof_index: 0,
+          json_name: "found",
+          proto3_optional: nil,
+          __unknown_fields__: []
+        },
+        %Google.Protobuf.FieldDescriptorProto{
+          name: "missing",
+          extendee: nil,
+          number: 2,
+          label: :LABEL_OPTIONAL,
+          type: :TYPE_MESSAGE,
+          type_name: ".cache_client._SortedSetLengthByScoreResponse._Missing",
+          default_value: nil,
+          options: nil,
+          oneof_index: 0,
+          json_name: "missing",
+          proto3_optional: nil,
+          __unknown_fields__: []
+        }
+      ],
+      nested_type: [
+        %Google.Protobuf.DescriptorProto{
+          name: "_Found",
+          field: [
+            %Google.Protobuf.FieldDescriptorProto{
+              name: "length",
+              extendee: nil,
+              number: 1,
+              label: :LABEL_OPTIONAL,
+              type: :TYPE_UINT32,
+              type_name: nil,
+              default_value: nil,
+              options: nil,
+              oneof_index: nil,
+              json_name: "length",
+              proto3_optional: nil,
+              __unknown_fields__: []
+            }
+          ],
+          nested_type: [],
+          enum_type: [],
+          extension_range: [],
+          extension: [],
+          options: nil,
+          oneof_decl: [],
+          reserved_range: [],
+          reserved_name: [],
+          __unknown_fields__: []
+        },
+        %Google.Protobuf.DescriptorProto{
+          name: "_Missing",
+          field: [],
+          nested_type: [],
+          enum_type: [],
+          extension_range: [],
+          extension: [],
+          options: nil,
+          oneof_decl: [],
+          reserved_range: [],
+          reserved_name: [],
+          __unknown_fields__: []
+        }
+      ],
+      enum_type: [],
+      extension_range: [],
+      extension: [],
+      options: nil,
+      oneof_decl: [
+        %Google.Protobuf.OneofDescriptorProto{
+          name: "sorted_set",
+          options: nil,
+          __unknown_fields__: []
+        }
+      ],
+      reserved_range: [],
+      reserved_name: [],
+      __unknown_fields__: []
+    }
+  end
+
+  oneof :sorted_set, 0
+
+  field :found, 1, type: Momento.Protos.CacheClient.SortedSetLengthByScoreResponse.Found, oneof: 0
+
+  field :missing, 2,
+    type: Momento.Protos.CacheClient.SortedSetLengthByScoreResponse.Missing,
+    oneof: 0
+end
+
+defmodule Momento.Protos.CacheClient.Scs.Service do
   @moduledoc false
 
   use GRPC.Service, name: "cache_client.Scs", protoc_gen_elixir_version: "0.12.0"
@@ -9389,6 +9964,36 @@ defmodule CacheClient.Scs.Service do
           client_streaming: false,
           server_streaming: false,
           __unknown_fields__: []
+        },
+        %Google.Protobuf.MethodDescriptorProto{
+          name: "SortedSetLength",
+          input_type: ".cache_client._SortedSetLengthRequest",
+          output_type: ".cache_client._SortedSetLengthResponse",
+          options: %Google.Protobuf.MethodOptions{
+            deprecated: false,
+            idempotency_level: :IDEMPOTENCY_UNKNOWN,
+            uninterpreted_option: [],
+            __pb_extensions__: %{},
+            __unknown_fields__: []
+          },
+          client_streaming: false,
+          server_streaming: false,
+          __unknown_fields__: []
+        },
+        %Google.Protobuf.MethodDescriptorProto{
+          name: "SortedSetLengthByScore",
+          input_type: ".cache_client._SortedSetLengthByScoreRequest",
+          output_type: ".cache_client._SortedSetLengthByScoreResponse",
+          options: %Google.Protobuf.MethodOptions{
+            deprecated: false,
+            idempotency_level: :IDEMPOTENCY_UNKNOWN,
+            uninterpreted_option: [],
+            __pb_extensions__: %{},
+            __unknown_fields__: []
+          },
+          client_streaming: false,
+          server_streaming: false,
+          __unknown_fields__: []
         }
       ],
       options: nil,
@@ -9396,93 +10001,159 @@ defmodule CacheClient.Scs.Service do
     }
   end
 
-  rpc :Get, CacheClient.GetRequest, CacheClient.GetResponse
+  rpc :Get, Momento.Protos.CacheClient.GetRequest, Momento.Protos.CacheClient.GetResponse
 
-  rpc :Set, CacheClient.SetRequest, CacheClient.SetResponse
+  rpc :Set, Momento.Protos.CacheClient.SetRequest, Momento.Protos.CacheClient.SetResponse
 
-  rpc :SetIfNotExists, CacheClient.SetIfNotExistsRequest, CacheClient.SetIfNotExistsResponse
+  rpc :SetIfNotExists,
+      Momento.Protos.CacheClient.SetIfNotExistsRequest,
+      Momento.Protos.CacheClient.SetIfNotExistsResponse
 
-  rpc :Delete, CacheClient.DeleteRequest, CacheClient.DeleteResponse
+  rpc :Delete, Momento.Protos.CacheClient.DeleteRequest, Momento.Protos.CacheClient.DeleteResponse
 
-  rpc :KeysExist, CacheClient.KeysExistRequest, CacheClient.KeysExistResponse
+  rpc :KeysExist,
+      Momento.Protos.CacheClient.KeysExistRequest,
+      Momento.Protos.CacheClient.KeysExistResponse
 
-  rpc :Increment, CacheClient.IncrementRequest, CacheClient.IncrementResponse
+  rpc :Increment,
+      Momento.Protos.CacheClient.IncrementRequest,
+      Momento.Protos.CacheClient.IncrementResponse
 
-  rpc :UpdateTtl, CacheClient.UpdateTtlRequest, CacheClient.UpdateTtlResponse
+  rpc :UpdateTtl,
+      Momento.Protos.CacheClient.UpdateTtlRequest,
+      Momento.Protos.CacheClient.UpdateTtlResponse
 
-  rpc :ItemGetTtl, CacheClient.ItemGetTtlRequest, CacheClient.ItemGetTtlResponse
+  rpc :ItemGetTtl,
+      Momento.Protos.CacheClient.ItemGetTtlRequest,
+      Momento.Protos.CacheClient.ItemGetTtlResponse
 
-  rpc :ItemGetType, CacheClient.ItemGetTypeRequest, CacheClient.ItemGetTypeResponse
+  rpc :ItemGetType,
+      Momento.Protos.CacheClient.ItemGetTypeRequest,
+      Momento.Protos.CacheClient.ItemGetTypeResponse
 
-  rpc :DictionaryGet, CacheClient.DictionaryGetRequest, CacheClient.DictionaryGetResponse
+  rpc :DictionaryGet,
+      Momento.Protos.CacheClient.DictionaryGetRequest,
+      Momento.Protos.CacheClient.DictionaryGetResponse
 
-  rpc :DictionaryFetch, CacheClient.DictionaryFetchRequest, CacheClient.DictionaryFetchResponse
+  rpc :DictionaryFetch,
+      Momento.Protos.CacheClient.DictionaryFetchRequest,
+      Momento.Protos.CacheClient.DictionaryFetchResponse
 
-  rpc :DictionarySet, CacheClient.DictionarySetRequest, CacheClient.DictionarySetResponse
+  rpc :DictionarySet,
+      Momento.Protos.CacheClient.DictionarySetRequest,
+      Momento.Protos.CacheClient.DictionarySetResponse
 
   rpc :DictionaryIncrement,
-      CacheClient.DictionaryIncrementRequest,
-      CacheClient.DictionaryIncrementResponse
+      Momento.Protos.CacheClient.DictionaryIncrementRequest,
+      Momento.Protos.CacheClient.DictionaryIncrementResponse
 
-  rpc :DictionaryDelete, CacheClient.DictionaryDeleteRequest, CacheClient.DictionaryDeleteResponse
+  rpc :DictionaryDelete,
+      Momento.Protos.CacheClient.DictionaryDeleteRequest,
+      Momento.Protos.CacheClient.DictionaryDeleteResponse
 
-  rpc :DictionaryLength, CacheClient.DictionaryLengthRequest, CacheClient.DictionaryLengthResponse
+  rpc :DictionaryLength,
+      Momento.Protos.CacheClient.DictionaryLengthRequest,
+      Momento.Protos.CacheClient.DictionaryLengthResponse
 
-  rpc :SetFetch, CacheClient.SetFetchRequest, CacheClient.SetFetchResponse
+  rpc :SetFetch,
+      Momento.Protos.CacheClient.SetFetchRequest,
+      Momento.Protos.CacheClient.SetFetchResponse
 
-  rpc :SetUnion, CacheClient.SetUnionRequest, CacheClient.SetUnionResponse
+  rpc :SetUnion,
+      Momento.Protos.CacheClient.SetUnionRequest,
+      Momento.Protos.CacheClient.SetUnionResponse
 
-  rpc :SetDifference, CacheClient.SetDifferenceRequest, CacheClient.SetDifferenceResponse
+  rpc :SetDifference,
+      Momento.Protos.CacheClient.SetDifferenceRequest,
+      Momento.Protos.CacheClient.SetDifferenceResponse
 
-  rpc :SetContains, CacheClient.SetContainsRequest, CacheClient.SetContainsResponse
+  rpc :SetContains,
+      Momento.Protos.CacheClient.SetContainsRequest,
+      Momento.Protos.CacheClient.SetContainsResponse
 
-  rpc :SetLength, CacheClient.SetLengthRequest, CacheClient.SetLengthResponse
+  rpc :SetLength,
+      Momento.Protos.CacheClient.SetLengthRequest,
+      Momento.Protos.CacheClient.SetLengthResponse
 
-  rpc :ListPushFront, CacheClient.ListPushFrontRequest, CacheClient.ListPushFrontResponse
+  rpc :ListPushFront,
+      Momento.Protos.CacheClient.ListPushFrontRequest,
+      Momento.Protos.CacheClient.ListPushFrontResponse
 
-  rpc :ListPushBack, CacheClient.ListPushBackRequest, CacheClient.ListPushBackResponse
+  rpc :ListPushBack,
+      Momento.Protos.CacheClient.ListPushBackRequest,
+      Momento.Protos.CacheClient.ListPushBackResponse
 
-  rpc :ListPopFront, CacheClient.ListPopFrontRequest, CacheClient.ListPopFrontResponse
+  rpc :ListPopFront,
+      Momento.Protos.CacheClient.ListPopFrontRequest,
+      Momento.Protos.CacheClient.ListPopFrontResponse
 
-  rpc :ListPopBack, CacheClient.ListPopBackRequest, CacheClient.ListPopBackResponse
+  rpc :ListPopBack,
+      Momento.Protos.CacheClient.ListPopBackRequest,
+      Momento.Protos.CacheClient.ListPopBackResponse
 
-  rpc :ListErase, CacheClient.ListEraseRequest, CacheClient.ListEraseResponse
+  rpc :ListErase,
+      Momento.Protos.CacheClient.ListEraseRequest,
+      Momento.Protos.CacheClient.ListEraseResponse
 
-  rpc :ListRemove, CacheClient.ListRemoveRequest, CacheClient.ListRemoveResponse
+  rpc :ListRemove,
+      Momento.Protos.CacheClient.ListRemoveRequest,
+      Momento.Protos.CacheClient.ListRemoveResponse
 
-  rpc :ListFetch, CacheClient.ListFetchRequest, CacheClient.ListFetchResponse
+  rpc :ListFetch,
+      Momento.Protos.CacheClient.ListFetchRequest,
+      Momento.Protos.CacheClient.ListFetchResponse
 
-  rpc :ListLength, CacheClient.ListLengthRequest, CacheClient.ListLengthResponse
+  rpc :ListLength,
+      Momento.Protos.CacheClient.ListLengthRequest,
+      Momento.Protos.CacheClient.ListLengthResponse
 
   rpc :ListConcatenateFront,
-      CacheClient.ListConcatenateFrontRequest,
-      CacheClient.ListConcatenateFrontResponse
+      Momento.Protos.CacheClient.ListConcatenateFrontRequest,
+      Momento.Protos.CacheClient.ListConcatenateFrontResponse
 
   rpc :ListConcatenateBack,
-      CacheClient.ListConcatenateBackRequest,
-      CacheClient.ListConcatenateBackResponse
+      Momento.Protos.CacheClient.ListConcatenateBackRequest,
+      Momento.Protos.CacheClient.ListConcatenateBackResponse
 
-  rpc :ListRetain, CacheClient.ListRetainRequest, CacheClient.ListRetainResponse
+  rpc :ListRetain,
+      Momento.Protos.CacheClient.ListRetainRequest,
+      Momento.Protos.CacheClient.ListRetainResponse
 
-  rpc :SortedSetPut, CacheClient.SortedSetPutRequest, CacheClient.SortedSetPutResponse
+  rpc :SortedSetPut,
+      Momento.Protos.CacheClient.SortedSetPutRequest,
+      Momento.Protos.CacheClient.SortedSetPutResponse
 
-  rpc :SortedSetFetch, CacheClient.SortedSetFetchRequest, CacheClient.SortedSetFetchResponse
+  rpc :SortedSetFetch,
+      Momento.Protos.CacheClient.SortedSetFetchRequest,
+      Momento.Protos.CacheClient.SortedSetFetchResponse
 
   rpc :SortedSetGetScore,
-      CacheClient.SortedSetGetScoreRequest,
-      CacheClient.SortedSetGetScoreResponse
+      Momento.Protos.CacheClient.SortedSetGetScoreRequest,
+      Momento.Protos.CacheClient.SortedSetGetScoreResponse
 
-  rpc :SortedSetRemove, CacheClient.SortedSetRemoveRequest, CacheClient.SortedSetRemoveResponse
+  rpc :SortedSetRemove,
+      Momento.Protos.CacheClient.SortedSetRemoveRequest,
+      Momento.Protos.CacheClient.SortedSetRemoveResponse
 
   rpc :SortedSetIncrement,
-      CacheClient.SortedSetIncrementRequest,
-      CacheClient.SortedSetIncrementResponse
+      Momento.Protos.CacheClient.SortedSetIncrementRequest,
+      Momento.Protos.CacheClient.SortedSetIncrementResponse
 
-  rpc :SortedSetGetRank, CacheClient.SortedSetGetRankRequest, CacheClient.SortedSetGetRankResponse
+  rpc :SortedSetGetRank,
+      Momento.Protos.CacheClient.SortedSetGetRankRequest,
+      Momento.Protos.CacheClient.SortedSetGetRankResponse
+
+  rpc :SortedSetLength,
+      Momento.Protos.CacheClient.SortedSetLengthRequest,
+      Momento.Protos.CacheClient.SortedSetLengthResponse
+
+  rpc :SortedSetLengthByScore,
+      Momento.Protos.CacheClient.SortedSetLengthByScoreRequest,
+      Momento.Protos.CacheClient.SortedSetLengthByScoreResponse
 end
 
-defmodule CacheClient.Scs.Stub do
+defmodule Momento.Protos.CacheClient.Scs.Stub do
   @moduledoc false
 
-  use GRPC.Stub, service: CacheClient.Scs.Service
+  use GRPC.Stub, service: Momento.Protos.CacheClient.Scs.Service
 end

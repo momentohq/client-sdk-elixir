@@ -1,4 +1,4 @@
-defmodule ControlClient.DeleteCacheRequest do
+defmodule Momento.Protos.ControlClient.DeleteCacheRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -38,7 +38,7 @@ defmodule ControlClient.DeleteCacheRequest do
   field :cache_name, 1, type: :string, json_name: "cacheName"
 end
 
-defmodule ControlClient.DeleteCacheResponse do
+defmodule Momento.Protos.ControlClient.DeleteCacheResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -61,7 +61,7 @@ defmodule ControlClient.DeleteCacheResponse do
   end
 end
 
-defmodule ControlClient.CreateCacheRequest do
+defmodule Momento.Protos.ControlClient.CreateCacheRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -101,7 +101,7 @@ defmodule ControlClient.CreateCacheRequest do
   field :cache_name, 1, type: :string, json_name: "cacheName"
 end
 
-defmodule ControlClient.CreateCacheResponse do
+defmodule Momento.Protos.ControlClient.CreateCacheResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -124,7 +124,7 @@ defmodule ControlClient.CreateCacheResponse do
   end
 end
 
-defmodule ControlClient.ListCachesRequest do
+defmodule Momento.Protos.ControlClient.ListCachesRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -164,7 +164,7 @@ defmodule ControlClient.ListCachesRequest do
   field :next_token, 1, type: :string, json_name: "nextToken"
 end
 
-defmodule ControlClient.Cache do
+defmodule Momento.Protos.ControlClient.Cache do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -204,7 +204,7 @@ defmodule ControlClient.Cache do
   field :cache_name, 1, type: :string, json_name: "cacheName"
 end
 
-defmodule ControlClient.ListCachesResponse do
+defmodule Momento.Protos.ControlClient.ListCachesResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -255,11 +255,11 @@ defmodule ControlClient.ListCachesResponse do
     }
   end
 
-  field :cache, 1, repeated: true, type: ControlClient.Cache
+  field :cache, 1, repeated: true, type: Momento.Protos.ControlClient.Cache
   field :next_token, 2, type: :string, json_name: "nextToken"
 end
 
-defmodule ControlClient.CreateSigningKeyRequest do
+defmodule Momento.Protos.ControlClient.CreateSigningKeyRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -299,7 +299,7 @@ defmodule ControlClient.CreateSigningKeyRequest do
   field :ttl_minutes, 1, type: :uint32, json_name: "ttlMinutes"
 end
 
-defmodule ControlClient.CreateSigningKeyResponse do
+defmodule Momento.Protos.ControlClient.CreateSigningKeyResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -354,7 +354,7 @@ defmodule ControlClient.CreateSigningKeyResponse do
   field :expires_at, 2, type: :uint64, json_name: "expiresAt"
 end
 
-defmodule ControlClient.RevokeSigningKeyRequest do
+defmodule Momento.Protos.ControlClient.RevokeSigningKeyRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -394,7 +394,7 @@ defmodule ControlClient.RevokeSigningKeyRequest do
   field :key_id, 1, type: :string, json_name: "keyId"
 end
 
-defmodule ControlClient.RevokeSigningKeyResponse do
+defmodule Momento.Protos.ControlClient.RevokeSigningKeyResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -417,7 +417,7 @@ defmodule ControlClient.RevokeSigningKeyResponse do
   end
 end
 
-defmodule ControlClient.SigningKey do
+defmodule Momento.Protos.ControlClient.SigningKey do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -472,7 +472,7 @@ defmodule ControlClient.SigningKey do
   field :expires_at, 2, type: :uint64, json_name: "expiresAt"
 end
 
-defmodule ControlClient.ListSigningKeysRequest do
+defmodule Momento.Protos.ControlClient.ListSigningKeysRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -512,7 +512,7 @@ defmodule ControlClient.ListSigningKeysRequest do
   field :next_token, 1, type: :string, json_name: "nextToken"
 end
 
-defmodule ControlClient.ListSigningKeysResponse do
+defmodule Momento.Protos.ControlClient.ListSigningKeysResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -563,11 +563,15 @@ defmodule ControlClient.ListSigningKeysResponse do
     }
   end
 
-  field :signing_key, 1, repeated: true, type: ControlClient.SigningKey, json_name: "signingKey"
+  field :signing_key, 1,
+    repeated: true,
+    type: Momento.Protos.ControlClient.SigningKey,
+    json_name: "signingKey"
+
   field :next_token, 2, type: :string, json_name: "nextToken"
 end
 
-defmodule ControlClient.FlushCacheRequest do
+defmodule Momento.Protos.ControlClient.FlushCacheRequest do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -607,7 +611,7 @@ defmodule ControlClient.FlushCacheRequest do
   field :cache_name, 1, type: :string, json_name: "cacheName"
 end
 
-defmodule ControlClient.FlushCacheResponse do
+defmodule Momento.Protos.ControlClient.FlushCacheResponse do
   @moduledoc false
 
   use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
@@ -630,7 +634,7 @@ defmodule ControlClient.FlushCacheResponse do
   end
 end
 
-defmodule ControlClient.ScsControl.Service do
+defmodule Momento.Protos.ControlClient.ScsControl.Service do
   @moduledoc false
 
   use GRPC.Service, name: "control_client.ScsControl", protoc_gen_elixir_version: "0.12.0"
@@ -751,29 +755,37 @@ defmodule ControlClient.ScsControl.Service do
     }
   end
 
-  rpc :CreateCache, ControlClient.CreateCacheRequest, ControlClient.CreateCacheResponse
+  rpc :CreateCache,
+      Momento.Protos.ControlClient.CreateCacheRequest,
+      Momento.Protos.ControlClient.CreateCacheResponse
 
-  rpc :DeleteCache, ControlClient.DeleteCacheRequest, ControlClient.DeleteCacheResponse
+  rpc :DeleteCache,
+      Momento.Protos.ControlClient.DeleteCacheRequest,
+      Momento.Protos.ControlClient.DeleteCacheResponse
 
-  rpc :ListCaches, ControlClient.ListCachesRequest, ControlClient.ListCachesResponse
+  rpc :ListCaches,
+      Momento.Protos.ControlClient.ListCachesRequest,
+      Momento.Protos.ControlClient.ListCachesResponse
 
-  rpc :FlushCache, ControlClient.FlushCacheRequest, ControlClient.FlushCacheResponse
+  rpc :FlushCache,
+      Momento.Protos.ControlClient.FlushCacheRequest,
+      Momento.Protos.ControlClient.FlushCacheResponse
 
   rpc :CreateSigningKey,
-      ControlClient.CreateSigningKeyRequest,
-      ControlClient.CreateSigningKeyResponse
+      Momento.Protos.ControlClient.CreateSigningKeyRequest,
+      Momento.Protos.ControlClient.CreateSigningKeyResponse
 
   rpc :RevokeSigningKey,
-      ControlClient.RevokeSigningKeyRequest,
-      ControlClient.RevokeSigningKeyResponse
+      Momento.Protos.ControlClient.RevokeSigningKeyRequest,
+      Momento.Protos.ControlClient.RevokeSigningKeyResponse
 
   rpc :ListSigningKeys,
-      ControlClient.ListSigningKeysRequest,
-      ControlClient.ListSigningKeysResponse
+      Momento.Protos.ControlClient.ListSigningKeysRequest,
+      Momento.Protos.ControlClient.ListSigningKeysResponse
 end
 
-defmodule ControlClient.ScsControl.Stub do
+defmodule Momento.Protos.ControlClient.ScsControl.Stub do
   @moduledoc false
 
-  use GRPC.Stub, service: ControlClient.ScsControl.Service
+  use GRPC.Stub, service: Momento.Protos.ControlClient.ScsControl.Service
 end
