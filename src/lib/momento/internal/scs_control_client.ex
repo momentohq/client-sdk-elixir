@@ -69,6 +69,7 @@ defmodule Momento.Internal.ScsControlClient do
 
         {:error, error_response} ->
           err = Momento.Error.convert(error_response)
+
           case err.error_code do
             :already_exists_error -> :already_exists
             _ -> {:error, err}
