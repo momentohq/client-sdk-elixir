@@ -12,7 +12,8 @@ defmodule Momento.MixProject do
       description: description(),
       package: package(),
       name: "Momento Elixir SDK",
-      source_url: "https://github.com/momentohq/client-sdk-elixir"
+      source_url: "https://github.com/momentohq/client-sdk-elixir",
+      homepage_url: "https://www.gomomento.com/"
     ]
   end
 
@@ -27,6 +28,7 @@ defmodule Momento.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:ex_doc, "~> 0.27", only: :dev, runtime: false},
       {:dialyxir, "~> 1.3", only: [:dev], runtime: false},
       {:grpc, "~> 0.5.0"},
       {:protobuf, "~> 0.12.0"},
