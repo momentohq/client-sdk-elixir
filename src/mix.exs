@@ -4,15 +4,18 @@ defmodule Momento.MixProject do
   def project do
     [
       app: :momento,
-      version: "0.1.0",
+      version: System.get_env("ELIXIR_SDK_VERSION") || "0.0.1",
       elixir: "~> 1.14",
       start_permanent: Mix.env() == :prod,
       elixirc_paths: elixirc_paths(Mix.env()),
-      deps: deps()
+      deps: deps(),
+      description: description(),
+      package: package(),
+      name: "Momento Elixir SDK",
+      source_url: "https://github.com/momentohq/client-sdk-elixir"
     ]
   end
 
-  # Run "mix help compile.app" to learn about applications.
   def application do
     [
       extra_applications: [:logger]
@@ -31,6 +34,18 @@ defmodule Momento.MixProject do
       {:joken, "~> 2.5"},
       {:jason, "~> 1.4"},
       {:tls_certificate_check, "~> 1.19"}
+    ]
+  end
+
+  defp description() do
+    "Elixir client SDK for Momento Serverless Cache."
+  end
+
+  defp package() do
+    [
+      files: ~w(lib generated .formatter.exs mix.exs ../README.md ../LICENSE),
+      licenses: ["Apache-2.0"],
+      links: %{"GitHub" => "https://github.com/momentohq/client-sdk-elixir"}
     ]
   end
 end
