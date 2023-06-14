@@ -1,6 +1,6 @@
 defmodule Momento.Internal.ScsDataClient do
-  alias Momento.Configuration
   alias Momento.Auth.CredentialProvider
+  alias Momento.Responses.{Set, Get, Delete}
   import Momento.Validation
 
   @enforce_keys [:auth_token, :channel]
@@ -51,7 +51,7 @@ defmodule Momento.Internal.ScsDataClient do
       case Momento.Protos.CacheClient.Scs.Stub.set(data_client.channel, set_request,
              metadata: metadata
            ) do
-        {:ok, _} -> :success
+        {:ok, _} -> {:ok, %Set.Ok{}}
         {:error, error_response} -> {:error, Momento.Error.convert(error_response)}
       end
     else
@@ -72,7 +72,7 @@ defmodule Momento.Internal.ScsDataClient do
              metadata: metadata
            ) do
         {:ok, %Momento.Protos.CacheClient.GetResponse{result: :Hit, cache_body: cache_body}} ->
-          {:hit, cache_body}
+          {:hit, %Get.Hit{value: cache_body}}
 
         {:ok, %Momento.Protos.CacheClient.GetResponse{result: :Miss}} ->
           :miss
@@ -97,7 +97,7 @@ defmodule Momento.Internal.ScsDataClient do
       case Momento.Protos.CacheClient.Scs.Stub.delete(data_client.channel, delete_request,
              metadata: metadata
            ) do
-        {:ok, _} -> :success
+        {:ok, _} -> {:ok, %Delete.Ok{}}
         {:error, error_response} -> {:error, Momento.Error.convert(error_response)}
       end
     else

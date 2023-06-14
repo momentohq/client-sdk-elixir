@@ -33,14 +33,14 @@ defmodule CacheClientTest do
     value = "test_value"
     ttl_seconds = 60.0
 
-    assert CacheClient.set(cache_client, cache_name, key, value, ttl_seconds) == :success
+    {:ok, _} = CacheClient.set(cache_client, cache_name, key, value, ttl_seconds)
 
     {:hit, get_result} = CacheClient.get(cache_client, cache_name, key)
-    assert match?(^value, get_result)
+    assert match?(^value, get_result.value)
 
-    assert CacheClient.delete(cache_client, cache_name, key) == :success
+    {:ok, _} = CacheClient.delete(cache_client, cache_name, key)
 
-    assert CacheClient.get(cache_client, cache_name, key) == :miss
+    :miss = CacheClient.get(cache_client, cache_name, key)
   end
 
   test "set/5 returns an error with a bad key", %{
@@ -117,7 +117,7 @@ defmodule CacheClientTest do
   } do
     key = random_string(16)
 
-    assert CacheClient.delete(cache_client, cache_name, key) == :success
+    {:ok, _} = CacheClient.delete(cache_client, cache_name, key)
   end
 
   test "delete/3 validates cache name", %{cache_client: cache_client} do

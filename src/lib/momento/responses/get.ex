@@ -1,3 +1,12 @@
 defmodule Momento.Responses.Get do
-  @type t() :: {:hit, binary} | :miss | {:error, Momento.Error.t()}
+  defmodule Hit do
+    @enforce_keys [:value]
+    defstruct [:value]
+
+    @type t() :: %__MODULE__{
+            value: binary
+          }
+  end
+
+  @type t() :: {:hit, Momento.Responses.Get.Hit.t()} | :miss | {:error, Momento.Error.t()}
 end

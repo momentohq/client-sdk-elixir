@@ -1,3 +1,9 @@
 defmodule Momento.Responses.Set do
-  @type t() :: :success | {:error, Momento.Error.t()}
+  defmodule Ok do
+    @enforce_keys []
+    defstruct []
+    @type t() :: %__MODULE__{}
+  end
+
+  @type t() :: {:ok, Momento.Responses.Set.Ok.t()} | {:error, Momento.Error.t()}
 end

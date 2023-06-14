@@ -1,5 +1,5 @@
 defmodule Momento.Responses.ListCaches do
-  defmodule Success do
+  defmodule Ok do
     @enforce_keys [:caches]
     defstruct [:caches]
 
@@ -8,5 +8,5 @@ defmodule Momento.Responses.ListCaches do
           }
   end
 
-  @type t() :: {:success, Success.t()} | {:error, Momento.Error.t()}
+  @type t() :: {:ok, Ok.t()} | {:error, Momento.Error.t()}
 end

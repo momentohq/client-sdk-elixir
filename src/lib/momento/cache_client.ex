@@ -67,7 +67,7 @@ defmodule Momento.CacheClient do
 
   ## Returns
 
-  - `:success` on a successful create.
+  - `{:ok, %Momento.Responses.ListCaches.Ok{caches: caches}}` on a successful listing.
   - `{:error, error}` tuple if an error occurs.
   """
   @spec list_caches(client :: t()) :: Momento.Responses.ListCaches.t()
@@ -85,7 +85,7 @@ defmodule Momento.CacheClient do
 
   ## Returns
 
-  - `:success` on a successful create.
+  - `{:ok, %Momento.Responses.CreateCache.Ok{}}` on a successful create.
   - `:already_exists` if a cache with the specified name already exists.
   - `{:error, error}` tuple if an error occurs.
   """
@@ -107,7 +107,7 @@ defmodule Momento.CacheClient do
 
   ## Returns
 
-  - `:success` on a successful delete.
+  - `{:ok, %Momento.Responses.DeleteCache.Ok{}}` on a successful delete.
   - `{:error, error}` tuple if an error occurs.
   """
   @spec delete_cache(
@@ -131,7 +131,7 @@ defmodule Momento.CacheClient do
 
   ## Returns
 
-  - `:success` on a successful set.
+  - `{:ok, %Momento.Responses.Set.Ok{}}` on a successful set.
   - `{:error, error}` tuple if an error occurs.
   """
   @spec set(
@@ -157,7 +157,7 @@ defmodule Momento.CacheClient do
 
   ## Returns
 
-  - `{:hit, value}` tuple if the key exists.
+  - `{:ok, %Momento.Responses.Get.Hit{value: value}}` tuple if the key exists.
   - `:miss` if the key does not exist.
   - `{:error, error}` tuple if an error occurs.
   """
@@ -178,11 +178,11 @@ defmodule Momento.CacheClient do
 
   ## Returns
 
-  - `:success` on a successful deletion.
+  - `{:ok, %Momento.Responses.Delete.Ok{}}` on a successful deletion.
   - `{:error, error}` tuple if an error occurs.
   """
   @spec delete(client :: t(), cache_name :: String.t(), key :: binary) ::
-          Momento.Responses.Get.t()
+          Momento.Responses.Delete.t()
   def delete(client, cache_name, key) do
     ScsDataClient.delete(client.data_client, cache_name, key)
   end
