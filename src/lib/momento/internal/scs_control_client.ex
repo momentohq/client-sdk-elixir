@@ -2,8 +2,7 @@ defmodule Momento.Internal.ScsControlClient do
   import Momento.Validation
 
   alias Momento.Auth.CredentialProvider
-  alias Momento.Configuration
-  alias Momento.Responses.CacheInfo
+  alias Momento.Responses.{CacheInfo, CreateCache, DeleteCache, ListCaches}
 
   @enforce_keys [:auth_token, :channel]
   defstruct [:auth_token, :channel]
@@ -40,8 +39,8 @@ defmodule Momento.Internal.ScsControlClient do
            metadata: metadata
          ) do
       {:ok, response} ->
-        {:success,
-         %Momento.Responses.ListCaches.Success{
+        {:ok,
+         %ListCaches.Ok{
            caches: Enum.map(response.cache, fn c -> %CacheInfo{name: c.cache_name} end)
          }}
 
@@ -65,7 +64,7 @@ defmodule Momento.Internal.ScsControlClient do
              metadata: metadata
            ) do
         {:ok, _} ->
-          :success
+          {:ok, %CreateCache.Ok{}}
 
         {:error, error_response} ->
           err = Momento.Error.convert(error_response)
@@ -93,7 +92,7 @@ defmodule Momento.Internal.ScsControlClient do
              metadata: metadata
            ) do
         {:ok, _} ->
-          :success
+          {:ok, %DeleteCache.Ok{}}
 
         {:error, error_response} ->
           {:error, Momento.Error.convert(error_response)}

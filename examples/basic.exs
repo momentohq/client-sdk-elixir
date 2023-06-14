@@ -21,7 +21,7 @@ defmodule Momento.Examples.Basic do
     response = Task.await(set_task)
 
     case response do
-      :success -> Logger.info("'set' successful for key #{key}")
+      {:ok, _} -> Logger.info("'set' successful for key #{key}")
       {:error, error} -> Logger.info("Got an error for key #{key}: #{inspect(error)}")
     end
 
@@ -39,9 +39,14 @@ defmodule Momento.Examples.Basic do
     response = Task.await(get_task)
 
     case response do
-      {:hit, value} -> Logger.info("'get' resulted in a 'hit' for key #{key}: #{inspect(value)}")
-      :miss -> Logger.info("'get' resulted in a 'miss' for key #{key}.")
-      {:error, error} -> Logger.info("Got an error for key #{key}: #{inspect(error)}")
+      {:hit, result} ->
+        Logger.info("'get' resulted in a 'hit' for key #{key}: #{inspect(result.value)}")
+
+      :miss ->
+        Logger.info("'get' resulted in a 'miss' for key #{key}.")
+
+      {:error, error} ->
+        Logger.info("Got an error for key #{key}: #{inspect(error)}")
     end
 
     key
