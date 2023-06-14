@@ -31,10 +31,17 @@ jobs:
         allow-initial-development-versions: true
         force-bump-patch-version: true
 
+    - name: Replace version
+      uses: jacobtomlinson/gha-find-replace@v3
+      with:
+        regex: false
+        find: "0.0.1-develop"
+        replace: ${{ steps.semrel.outputs.version }}
+        include: "src/mix.exs"
+
     - name: Publish to hex
       env:
         HEX_API_KEY: ${{ secrets.ELIXIR_HEX_PACKAGE_PUBLISH_API_KEY }}
-        ELIXIR_SDK_VERSION: ${{ steps.semrel.outputs.version }}
       run: |
         pushd src
           mix hex.publish --yes
