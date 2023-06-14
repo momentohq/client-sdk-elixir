@@ -41,7 +41,9 @@ defmodule CacheControlPlaneTest do
       end)
     end
 
-    test "should return :already_exists if the cache already exists", %{cache_client: cache_client} do
+    test "should return :already_exists if the cache already exists", %{
+      cache_client: cache_client
+    } do
       cache_name = "elixir-int-test-#{random_string(10)}"
       :success = CacheClient.create_cache(cache_client, cache_name)
       :already_exists = CacheClient.create_cache(cache_client, cache_name)
