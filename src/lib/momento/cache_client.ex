@@ -1,11 +1,10 @@
 defmodule Momento.CacheClient do
   alias Momento.Auth.CredentialProvider
-  alias Momento.Configuration
   alias Momento.Internal.ScsControlClient
   alias Momento.Internal.ScsDataClient
+  alias Momento.Config.Configuration, as: Configuration
 
   require Logger
-  alias Momento.Config.Configuration, as: Configuration
 
   @moduledoc """
   Client to perform operations against a Momento cache.
@@ -44,7 +43,7 @@ defmodule Momento.CacheClient do
   - A `%Momento.CacheClient{}` struct representing the connected client.
   """
   @spec create!(
-          config :: Momento.Configuration.t(),
+          config :: Configuration.t(),
           credential_provider :: CredentialProvider.t()
         ) :: t()
   def create!(config, credential_provider) do
