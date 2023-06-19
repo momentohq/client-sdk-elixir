@@ -26,7 +26,7 @@ defmodule Momento.CacheClientTest do
       sorted_set_name = "sorted set name"
       value = "value"
       score = 1.0
-      collection_ttl = Momento.Requests.CollectionTtl.of(60)
+      collection_ttl = Momento.Requests.CollectionTtl.of(60.0)
 
       {:error, error} =
         CacheClient.sorted_set_put_element(
@@ -35,7 +35,7 @@ defmodule Momento.CacheClientTest do
           sorted_set_name,
           value,
           score,
-          collection_ttl
+          collection_ttl: collection_ttl
         )
 
       assert String.contains?(error.message, "The cache name cannot be nil")
@@ -47,7 +47,7 @@ defmodule Momento.CacheClientTest do
           sorted_set_name,
           value,
           score,
-          collection_ttl
+          collection_ttl: collection_ttl
         )
 
       assert String.contains?(error.message, "The cache name must be a string")
@@ -57,7 +57,7 @@ defmodule Momento.CacheClientTest do
       cache_name = "cache name"
       value = "value"
       score = 1.0
-      collection_ttl = Momento.Requests.CollectionTtl.of(60)
+      collection_ttl = Momento.Requests.CollectionTtl.of(60.0)
 
       {:error, error} =
         CacheClient.sorted_set_put_element(
@@ -66,7 +66,7 @@ defmodule Momento.CacheClientTest do
           nil,
           value,
           score,
-          collection_ttl
+          collection_ttl: collection_ttl
         )
 
       assert String.contains?(error.message, "The sorted set name cannot be nil")
@@ -78,7 +78,7 @@ defmodule Momento.CacheClientTest do
           12345,
           value,
           score,
-          collection_ttl
+          collection_ttl: collection_ttl
         )
 
       assert String.contains?(error.message, "The sorted set name must be a string")
@@ -88,7 +88,7 @@ defmodule Momento.CacheClientTest do
       cache_name = "cache name"
       sorted_set_name = "sorted set name"
       score = 1.0
-      collection_ttl = Momento.Requests.CollectionTtl.of(60)
+      collection_ttl = Momento.Requests.CollectionTtl.of(60.0)
 
       {:error, error} =
         CacheClient.sorted_set_put_element(
@@ -97,7 +97,7 @@ defmodule Momento.CacheClientTest do
           sorted_set_name,
           nil,
           score,
-          collection_ttl
+          collection_ttl: collection_ttl
         )
 
       assert String.contains?(
@@ -112,7 +112,7 @@ defmodule Momento.CacheClientTest do
           sorted_set_name,
           12345,
           score,
-          collection_ttl
+          collection_ttl: collection_ttl
         )
 
       assert String.contains?(
@@ -125,7 +125,7 @@ defmodule Momento.CacheClientTest do
       cache_name = "cache name"
       sorted_set_name = "sorted set name"
       value = "value"
-      collection_ttl = Momento.Requests.CollectionTtl.of(60)
+      collection_ttl = Momento.Requests.CollectionTtl.of(60.0)
 
       {:error, error} =
         CacheClient.sorted_set_put_element(
@@ -134,7 +134,7 @@ defmodule Momento.CacheClientTest do
           sorted_set_name,
           value,
           nil,
-          collection_ttl
+          collection_ttl: collection_ttl
         )
 
       assert String.contains?(
@@ -149,7 +149,7 @@ defmodule Momento.CacheClientTest do
           sorted_set_name,
           value,
           "one",
-          collection_ttl
+          collection_ttl: collection_ttl
         )
 
       assert String.contains?(
@@ -171,7 +171,7 @@ defmodule Momento.CacheClientTest do
           sorted_set_name,
           value,
           score,
-          "ttl"
+          collection_ttl: "ttl"
         )
 
       assert String.contains?(
@@ -185,7 +185,7 @@ defmodule Momento.CacheClientTest do
     test "returns an error with a bad cache name" do
       sorted_set_name = "sorted set name"
       elements = [{"key1", 1.0}]
-      collection_ttl = Momento.Requests.CollectionTtl.of(60)
+      collection_ttl = Momento.Requests.CollectionTtl.of(60.0)
 
       {:error, error} =
         CacheClient.sorted_set_put_elements(
@@ -193,7 +193,7 @@ defmodule Momento.CacheClientTest do
           nil,
           sorted_set_name,
           elements,
-          collection_ttl
+          collection_ttl: collection_ttl
         )
 
       assert String.contains?(error.message, "The cache name cannot be nil")
@@ -204,7 +204,7 @@ defmodule Momento.CacheClientTest do
           12345,
           sorted_set_name,
           elements,
-          collection_ttl
+          collection_ttl: collection_ttl
         )
 
       assert String.contains?(error.message, "The cache name must be a string")
@@ -213,7 +213,7 @@ defmodule Momento.CacheClientTest do
     test "returns an error with a bad sorted set name" do
       cache_name = "cache name"
       elements = [{"key1", 1.0}]
-      collection_ttl = Momento.Requests.CollectionTtl.of(60)
+      collection_ttl = Momento.Requests.CollectionTtl.of(60.0)
 
       {:error, error} =
         CacheClient.sorted_set_put_elements(
@@ -221,7 +221,7 @@ defmodule Momento.CacheClientTest do
           cache_name,
           nil,
           elements,
-          collection_ttl
+          collection_ttl: collection_ttl
         )
 
       assert String.contains?(error.message, "The sorted set name cannot be nil")
@@ -232,7 +232,7 @@ defmodule Momento.CacheClientTest do
           cache_name,
           12345,
           elements,
-          collection_ttl
+          collection_ttl: collection_ttl
         )
 
       assert String.contains?(error.message, "The sorted set name must be a string")
@@ -241,7 +241,7 @@ defmodule Momento.CacheClientTest do
     test "returns an error with bad elements" do
       cache_name = "cache name"
       sorted_set_name = "sorted set name"
-      collection_ttl = Momento.Requests.CollectionTtl.of(60)
+      collection_ttl = Momento.Requests.CollectionTtl.of(60.0)
 
       {:error, error} =
         CacheClient.sorted_set_put_elements(
@@ -249,7 +249,7 @@ defmodule Momento.CacheClientTest do
           cache_name,
           sorted_set_name,
           nil,
-          collection_ttl
+          collection_ttl: collection_ttl
         )
 
       assert String.contains?(
@@ -263,7 +263,7 @@ defmodule Momento.CacheClientTest do
           cache_name,
           sorted_set_name,
           [{nil, 1.0}],
-          collection_ttl
+          collection_ttl: collection_ttl
         )
 
       assert String.contains?(
@@ -277,7 +277,7 @@ defmodule Momento.CacheClientTest do
           cache_name,
           sorted_set_name,
           [{12345, 1.0}],
-          collection_ttl
+          collection_ttl: collection_ttl
         )
 
       assert String.contains?(
@@ -291,7 +291,7 @@ defmodule Momento.CacheClientTest do
           cache_name,
           sorted_set_name,
           [{"key1", nil}],
-          collection_ttl
+          collection_ttl: collection_ttl
         )
 
       assert String.contains?(
@@ -305,7 +305,7 @@ defmodule Momento.CacheClientTest do
           cache_name,
           sorted_set_name,
           [{"key1", "one"}],
-          collection_ttl
+          collection_ttl: collection_ttl
         )
 
       assert String.contains?(
@@ -325,7 +325,7 @@ defmodule Momento.CacheClientTest do
           cache_name,
           sorted_set_name,
           elements,
-          "ttl"
+          collection_ttl: "ttl"
         )
 
       assert String.contains?(
@@ -347,9 +347,9 @@ defmodule Momento.CacheClientTest do
           @fake_cache_client,
           nil,
           sorted_set_name,
-          start_rank,
-          end_rank,
-          sort_order
+          start_rank: start_rank,
+          end_rank: end_rank,
+          sort_order: sort_order
         )
 
       assert String.contains?(error.message, "The cache name cannot be nil")
@@ -359,9 +359,9 @@ defmodule Momento.CacheClientTest do
           @fake_cache_client,
           12345,
           sorted_set_name,
-          start_rank,
-          end_rank,
-          sort_order
+          start_rank: start_rank,
+          end_rank: end_rank,
+          sort_order: sort_order
         )
 
       assert String.contains?(error.message, "The cache name must be a string")
@@ -378,9 +378,9 @@ defmodule Momento.CacheClientTest do
           @fake_cache_client,
           cache_name,
           nil,
-          start_rank,
-          end_rank,
-          sort_order
+          start_rank: start_rank,
+          end_rank: end_rank,
+          sort_order: sort_order
         )
 
       assert String.contains?(error.message, "The sorted set name cannot be nil")
@@ -390,9 +390,9 @@ defmodule Momento.CacheClientTest do
           @fake_cache_client,
           cache_name,
           12345,
-          start_rank,
-          end_rank,
-          sort_order
+          start_rank: start_rank,
+          end_rank: end_rank,
+          sort_order: sort_order
         )
 
       assert String.contains?(error.message, "The sorted set name must be a string")
@@ -408,9 +408,9 @@ defmodule Momento.CacheClientTest do
           @fake_cache_client,
           cache_name,
           sorted_set_name,
-          "start",
-          10,
-          sort_order
+          start_rank: "start",
+          end_rank: 10,
+          sort_order: sort_order
         )
 
       assert String.contains?(error.message, "start is not an integer")
@@ -420,9 +420,9 @@ defmodule Momento.CacheClientTest do
           @fake_cache_client,
           cache_name,
           sorted_set_name,
-          1,
-          "end",
-          sort_order
+          start_rank: 1,
+          end_rank: "end",
+          sort_order: sort_order
         )
 
       assert String.contains?(error.message, "end is not an integer")
@@ -432,9 +432,9 @@ defmodule Momento.CacheClientTest do
           @fake_cache_client,
           cache_name,
           sorted_set_name,
-          100,
-          10,
-          sort_order
+          start_rank: 100,
+          end_rank: 10,
+          sort_order: sort_order
         )
 
       assert String.contains?(
@@ -454,9 +454,9 @@ defmodule Momento.CacheClientTest do
           @fake_cache_client,
           cache_name,
           sorted_set_name,
-          start_rank,
-          end_rank,
-          :bad_order
+          start_rank: start_rank,
+          end_rank: end_rank,
+          sort_order: :bad_order
         )
 
       assert String.contains?(error.message, "The sort order must be either :asc or :desc")

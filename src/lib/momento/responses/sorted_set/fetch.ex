@@ -1,10 +1,10 @@
 defmodule Momento.Responses.SortedSet.Fetch do
   defmodule Hit do
-    @enforce_keys [:scored_values]
-    defstruct [:scored_values]
+    @enforce_keys [:value]
+    defstruct [:value]
 
     @type t() :: %__MODULE__{
-            scored_values: [{binary(), float()}]
+            value: [{binary(), float()}]
           }
   end
 

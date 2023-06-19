@@ -199,7 +199,7 @@ defmodule Momento.CacheClient do
           sorted_set_name :: String.t(),
           value :: binary(),
           score :: float(),
-          collection_ttl :: CollectionTtl.t() | nil
+          opts :: [collection_ttl :: CollectionTtl.t()]
         ) :: SortedSet.PutElement.t()
   def sorted_set_put_element(
         client,
@@ -207,16 +207,17 @@ defmodule Momento.CacheClient do
         sorted_set_name,
         value,
         score,
-        collection_ttl \\ nil
+        opts \\ []
       ) do
-    ttl = collection_ttl || CollectionTtl.of(client.default_ttl_seconds)
+    collection_ttl =
+      Keyword.get(opts, :collection_ttl, CollectionTtl.of(client.default_ttl_seconds))
 
     case ScsDataClient.sorted_set_put_elements(
            client.data_client,
            cache_name,
            sorted_set_name,
            [{value, score}],
-           ttl
+           collection_ttl
          ) do
       {:ok, _} -> {:ok, %Momento.Responses.SortedSet.PutElement.Ok{}}
       {:error, error} -> {:error, error}
@@ -228,23 +229,24 @@ defmodule Momento.CacheClient do
           cache_name :: String.t(),
           sorted_set_name :: String.t(),
           elements :: %{binary() => float()} | [{binary(), float()}],
-          collection_ttl :: CollectionTtl.t() | nil
+          opts :: [collection_ttl :: CollectionTtl.t()]
         ) :: SortedSet.PutElements.t()
   def sorted_set_put_elements(
         client,
         cache_name,
         sorted_set_name,
         elements,
-        collection_ttl \\ nil
+        opts \\ []
       ) do
-    ttl = collection_ttl || CollectionTtl.of(client.default_ttl_seconds)
+    collection_ttl =
+      Keyword.get(opts, :collection_ttl, CollectionTtl.of(client.default_ttl_seconds))
 
     ScsDataClient.sorted_set_put_elements(
       client.data_client,
       cache_name,
       sorted_set_name,
       elements,
-      ttl
+      collection_ttl
     )
   end
 
@@ -252,18 +254,18 @@ defmodule Momento.CacheClient do
           client :: t(),
           cache_name :: String.t(),
           sorted_set_name :: String.t(),
-          start_rank :: integer() | nil,
-          end_rank :: integer() | nil,
-          sort_order :: :asc | :desc
+          opts :: [start_rank: integer(), end_rank: integer(), sort_order: :asc | :desc]
         ) :: SortedSet.Fetch.t()
   def sorted_set_fetch_by_rank(
         client,
         cache_name,
         sorted_set_name,
-        start_rank \\ nil,
-        end_rank \\ nil,
-        sort_order \\ :asc
+        opts \\ []
       ) do
+    start_rank = Keyword.get(opts, :start_rank)
+    end_rank = Keyword.get(opts, :end_rank)
+    sort_order = Keyword.get(opts, :sort_order, :asc)
+
     ScsDataClient.sorted_set_fetch_by_rank(
       client.data_client,
       cache_name,

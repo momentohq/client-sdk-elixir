@@ -137,7 +137,7 @@ defmodule CacheClientTest do
     assert String.contains?(error.message, "The key must be a binary")
   end
 
-  describe "sorted_set_put_elements/5 happy path" do
+  describe "sorted_set_put_elements/5" do
     test "should be able to put elements in a sorted set, overwriting existing elements", %{
       cache_client: cache_client,
       cache_name: cache_name
@@ -157,7 +157,7 @@ defmodule CacheClientTest do
         )
 
       {:ok, hit} = CacheClient.sorted_set_fetch_by_rank(cache_client, cache_name, sorted_set_name)
-      assert hit.scored_values == [{"key1", 1.0}, {"key2", 2.0}]
+      assert hit.value == [{"key1", 1.0}, {"key2", 2.0}]
 
       {:ok, _} =
         CacheClient.sorted_set_put_elements(
@@ -168,11 +168,11 @@ defmodule CacheClientTest do
         )
 
       {:ok, hit} = CacheClient.sorted_set_fetch_by_rank(cache_client, cache_name, sorted_set_name)
-      assert hit.scored_values == [{"key1", 1.0}, {"key3", 3.0}, {"key2", 5.0}]
+      assert hit.value == [{"key1", 1.0}, {"key3", 3.0}, {"key2", 5.0}]
     end
   end
 
-  describe "sorted_set_put_element/6 happy path" do
+  describe "sorted_set_put_element/6" do
     test "should be able to put individual elements in a sorted set, overwriting existing elements",
          %{
            cache_client: cache_client,
@@ -186,19 +186,19 @@ defmodule CacheClientTest do
         CacheClient.sorted_set_put_element(cache_client, cache_name, sorted_set_name, "key1", 1.0)
 
       {:ok, hit} = CacheClient.sorted_set_fetch_by_rank(cache_client, cache_name, sorted_set_name)
-      assert hit.scored_values == [{"key1", 1.0}]
+      assert hit.value == [{"key1", 1.0}]
 
       {:ok, _} =
         CacheClient.sorted_set_put_element(cache_client, cache_name, sorted_set_name, "key1", 5.0)
 
       {:ok, hit} = CacheClient.sorted_set_fetch_by_rank(cache_client, cache_name, sorted_set_name)
-      assert hit.scored_values == [{"key1", 5.0}]
+      assert hit.value == [{"key1", 5.0}]
 
       {:ok, _} =
         CacheClient.sorted_set_put_element(cache_client, cache_name, sorted_set_name, "key2", 2.0)
 
       {:ok, hit} = CacheClient.sorted_set_fetch_by_rank(cache_client, cache_name, sorted_set_name)
-      assert hit.scored_values == [{"key2", 2.0}, {"key1", 5.0}]
+      assert hit.value == [{"key2", 2.0}, {"key1", 5.0}]
     end
   end
 
@@ -220,24 +220,20 @@ defmodule CacheClientTest do
           cache_client,
           cache_name,
           sorted_set_name,
-          nil,
-          nil,
-          :asc
+          sort_order: :asc
         )
 
-      assert hit.scored_values == [{"key1", 1.0}, {"key2", 2.0}, {"key3", 3.0}]
+      assert hit.value == [{"key1", 1.0}, {"key2", 2.0}, {"key3", 3.0}]
 
       {:ok, hit} =
         CacheClient.sorted_set_fetch_by_rank(
           cache_client,
           cache_name,
           sorted_set_name,
-          nil,
-          nil,
-          :desc
+          sort_order: :desc
         )
 
-      assert hit.scored_values == [{"key3", 3.0}, {"key2", 2.0}, {"key1", 1.0}]
+      assert hit.value == [{"key3", 3.0}, {"key2", 2.0}, {"key1", 1.0}]
     end
 
     test "should be able to fetch a subset of a sorted set", %{
@@ -253,9 +249,11 @@ defmodule CacheClientTest do
         CacheClient.sorted_set_put_elements(cache_client, cache_name, sorted_set_name, elements)
 
       {:ok, hit} =
-        CacheClient.sorted_set_fetch_by_rank(cache_client, cache_name, sorted_set_name, 0, nil)
+        CacheClient.sorted_set_fetch_by_rank(cache_client, cache_name, sorted_set_name,
+          start_rank: 0
+        )
 
-      assert hit.scored_values == [
+      assert hit.value == [
                {"key1", 1.0},
                {"key2", 2.0},
                {"key3", 3.0},
@@ -264,9 +262,12 @@ defmodule CacheClientTest do
              ]
 
       {:ok, hit} =
-        CacheClient.sorted_set_fetch_by_rank(cache_client, cache_name, sorted_set_name, 0, 5)
+        CacheClient.sorted_set_fetch_by_rank(cache_client, cache_name, sorted_set_name,
+          start_rank: 0,
+          end_rank: 5
+        )
 
-      assert hit.scored_values == [
+      assert hit.value == [
                {"key1", 1.0},
                {"key2", 2.0},
                {"key3", 3.0},
@@ -275,9 +276,12 @@ defmodule CacheClientTest do
              ]
 
       {:ok, hit} =
-        CacheClient.sorted_set_fetch_by_rank(cache_client, cache_name, sorted_set_name, 0, 100)
+        CacheClient.sorted_set_fetch_by_rank(cache_client, cache_name, sorted_set_name,
+          start_rank: 0,
+          end_rank: 100
+        )
 
-      assert hit.scored_values == [
+      assert hit.value == [
                {"key1", 1.0},
                {"key2", 2.0},
                {"key3", 3.0},
@@ -286,21 +290,24 @@ defmodule CacheClientTest do
              ]
 
       {:ok, hit} =
-        CacheClient.sorted_set_fetch_by_rank(cache_client, cache_name, sorted_set_name, 1, 3)
+        CacheClient.sorted_set_fetch_by_rank(cache_client, cache_name, sorted_set_name,
+          start_rank: 1,
+          end_rank: 3
+        )
 
-      assert hit.scored_values == [{"key2", 2.0}, {"key3", 3.0}]
+      assert hit.value == [{"key2", 2.0}, {"key3", 3.0}]
 
       {:ok, hit} =
         CacheClient.sorted_set_fetch_by_rank(
           cache_client,
           cache_name,
           sorted_set_name,
-          1,
-          3,
-          :desc
+          start_rank: 1,
+          end_rank: 3,
+          sort_order: :desc
         )
 
-      assert hit.scored_values == [{"key4", 4.0}, {"key3", 3.0}]
+      assert hit.value == [{"key4", 4.0}, {"key3", 3.0}]
     end
   end
 end

@@ -282,7 +282,7 @@ defmodule Momento.Internal.ScsDataClient do
                 {element.value, element.score}
               end)
 
-            {:ok, %Momento.Responses.SortedSet.Fetch.Hit{scored_values: scored_values}}
+            {:ok, %Momento.Responses.SortedSet.Fetch.Hit{value: scored_values}}
 
           {:missing, _} ->
             :miss
