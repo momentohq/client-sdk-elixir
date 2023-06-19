@@ -1,5 +1,8 @@
 defmodule Momento.CacheClient do
   alias Momento.Auth.CredentialProvider
+  alias Momento.Responses.{CreateCache, DeleteCache, ListCaches, Set, Get, Delete}
+  alias Momento.Responses.SortedSet
+  alias Momento.Requests.CollectionTtl
   alias Momento.Internal.ScsControlClient
   alias Momento.Internal.ScsDataClient
   alias Momento.Config.Configuration, as: Configuration
@@ -13,12 +16,14 @@ defmodule Momento.CacheClient do
   @enforce_keys [
     :config,
     :credential_provider,
+    :default_ttl_seconds,
     :control_client,
     :data_client
   ]
   defstruct [
     :config,
     :credential_provider,
+    :default_ttl_seconds,
     :control_client,
     :data_client
   ]
@@ -26,6 +31,7 @@ defmodule Momento.CacheClient do
   @opaque t() :: %__MODULE__{
             config: Configuration.t(),
             credential_provider: CredentialProvider.t(),
+            default_ttl_seconds: float(),
             control_client: ScsControlClient.t(),
             data_client: ScsDataClient.t()
           }
@@ -44,14 +50,16 @@ defmodule Momento.CacheClient do
   """
   @spec create!(
           config :: Configuration.t(),
-          credential_provider :: CredentialProvider.t()
+          credential_provider :: CredentialProvider.t(),
+          default_ttl_seconds :: float()
         ) :: t()
-  def create!(config, credential_provider) do
+  def create!(config, credential_provider, default_ttl_seconds) do
     with control_client <- ScsControlClient.create!(credential_provider),
          data_client <- ScsDataClient.create!(credential_provider) do
       %__MODULE__{
         config: config,
         credential_provider: credential_provider,
+        default_ttl_seconds: default_ttl_seconds,
         control_client: control_client,
         data_client: data_client
       }
@@ -70,7 +78,7 @@ defmodule Momento.CacheClient do
   - `{:ok, %Momento.Responses.ListCaches.Ok{caches: caches}}` on a successful listing.
   - `{:error, error}` tuple if an error occurs.
   """
-  @spec list_caches(client :: t()) :: Momento.Responses.ListCaches.t()
+  @spec list_caches(client :: t()) :: ListCaches.t()
   def list_caches(client) do
     ScsControlClient.list_caches(client.control_client)
   end
@@ -92,7 +100,7 @@ defmodule Momento.CacheClient do
   @spec create_cache(
           client :: t(),
           cache_name :: String.t()
-        ) :: Momento.Responses.DeleteCache.t()
+        ) :: CreateCache.t()
   def create_cache(client, cache_name) do
     ScsControlClient.create_cache(client.control_client, cache_name)
   end
@@ -113,7 +121,7 @@ defmodule Momento.CacheClient do
   @spec delete_cache(
           client :: t(),
           cache_name :: String.t()
-        ) :: Momento.Responses.DeleteCache.t()
+        ) :: DeleteCache.t()
   def delete_cache(client, cache_name) do
     ScsControlClient.delete_cache(client.control_client, cache_name)
   end
@@ -139,11 +147,11 @@ defmodule Momento.CacheClient do
           cache_name :: String.t(),
           key :: binary(),
           value :: binary(),
-          ttl_seconds :: float()
-        ) ::
-          Momento.Responses.Set.t()
+          ttl_seconds :: float() | nil
+        ) :: Set.t()
   def set(client, cache_name, key, value, ttl_seconds) do
-    ScsDataClient.set(client.data_client, cache_name, key, value, ttl_seconds)
+    ttl = ttl_seconds || client.default_ttl_seconds
+    ScsDataClient.set(client.data_client, cache_name, key, value, ttl)
   end
 
   @doc """
@@ -161,8 +169,7 @@ defmodule Momento.CacheClient do
   - `:miss` if the key does not exist.
   - `{:error, error}` tuple if an error occurs.
   """
-  @spec get(client :: t(), cache_name :: String.t(), key :: binary) ::
-          Momento.Responses.Get.t()
+  @spec get(client :: t(), cache_name :: String.t(), key :: binary) :: Get.t()
   def get(client, cache_name, key) do
     ScsDataClient.get(client.data_client, cache_name, key)
   end
@@ -181,9 +188,89 @@ defmodule Momento.CacheClient do
   - `{:ok, %Momento.Responses.Delete.Ok{}}` on a successful deletion.
   - `{:error, error}` tuple if an error occurs.
   """
-  @spec delete(client :: t(), cache_name :: String.t(), key :: binary) ::
-          Momento.Responses.Delete.t()
+  @spec delete(client :: t(), cache_name :: String.t(), key :: binary) :: Delete.t()
   def delete(client, cache_name, key) do
     ScsDataClient.delete(client.data_client, cache_name, key)
+  end
+
+  @spec sorted_set_put_element(
+          client :: t(),
+          cache_name :: String.t(),
+          sorted_set_name :: String.t(),
+          value :: binary(),
+          score :: float(),
+          collection_ttl :: CollectionTtl.t() | nil
+        ) :: SortedSet.PutElement.t()
+  def sorted_set_put_element(
+        client,
+        cache_name,
+        sorted_set_name,
+        value,
+        score,
+        collection_ttl \\ nil
+      ) do
+    ttl = collection_ttl || CollectionTtl.of(client.default_ttl_seconds)
+
+    case ScsDataClient.sorted_set_put_elements(
+           client.data_client,
+           cache_name,
+           sorted_set_name,
+           [{value, score}],
+           ttl
+         ) do
+      {:ok, _} -> {:ok, %Momento.Responses.SortedSet.PutElement.Ok{}}
+      {:error, error} -> {:error, error}
+    end
+  end
+
+  @spec sorted_set_put_elements(
+          client :: t(),
+          cache_name :: String.t(),
+          sorted_set_name :: String.t(),
+          elements :: %{binary() => float()} | [{binary(), float()}],
+          collection_ttl :: CollectionTtl.t() | nil
+        ) :: SortedSet.PutElements.t()
+  def sorted_set_put_elements(
+        client,
+        cache_name,
+        sorted_set_name,
+        elements,
+        collection_ttl \\ nil
+      ) do
+    ttl = collection_ttl || CollectionTtl.of(client.default_ttl_seconds)
+
+    ScsDataClient.sorted_set_put_elements(
+      client.data_client,
+      cache_name,
+      sorted_set_name,
+      elements,
+      ttl
+    )
+  end
+
+  @spec sorted_set_fetch_by_rank(
+          client :: t(),
+          cache_name :: String.t(),
+          sorted_set_name :: String.t(),
+          start_rank :: integer() | nil,
+          end_rank :: integer() | nil,
+          sort_order :: :asc | :desc
+        ) :: SortedSet.Fetch.t()
+  def sorted_set_fetch_by_rank(
+        client,
+        cache_name,
+        sorted_set_name,
+        start_rank \\ nil,
+        end_rank \\ nil,
+        sort_order \\ :asc
+      ) do
+    ScsDataClient.sorted_set_fetch_by_rank(
+      client.data_client,
+      cache_name,
+      sorted_set_name,
+      start_rank,
+      end_rank,
+      sort_order
+    )
   end
 end
