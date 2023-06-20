@@ -354,4 +354,98 @@ defmodule Momento.CacheClient do
       values
     )
   end
+
+  @spec sorted_set_get_rank(
+          client :: t(),
+          cache_name :: String.t(),
+          sorted_set_name :: String.t(),
+          value :: binary(),
+          opts :: [sort_order: :asc | :desc]
+        ) :: Momento.Responses.SortedSet.GetRank.t()
+  def sorted_set_get_rank(
+        client,
+        cache_name,
+        sorted_set_name,
+        value,
+        opts \\ []
+      ) do
+    sort_order = Keyword.get(opts, :sort_order, :asc)
+
+    ScsDataClient.sorted_set_get_rank(
+      client.data_client,
+      cache_name,
+      sorted_set_name,
+      value,
+      sort_order
+    )
+  end
+
+  @spec sorted_set_get_score(
+          client :: t(),
+          cache_name :: String.t(),
+          sorted_set_name :: String.t(),
+          value :: binary()
+        ) :: Momento.Responses.SortedSet.GetScore.t()
+  def sorted_set_get_score(
+        client,
+        cache_name,
+        sorted_set_name,
+        value
+      ) do
+    ScsDataClient.sorted_set_get_score(
+      client.data_client,
+      cache_name,
+      sorted_set_name,
+      value
+    )
+  end
+
+  @spec sorted_set_get_scores(
+          client :: t(),
+          cache_name :: String.t(),
+          sorted_set_name :: String.t(),
+          values :: [binary()]
+        ) :: Momento.Responses.SortedSet.GetScores.t()
+  def sorted_set_get_scores(
+        client,
+        cache_name,
+        sorted_set_name,
+        values
+      ) do
+    ScsDataClient.sorted_set_get_scores(
+      client.data_client,
+      cache_name,
+      sorted_set_name,
+      values
+    )
+  end
+
+  @spec sorted_set_increment_score(
+          client :: t(),
+          cache_name :: String.t(),
+          sorted_set_name :: String.t(),
+          value :: binary(),
+          amount :: float(),
+          opts :: [collection_ttl :: CollectionTtl.t()]
+        ) :: Momento.Responses.SortedSet.IncrementScore.t()
+  def sorted_set_increment_score(
+        client,
+        cache_name,
+        sorted_set_name,
+        value,
+        amount,
+        opts \\ []
+      ) do
+    collection_ttl =
+      Keyword.get(opts, :collection_ttl, CollectionTtl.of(client.default_ttl_seconds))
+
+    ScsDataClient.sorted_set_increment_score(
+      client.data_client,
+      cache_name,
+      sorted_set_name,
+      value,
+      amount,
+      collection_ttl
+    )
+  end
 end
