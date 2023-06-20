@@ -13,7 +13,7 @@ defmodule Momento.Error do
   def convert(%GRPC.RPCError{} = error), do: convert_grpc_error(error)
 
   def convert(%Protobuf.EncodeError{} = error),
-    do: invalid_argument("protobuf encode error", error)
+    do: invalid_argument("Unable to encode message. Check cause for details.", error)
 
   def convert(error),
     do: %Momento.Error{
