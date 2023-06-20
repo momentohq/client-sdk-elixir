@@ -292,4 +292,213 @@ defmodule Momento.Internal.ScsDataClient do
         {:error, Momento.Error.convert(error_response)}
     end
   end
+
+  @spec sorted_set_fetch_by_score(
+          data_client :: t(),
+          cache_name :: String.t(),
+          sorted_set_name :: String.t(),
+          min_score :: float() | nil,
+          max_score :: float() | nil,
+          offset :: integer() | nil,
+          count :: integer() | nil,
+          sort_order :: :asc | :desc
+        ) :: Momento.Responses.SortedSet.Fetch.t()
+  def sorted_set_fetch_by_score(
+        data_client,
+        cache_name,
+        sorted_set_name,
+        min_score,
+        max_score,
+        offset,
+        count,
+        sort_order
+      ) do
+    with :ok <- validate_cache_name(cache_name),
+         :ok <- validate_sorted_set_name(sorted_set_name) do
+      try do
+        send_sorted_set_fetch_by_score(
+          data_client,
+          cache_name,
+          sorted_set_name,
+          min_score,
+          max_score,
+          offset,
+          count,
+          sort_order
+        )
+      rescue
+        e -> {:error, Momento.Error.convert(e)}
+      end
+    else
+      error -> error
+    end
+  end
+
+  @spec send_sorted_set_fetch_by_score(
+          data_client :: t(),
+          cache_name :: String.t(),
+          sorted_set_name :: String.t(),
+          min_score :: float() | nil,
+          max_score :: float() | nil,
+          offset :: integer() | nil,
+          count :: integer() | nil,
+          sort_order :: :asc | :desc
+        ) :: Momento.Responses.SortedSet.Fetch.t()
+  defp send_sorted_set_fetch_by_score(
+         data_client,
+         cache_name,
+         sorted_set_name,
+         min_score,
+         max_score,
+         offset,
+         count,
+         sort_order
+       ) do
+    metadata = %{cache: cache_name, Authorization: data_client.auth_token}
+
+    request_min_score =
+      case min_score do
+        nil ->
+          {:unbounded_min, %Momento.Protos.CacheClient.Unbounded{}}
+
+        _ ->
+          {:min_score,
+           %Momento.Protos.CacheClient.SortedSetFetchRequest.ByScore.Score{
+             score: min_score,
+             exclusive: false
+           }}
+      end
+
+    request_max_score =
+      case max_score do
+        nil ->
+          {:unbounded_max, %Momento.Protos.CacheClient.Unbounded{}}
+
+        _ ->
+          {:max_score,
+           %Momento.Protos.CacheClient.SortedSetFetchRequest.ByScore.Score{
+             score: max_score,
+             exclusive: false
+           }}
+      end
+
+    request_offset =
+      case offset do
+        nil -> 0
+        _ -> offset
+      end
+
+    request_count =
+      case count do
+        nil -> -1
+        _ -> count
+      end
+
+    request_order =
+      case sort_order do
+        :asc -> 0
+        _ -> 1
+      end
+
+    fetch_request = %Momento.Protos.CacheClient.SortedSetFetchRequest{
+      set_name: sorted_set_name,
+      order: request_order,
+      with_scores: true,
+      range:
+        {:by_score,
+         %Momento.Protos.CacheClient.SortedSetFetchRequest.ByScore{
+           min: request_min_score,
+           max: request_max_score,
+           offset: request_offset,
+           count: request_count
+         }}
+    }
+
+    case Momento.Protos.CacheClient.Scs.Stub.sorted_set_fetch(
+           data_client.channel,
+           fetch_request,
+           metadata: metadata
+         ) do
+      {:ok, response} ->
+        case response.sorted_set do
+          {:found, found} ->
+            {:values_with_scores, values_with_scores} = found.elements
+
+            scored_values =
+              Enum.map(values_with_scores.elements, fn element ->
+                {element.value, element.score}
+              end)
+
+            {:ok, %Momento.Responses.SortedSet.Fetch.Hit{value: scored_values}}
+
+          {:missing, _} ->
+            :miss
+        end
+
+      {:error, error_response} ->
+        {:error, Momento.Error.convert(error_response)}
+    end
+  end
+
+  @spec sorted_set_remove_elements(
+          data_client :: t(),
+          cache_name :: String.t(),
+          sorted_set_name :: String.t(),
+          values :: [binary()]
+        ) :: Momento.Responses.SortedSet.RemoveElements.t()
+  def sorted_set_remove_elements(
+        data_client,
+        cache_name,
+        sorted_set_name,
+        values
+      ) do
+    with :ok <- validate_cache_name(cache_name),
+         :ok <- validate_sorted_set_name(sorted_set_name) do
+      try do
+        send_sorted_set_remove_elements(
+          data_client,
+          cache_name,
+          sorted_set_name,
+          values
+        )
+      rescue
+        e -> {:error, Momento.Error.convert(e)}
+      end
+    else
+      error -> error
+    end
+  end
+
+  @spec send_sorted_set_remove_elements(
+          data_client :: t(),
+          cache_name :: String.t(),
+          sorted_set_name :: String.t(),
+          values :: [binary()]
+        ) :: Momento.Responses.SortedSet.RemoveElements.t()
+  defp send_sorted_set_remove_elements(
+         data_client,
+         cache_name,
+         sorted_set_name,
+         values
+       ) do
+    metadata = %{cache: cache_name, Authorization: data_client.auth_token}
+
+    remove_request = %Momento.Protos.CacheClient.SortedSetRemoveRequest{
+      set_name: sorted_set_name,
+      remove_elements:
+        {:some, %Momento.Protos.CacheClient.SortedSetRemoveRequest.Some{values: values}}
+    }
+
+    case Momento.Protos.CacheClient.Scs.Stub.sorted_set_remove(
+           data_client.channel,
+           remove_request,
+           metadata: metadata
+         ) do
+      {:ok, _} ->
+        {:ok, %Momento.Responses.SortedSet.RemoveElements.Ok{}}
+
+      {:error, error} ->
+        {:error, Momento.Error.convert(error)}
+    end
+  end
 end

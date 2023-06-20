@@ -275,4 +275,83 @@ defmodule Momento.CacheClient do
       sort_order
     )
   end
+
+  @spec sorted_set_fetch_by_score(
+          client :: t(),
+          cache_name :: String.t(),
+          sorted_set_name :: String.t(),
+          opts :: [
+            min_score: float(),
+            max_score: float(),
+            offset: integer(),
+            count: integer(),
+            sort_order: :asc | :desc
+          ]
+        ) :: SortedSet.Fetch.t()
+  def sorted_set_fetch_by_score(
+        client,
+        cache_name,
+        sorted_set_name,
+        opts \\ []
+      ) do
+    min_score = Keyword.get(opts, :min_score)
+    max_score = Keyword.get(opts, :max_score)
+    offset = Keyword.get(opts, :offset)
+    count = Keyword.get(opts, :count)
+    sort_order = Keyword.get(opts, :sort_order, :asc)
+
+    ScsDataClient.sorted_set_fetch_by_score(
+      client.data_client,
+      cache_name,
+      sorted_set_name,
+      min_score,
+      max_score,
+      offset,
+      count,
+      sort_order
+    )
+  end
+
+  @spec sorted_set_remove_element(
+          client :: t(),
+          cache_name :: String.t(),
+          sorted_set_name :: String.t(),
+          value :: binary()
+        ) :: Momento.Responses.SortedSet.RemoveElement.t()
+  def sorted_set_remove_element(
+        client,
+        cache_name,
+        sorted_set_name,
+        value
+      ) do
+    case ScsDataClient.sorted_set_remove_elements(
+           client.data_client,
+           cache_name,
+           sorted_set_name,
+           [value]
+         ) do
+      {:ok, _} -> {:ok, %Momento.Responses.SortedSet.RemoveElement.Ok{}}
+      {:error, error} -> {:error, error}
+    end
+  end
+
+  @spec sorted_set_remove_elements(
+          client :: t(),
+          cache_name :: String.t(),
+          sorted_set_name :: String.t(),
+          values :: [binary()]
+        ) :: Momento.Responses.SortedSet.RemoveElements.t()
+  def sorted_set_remove_elements(
+        client,
+        cache_name,
+        sorted_set_name,
+        values
+      ) do
+    ScsDataClient.sorted_set_remove_elements(
+      client.data_client,
+      cache_name,
+      sorted_set_name,
+      values
+    )
+  end
 end
