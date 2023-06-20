@@ -24,7 +24,7 @@ defmodule Momento.IntegrationTestUtils do
       }
     }
 
-    cache_client = CacheClient.create!(config, credential_provider)
+    cache_client = CacheClient.create!(config, credential_provider, 120.0)
     [cache_name: cache_name, cache_client: cache_client]
   end
 
