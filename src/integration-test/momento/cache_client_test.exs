@@ -1008,7 +1008,7 @@ defmodule CacheClientTest do
           "key99"
         ])
 
-      assert [{"key1", 1.0}, {"key99", nil}] = response.values
+      assert [{"key1", 1.0}, {"key99", nil}] = response.value
 
       {:ok, response} =
         CacheClient.sorted_set_get_scores(cache_client, cache_name, sorted_set_name, [
@@ -1016,7 +1016,7 @@ defmodule CacheClientTest do
           "key99"
         ])
 
-      assert [{"key98", nil}, {"key99", nil}] = response.values
+      assert [{"key98", nil}, {"key99", nil}] = response.value
     end
 
     test "should fail if the cache name is invalid", %{

@@ -12,6 +12,12 @@ defmodule Momento.Internal.ScsControlClient do
             channel: GRPC.Channel.t()
           }
 
+  defimpl Inspect, for: Momento.Internal.ScsControlClient do
+    def inspect(%Momento.Internal.ScsControlClient{} = control_client, _opts) do
+      "#Momento.Internal.ScsControlClient<auth_token: [hidden], channel: #{inspect(control_client.channel)}>"
+    end
+  end
+
   @spec create!(CredentialProvider.t()) :: t()
   def create!(credential_provider) do
     control_endpoint = CredentialProvider.control_endpoint(credential_provider)
