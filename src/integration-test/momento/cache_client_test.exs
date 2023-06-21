@@ -794,4 +794,443 @@ defmodule CacheClientTest do
       assert %Protobuf.EncodeError{} = error.cause
     end
   end
+
+  describe "sorted_set_get_rank/4" do
+    test "should get the rank of a value in a sorted set", %{
+      cache_client: cache_client,
+      cache_name: cache_name
+    } do
+      sorted_set_name = random_string(16)
+      elements = [{"key1", 1.0}, {"key2", 2.0}, {"key3", 3.0}, {"key4", 4.0}, {"key5", 5.0}]
+
+      :miss = CacheClient.sorted_set_get_rank(cache_client, cache_name, sorted_set_name, "key1")
+
+      {:ok, _} =
+        CacheClient.sorted_set_put_elements(cache_client, cache_name, sorted_set_name, elements)
+
+      {:ok, response} =
+        CacheClient.sorted_set_get_rank(cache_client, cache_name, sorted_set_name, "key1")
+
+      assert 0 = response.rank
+
+      {:ok, response} =
+        CacheClient.sorted_set_get_rank(cache_client, cache_name, sorted_set_name, "key1",
+          sort_order: :desc
+        )
+
+      assert 4 = response.rank
+    end
+
+    test "should fail if the cache name is invalid", %{
+      cache_client: cache_client
+    } do
+      sorted_set_name = random_string(16)
+      value = "key1"
+
+      {:error, error} =
+        CacheClient.sorted_set_get_rank(
+          cache_client,
+          nil,
+          sorted_set_name,
+          value
+        )
+
+      assert String.contains?(error.message, "The cache name cannot be nil")
+
+      {:error, error} =
+        CacheClient.sorted_set_get_rank(
+          cache_client,
+          12345,
+          sorted_set_name,
+          value
+        )
+
+      assert String.contains?(error.message, "The cache name must be a string")
+    end
+
+    test "should fail if the sorted set name is invalid", %{
+      cache_client: cache_client,
+      cache_name: cache_name
+    } do
+      value = "key1"
+
+      {:error, error} =
+        CacheClient.sorted_set_get_rank(
+          cache_client,
+          cache_name,
+          nil,
+          value
+        )
+
+      assert String.contains?(error.message, "The sorted set name cannot be nil")
+
+      {:error, error} =
+        CacheClient.sorted_set_get_rank(
+          cache_client,
+          cache_name,
+          12345,
+          value
+        )
+
+      assert String.contains?(error.message, "The sorted set name must be a string")
+    end
+
+    test "should fail if the value is invalid", %{
+      cache_client: cache_client,
+      cache_name: cache_name
+    } do
+      sorted_set_name = random_string(16)
+
+      {:error, error} =
+        CacheClient.sorted_set_get_rank(
+          cache_client,
+          cache_name,
+          sorted_set_name,
+          12345
+        )
+
+      assert :invalid_argument_error = error.error_code
+      assert %Protobuf.EncodeError{} = error.cause
+    end
+  end
+
+  describe "sorted_set_get_score/4" do
+    test "should get the score for a value in a sorted set", %{
+      cache_client: cache_client,
+      cache_name: cache_name
+    } do
+      sorted_set_name = random_string(16)
+      elements = [{"key1", 1.0}, {"key2", 2.0}, {"key3", 3.0}, {"key4", 4.0}, {"key5", 5.0}]
+
+      :miss = CacheClient.sorted_set_get_score(cache_client, cache_name, sorted_set_name, "key1")
+
+      {:ok, _} =
+        CacheClient.sorted_set_put_elements(cache_client, cache_name, sorted_set_name, elements)
+
+      {:ok, response} =
+        CacheClient.sorted_set_get_score(cache_client, cache_name, sorted_set_name, "key1")
+
+      assert 1.0 = response.score
+
+      :miss = CacheClient.sorted_set_get_score(cache_client, cache_name, sorted_set_name, "key99")
+    end
+
+    test "should fail if the cache name is invalid", %{
+      cache_client: cache_client
+    } do
+      sorted_set_name = random_string(16)
+      value = "key1"
+
+      {:error, error} =
+        CacheClient.sorted_set_get_score(
+          cache_client,
+          nil,
+          sorted_set_name,
+          value
+        )
+
+      assert String.contains?(error.message, "The cache name cannot be nil")
+
+      {:error, error} =
+        CacheClient.sorted_set_get_score(
+          cache_client,
+          12345,
+          sorted_set_name,
+          value
+        )
+
+      assert String.contains?(error.message, "The cache name must be a string")
+    end
+
+    test "should fail if the sorted set name is invalid", %{
+      cache_client: cache_client,
+      cache_name: cache_name
+    } do
+      value = "key1"
+
+      {:error, error} =
+        CacheClient.sorted_set_get_score(
+          cache_client,
+          cache_name,
+          nil,
+          value
+        )
+
+      assert String.contains?(error.message, "The sorted set name cannot be nil")
+
+      {:error, error} =
+        CacheClient.sorted_set_get_score(
+          cache_client,
+          cache_name,
+          12345,
+          value
+        )
+
+      assert String.contains?(error.message, "The sorted set name must be a string")
+    end
+
+    test "should fail if the value is invalid", %{
+      cache_client: cache_client,
+      cache_name: cache_name
+    } do
+      sorted_set_name = random_string(16)
+
+      {:error, error} =
+        CacheClient.sorted_set_get_score(
+          cache_client,
+          cache_name,
+          sorted_set_name,
+          12345
+        )
+
+      assert :invalid_argument_error = error.error_code
+      assert %Protobuf.EncodeError{} = error.cause
+    end
+  end
+
+  describe "sorted_set_get_scores/4" do
+    test "should get the scores for values in a sorted set", %{
+      cache_client: cache_client,
+      cache_name: cache_name
+    } do
+      sorted_set_name = random_string(16)
+      elements = [{"key1", 1.0}, {"key2", 2.0}, {"key3", 3.0}, {"key4", 4.0}, {"key5", 5.0}]
+
+      :miss =
+        CacheClient.sorted_set_get_scores(cache_client, cache_name, sorted_set_name, ["key1"])
+
+      {:ok, _} =
+        CacheClient.sorted_set_put_elements(cache_client, cache_name, sorted_set_name, elements)
+
+      {:ok, response} =
+        CacheClient.sorted_set_get_scores(cache_client, cache_name, sorted_set_name, [
+          "key1",
+          "key99"
+        ])
+
+      assert [{"key1", 1.0}, {"key99", nil}] = response.values
+
+      {:ok, response} =
+        CacheClient.sorted_set_get_scores(cache_client, cache_name, sorted_set_name, [
+          "key98",
+          "key99"
+        ])
+
+      assert [{"key98", nil}, {"key99", nil}] = response.values
+    end
+
+    test "should fail if the cache name is invalid", %{
+      cache_client: cache_client
+    } do
+      sorted_set_name = random_string(16)
+      values = ["key1"]
+
+      {:error, error} =
+        CacheClient.sorted_set_get_scores(
+          cache_client,
+          nil,
+          sorted_set_name,
+          values
+        )
+
+      assert String.contains?(error.message, "The cache name cannot be nil")
+
+      {:error, error} =
+        CacheClient.sorted_set_get_scores(
+          cache_client,
+          12345,
+          sorted_set_name,
+          values
+        )
+
+      assert String.contains?(error.message, "The cache name must be a string")
+    end
+
+    test "should fail if the sorted set name is invalid", %{
+      cache_client: cache_client,
+      cache_name: cache_name
+    } do
+      values = ["key1"]
+
+      {:error, error} =
+        CacheClient.sorted_set_get_scores(
+          cache_client,
+          cache_name,
+          nil,
+          values
+        )
+
+      assert String.contains?(error.message, "The sorted set name cannot be nil")
+
+      {:error, error} =
+        CacheClient.sorted_set_get_scores(
+          cache_client,
+          cache_name,
+          12345,
+          values
+        )
+
+      assert String.contains?(error.message, "The sorted set name must be a string")
+    end
+
+    test "should fail if the values are invalid", %{
+      cache_client: cache_client,
+      cache_name: cache_name
+    } do
+      sorted_set_name = random_string(16)
+
+      {:error, error} =
+        CacheClient.sorted_set_get_scores(
+          cache_client,
+          cache_name,
+          sorted_set_name,
+          12345
+        )
+
+      assert :invalid_argument_error = error.error_code
+      assert %Protobuf.EncodeError{} = error.cause
+
+      {:error, error} =
+        CacheClient.sorted_set_get_scores(
+          cache_client,
+          cache_name,
+          sorted_set_name,
+          [12345]
+        )
+
+      assert :invalid_argument_error = error.error_code
+      assert %Protobuf.EncodeError{} = error.cause
+    end
+  end
+
+  describe "sorted_set_increment_score/6" do
+    test "should increment the score for a value in a sorted set", %{
+      cache_client: cache_client,
+      cache_name: cache_name
+    } do
+      sorted_set_name = random_string(16)
+
+      {:ok, _} =
+        CacheClient.sorted_set_increment_score(
+          cache_client,
+          cache_name,
+          sorted_set_name,
+          "key1",
+          1
+        )
+
+      {:ok, response} =
+        CacheClient.sorted_set_get_score(cache_client, cache_name, sorted_set_name, "key1")
+
+      assert 1.0 = response.score
+
+      {:ok, _} =
+        CacheClient.sorted_set_increment_score(
+          cache_client,
+          cache_name,
+          sorted_set_name,
+          "key1",
+          9.0
+        )
+
+      {:ok, response} =
+        CacheClient.sorted_set_get_score(cache_client, cache_name, sorted_set_name, "key1")
+
+      assert 10.0 = response.score
+
+      {:ok, _} =
+        CacheClient.sorted_set_increment_score(
+          cache_client,
+          cache_name,
+          sorted_set_name,
+          "key1",
+          -100.0
+        )
+
+      {:ok, response} =
+        CacheClient.sorted_set_get_score(cache_client, cache_name, sorted_set_name, "key1")
+
+      assert -90.0 = response.score
+    end
+
+    test "should fail if the cache name is invalid", %{
+      cache_client: cache_client
+    } do
+      sorted_set_name = random_string(16)
+      value = "key1"
+      amount = 1.0
+
+      {:error, error} =
+        CacheClient.sorted_set_increment_score(
+          cache_client,
+          nil,
+          sorted_set_name,
+          value,
+          amount
+        )
+
+      assert String.contains?(error.message, "The cache name cannot be nil")
+
+      {:error, error} =
+        CacheClient.sorted_set_increment_score(
+          cache_client,
+          12345,
+          sorted_set_name,
+          value,
+          amount
+        )
+
+      assert String.contains?(error.message, "The cache name must be a string")
+    end
+
+    test "should fail if the sorted set name is invalid", %{
+      cache_client: cache_client,
+      cache_name: cache_name
+    } do
+      value = "key1"
+      amount = 1.0
+
+      {:error, error} =
+        CacheClient.sorted_set_increment_score(
+          cache_client,
+          cache_name,
+          nil,
+          value,
+          amount
+        )
+
+      assert String.contains?(error.message, "The sorted set name cannot be nil")
+
+      {:error, error} =
+        CacheClient.sorted_set_increment_score(
+          cache_client,
+          cache_name,
+          12345,
+          value,
+          amount
+        )
+
+      assert String.contains?(error.message, "The sorted set name must be a string")
+    end
+
+    test "should fail if the value is invalid", %{
+      cache_client: cache_client,
+      cache_name: cache_name
+    } do
+      sorted_set_name = random_string(16)
+      amount = 1.0
+
+      {:error, error} =
+        CacheClient.sorted_set_increment_score(
+          cache_client,
+          cache_name,
+          sorted_set_name,
+          12345,
+          amount
+        )
+
+      assert :invalid_argument_error = error.error_code
+      assert %Protobuf.EncodeError{} = error.cause
+    end
+  end
 end

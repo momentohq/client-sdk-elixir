@@ -501,4 +501,234 @@ defmodule Momento.Internal.ScsDataClient do
         {:error, Momento.Error.convert(error)}
     end
   end
+
+  @spec sorted_set_get_rank(
+          data_client :: t(),
+          cache_name :: String.t(),
+          sorted_set_name :: String.t(),
+          value :: binary(),
+          sort_order :: :asc | :desc
+        ) :: Momento.Responses.SortedSet.GetRank.t()
+  def sorted_set_get_rank(
+        data_client,
+        cache_name,
+        sorted_set_name,
+        value,
+        sort_order
+      ) do
+    with :ok <- validate_cache_name(cache_name),
+         :ok <- validate_sorted_set_name(sorted_set_name) do
+      try do
+        metadata = %{cache: cache_name, Authorization: data_client.auth_token}
+
+        request_order =
+          case sort_order do
+            :asc -> 0
+            _ -> 1
+          end
+
+        get_rank_request = %Momento.Protos.CacheClient.SortedSetGetRankRequest{
+          set_name: sorted_set_name,
+          value: value,
+          order: request_order
+        }
+
+        case Momento.Protos.CacheClient.Scs.Stub.sorted_set_get_rank(
+               data_client.channel,
+               get_rank_request,
+               metadata: metadata
+             ) do
+          {:ok, response} ->
+            case response do
+              %Momento.Protos.CacheClient.SortedSetGetRankResponse{
+                rank:
+                  {:element_rank,
+                   %Momento.Protos.CacheClient.SortedSetGetRankResponse.RankResponsePart{
+                     result: :Hit,
+                     rank: rank
+                   }}
+              } ->
+                {:ok, %Momento.Responses.SortedSet.GetRank.Hit{rank: rank}}
+
+              %Momento.Protos.CacheClient.SortedSetGetRankResponse{
+                rank:
+                  {:missing,
+                   %Momento.Protos.CacheClient.SortedSetGetRankResponse.SortedSetMissing{}}
+              } ->
+                :miss
+            end
+
+          {:error, error} ->
+            {:error, Momento.Error.convert(error)}
+        end
+      rescue
+        e -> {:error, Momento.Error.convert(e)}
+      end
+    else
+      error -> error
+    end
+  end
+
+  @spec sorted_set_get_score(
+          data_client :: t(),
+          cache_name :: String.t(),
+          sorted_set_name :: String.t(),
+          value :: binary()
+        ) :: Momento.Responses.SortedSet.GetScore.t()
+  def sorted_set_get_score(
+        data_client,
+        cache_name,
+        sorted_set_name,
+        value
+      ) do
+    try do
+      case sorted_set_get_scores(
+             data_client,
+             cache_name,
+             sorted_set_name,
+             [value]
+           ) do
+        {:ok, %Momento.Responses.SortedSet.GetScores.Hit{values: values}} ->
+          case values do
+            [] ->
+              :miss
+
+            _ ->
+              case Enum.find(values, fn {key, _} -> key == value end) do
+                nil ->
+                  :miss
+
+                {_, score} ->
+                  case score do
+                    nil -> :miss
+                    _ -> {:ok, %Momento.Responses.SortedSet.GetScore.Hit{score: score}}
+                  end
+              end
+          end
+
+        :miss ->
+          :miss
+
+        {:error, error} ->
+          {:error, error}
+      end
+    rescue
+      e -> {:error, Momento.Error.convert(e)}
+    end
+  end
+
+  @spec sorted_set_get_scores(
+          data_client :: t(),
+          cache_name :: String.t(),
+          sorted_set_name :: String.t(),
+          values :: [binary()]
+        ) :: Momento.Responses.SortedSet.GetScores.t()
+  def sorted_set_get_scores(
+        data_client,
+        cache_name,
+        sorted_set_name,
+        values
+      ) do
+    with :ok <- validate_cache_name(cache_name),
+         :ok <- validate_sorted_set_name(sorted_set_name) do
+      try do
+        metadata = %{cache: cache_name, Authorization: data_client.auth_token}
+
+        get_scores_request = %Momento.Protos.CacheClient.SortedSetGetScoreRequest{
+          set_name: sorted_set_name,
+          values: values
+        }
+
+        case Momento.Protos.CacheClient.Scs.Stub.sorted_set_get_score(
+               data_client.channel,
+               get_scores_request,
+               metadata: metadata
+             ) do
+          {:ok, response} ->
+            case response do
+              %Momento.Protos.CacheClient.SortedSetGetScoreResponse{
+                sorted_set:
+                  {:found,
+                   %Momento.Protos.CacheClient.SortedSetGetScoreResponse.SortedSetFound{
+                     elements: elements
+                   }}
+              } ->
+                values_to_scores =
+                  Enum.zip(values, elements)
+                  |> Enum.map(fn {value, element} ->
+                    case element.result do
+                      :Hit -> {value, element.score}
+                      :Miss -> {value, nil}
+                    end
+                  end)
+
+                {:ok, %Momento.Responses.SortedSet.GetScores.Hit{values: values_to_scores}}
+
+              %Momento.Protos.CacheClient.SortedSetGetScoreResponse{
+                sorted_set:
+                  {:missing,
+                   %Momento.Protos.CacheClient.SortedSetGetScoreResponse.SortedSetMissing{}}
+              } ->
+                :miss
+            end
+
+          {:error, error} ->
+            {:error, Momento.Error.convert(error)}
+        end
+      rescue
+        e -> {:error, Momento.Error.convert(e)}
+      end
+    else
+      error -> error
+    end
+  end
+
+  @spec sorted_set_increment_score(
+          data_client :: t(),
+          cache_name :: String.t(),
+          sorted_set_name :: String.t(),
+          value :: binary(),
+          amount :: float(),
+          collection_ttl :: CollectionTtl.t()
+        ) :: Momento.Responses.SortedSet.IncrementScore.t()
+  def sorted_set_increment_score(
+        data_client,
+        cache_name,
+        sorted_set_name,
+        value,
+        amount,
+        collection_ttl
+      ) do
+    with :ok <- validate_cache_name(cache_name),
+         :ok <- validate_sorted_set_name(sorted_set_name) do
+      try do
+        ttl_milliseconds = collection_ttl.ttl_seconds |> Kernel.*(1000) |> round()
+        metadata = %{cache: cache_name, Authorization: data_client.auth_token}
+
+        increment_request = %Momento.Protos.CacheClient.SortedSetIncrementRequest{
+          set_name: sorted_set_name,
+          value: value,
+          amount: amount,
+          ttl_milliseconds: ttl_milliseconds,
+          refresh_ttl: collection_ttl.refresh_ttl
+        }
+
+        case Momento.Protos.CacheClient.Scs.Stub.sorted_set_increment(
+               data_client.channel,
+               increment_request,
+               metadata: metadata
+             ) do
+          {:ok, response} ->
+            {:ok, %Momento.Responses.SortedSet.IncrementScore.Ok{score: response.score}}
+
+          {:error, error} ->
+            {:error, Momento.Error.convert(error)}
+        end
+      rescue
+        e -> {:error, Momento.Error.convert(e)}
+      end
+    else
+      error -> error
+    end
+  end
 end
