@@ -1,21 +1,24 @@
-# Examples
+# Elixir SDK Examples
 
-**TODO: Add description**
+## Running the Examples
 
-## Installation
-
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `examples` to your list of dependencies in `mix.exs`:
-
-```elixir
-def deps do
-  [
-    {:examples, "~> 0.1.0"}
-  ]
-end
+Build and compile the examples with:
+```bash
+mix deps.get
+mix compile
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/examples>.
+### Basic
+The basic example shows how to get and set individual items in a Momento cache.
+```bash
+MOMENTO_AUTH_TOKEN=<YOUR AUTH TOKEN> mix run basic.exs
+```
+Example Code: [basic.exs](basic.exs)
+
+### Sorted Set
+The sorted set example shows how to use the various sorted set methods.
+```bash
+MOMENTO_AUTH_TOKEN=<YOUR AUTH TOKEN> mix run sorted_set.exs
+```
+Example Code: [sorted_set.exs](sorted_set.exs)
 
