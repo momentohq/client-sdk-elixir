@@ -1,8 +1,8 @@
 defmodule Momento.Responses.SortedSet.GetScores do
   defmodule Hit do
-    @enforce_keys [:values]
-    defstruct [:values]
-    @type t() :: %__MODULE__{values: [{binary(), float() | nil}]}
+    @enforce_keys [:value]
+    defstruct [:value]
+    @type t() :: %__MODULE__{value: [{binary(), float() | nil}]}
   end
 
   @type t() ::

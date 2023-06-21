@@ -12,6 +12,12 @@ defmodule Momento.Internal.ScsDataClient do
             channel: GRPC.Channel.t()
           }
 
+  defimpl Inspect, for: Momento.Internal.ScsDataClient do
+    def inspect(%Momento.Internal.ScsDataClient{} = data_client, _opts) do
+      "#Momento.Internal.ScsDataClient<auth_token: [hidden], channel: #{inspect(data_client.channel)}>"
+    end
+  end
+
   @spec create!(CredentialProvider.t()) :: t()
   def create!(credential_provider) do
     cache_endpoint = CredentialProvider.cache_endpoint(credential_provider)
@@ -588,7 +594,7 @@ defmodule Momento.Internal.ScsDataClient do
              sorted_set_name,
              [value]
            ) do
-        {:ok, %Momento.Responses.SortedSet.GetScores.Hit{values: values}} ->
+        {:ok, %Momento.Responses.SortedSet.GetScores.Hit{value: values}} ->
           case values do
             [] ->
               :miss
@@ -662,7 +668,7 @@ defmodule Momento.Internal.ScsDataClient do
                     end
                   end)
 
-                {:ok, %Momento.Responses.SortedSet.GetScores.Hit{values: values_to_scores}}
+                {:ok, %Momento.Responses.SortedSet.GetScores.Hit{value: values_to_scores}}
 
               %Momento.Protos.CacheClient.SortedSetGetScoreResponse{
                 sorted_set:
