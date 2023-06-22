@@ -79,7 +79,7 @@ defmodule Momento.Internal.ScsDataClient do
              metadata: metadata
            ) do
         {:ok, %Momento.Protos.CacheClient.GetResponse{result: :Hit, cache_body: cache_body}} ->
-          {:hit, %Get.Hit{value: cache_body}}
+          {:ok, %Get.Hit{value: cache_body}}
 
         {:ok, %Momento.Protos.CacheClient.GetResponse{result: :Miss}} ->
           :miss

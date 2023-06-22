@@ -13,7 +13,9 @@ defmodule Momento.Examples.Basic do
     Logger.info("Executing a 'set' for key: #{key}")
 
     {key,
-     Task.async(fn -> Momento.CacheClient.set(cache_client, @cache_name, key, "foo", 42.2) end)}
+     Task.async(fn ->
+       Momento.CacheClient.set(cache_client, @cache_name, key, "foo", ttl_seconds: 42.2)
+     end)}
   end
 
   @spec await_set({String.t(), Task.t()}) :: String.t()
@@ -56,7 +58,14 @@ end
 Logger.info("Hello world")
 Logger.info("Hello logging world!")
 
-config = %Momento.Config.Configuration{}
+config = %Momento.Config.Configuration{
+  transport_strategy: %Momento.Config.Transport.TransportStrategy{
+    grpc_config: %Momento.Config.Transport.GrpcConfiguration{
+      deadline_millis: 5000
+    }
+  }
+}
+
 credential_provider = Momento.Auth.CredentialProvider.from_env_var!("MOMENTO_AUTH_TOKEN")
 cache_client = Momento.CacheClient.create!(config, credential_provider, 60.0)
 

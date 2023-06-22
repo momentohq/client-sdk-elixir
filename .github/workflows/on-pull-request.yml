@@ -15,6 +15,15 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Verify README generation
+        uses: momentohq/standards-and-practices/github-actions/oss-readme-template@gh-actions-v2
+        with:
+          project_status: official
+          project_stability: experimental
+          project_type: sdk
+          sdk_language: Elixir
+          dev_docs_slug: elixir
+
       - name: Commitlint and Other Shared Build Steps
         uses: momentohq/standards-and-practices/github-actions/shared-build@gh-actions-v2
         env:
@@ -49,5 +58,9 @@ jobs:
             mix compile
             mix format --check-formatted
             mix run basic.exs
+            mix run sorted_set.exs
+            mix run doc_examples/cheat_sheet.exs
+            mix run doc_examples/readme_example.exs
+            mix run doc_examples.exs
           popd
 
