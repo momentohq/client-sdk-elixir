@@ -2,15 +2,7 @@
 
 ## Packages
 
-The Elixir SDK is available on Hex:
-
-```elixir
-defp deps do
-    [
-      {:gomomento, "~> 0.4.0"}
-    ]
-end
-```
+The Momento Elixir SDK is available on [Hex](https://hex.pm/packages/gomomento).
 
 ## Usage
 
