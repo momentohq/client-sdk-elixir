@@ -558,6 +558,15 @@ defmodule Momento.Internal.ScsDataClient do
 
               %Momento.Protos.CacheClient.SortedSetGetRankResponse{
                 rank:
+                  {:element_rank,
+                   %Momento.Protos.CacheClient.SortedSetGetRankResponse.RankResponsePart{
+                     result: :Miss
+                   }}
+              } ->
+                :miss
+
+              %Momento.Protos.CacheClient.SortedSetGetRankResponse{
+                rank:
                   {:missing,
                    %Momento.Protos.CacheClient.SortedSetGetRankResponse.SortedSetMissing{}}
               } ->

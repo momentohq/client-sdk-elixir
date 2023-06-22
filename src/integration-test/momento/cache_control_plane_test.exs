@@ -8,12 +8,15 @@ defmodule CacheControlPlaneTest do
   import Momento.IntegrationTestUtils,
     only: [
       initialize_cache_client: 0,
+      cleanup_cache: 1,
       random_string: 1,
       assert_validates_cache_name: 1
     ]
 
   setup_all do
-    {:ok, initialize_cache_client()}
+    client_state = initialize_cache_client()
+    on_exit(fn -> cleanup_cache(client_state) end)
+    {:ok, client_state}
   end
 
   describe "create_cache, list_caches, delete_cache happy path" do

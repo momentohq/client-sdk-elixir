@@ -25,7 +25,23 @@ defmodule Momento.IntegrationTestUtils do
     }
 
     cache_client = CacheClient.create!(config, credential_provider, 120.0)
+
+    case CacheClient.create_cache(cache_client, cache_name) do
+      {:ok, _} -> :ok
+      :already_exists -> :ok
+      {:error, error} -> raise error
+    end
+
     [cache_name: cache_name, cache_client: cache_client]
+  end
+
+  @spec cleanup_cache(cache_state :: [cache_name: String.t(), cache_client: CacheClient.t()]) ::
+          :ok
+  def cleanup_cache(cache_state) do
+    cache_name = Keyword.fetch!(cache_state, :cache_name)
+    cache_client = Keyword.fetch!(cache_state, :cache_client)
+    CacheClient.delete_cache(cache_client, cache_name)
+    :ok
   end
 
   def random_string(length) do

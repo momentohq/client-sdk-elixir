@@ -9,19 +9,22 @@ defmodule CacheClientTest do
   import Momento.IntegrationTestUtils,
     only: [
       initialize_cache_client: 0,
+      cleanup_cache: 1,
       random_string: 1,
       assert_validates_cache_name: 1
     ]
 
   setup_all do
-    {:ok, initialize_cache_client()}
+    client_state = initialize_cache_client()
+    on_exit(fn -> cleanup_cache(client_state) end)
+    {:ok, client_state}
   end
 
   test "set/5 validates cache name", %{
     cache_client: cache_client
   } do
     assert_validates_cache_name(fn cache_name ->
-      CacheClient.set(cache_client, cache_name, "foo", "bar", 60)
+      CacheClient.set(cache_client, cache_name, "foo", "bar")
     end)
   end
 
@@ -33,7 +36,7 @@ defmodule CacheClientTest do
     value = "test_value"
     ttl_seconds = 60.0
 
-    {:ok, _} = CacheClient.set(cache_client, cache_name, key, value, ttl_seconds)
+    {:ok, _} = CacheClient.set(cache_client, cache_name, key, value, ttl_seconds: ttl_seconds)
 
     {:hit, get_result} = CacheClient.get(cache_client, cache_name, key)
     assert match?(^value, get_result.value)
@@ -48,12 +51,11 @@ defmodule CacheClientTest do
     cache_name: cache_name
   } do
     value = "test_value"
-    ttl_seconds = 60.0
 
-    {:error, error} = CacheClient.set(cache_client, cache_name, nil, value, ttl_seconds)
+    {:error, error} = CacheClient.set(cache_client, cache_name, nil, value)
     assert String.contains?(error.message, "The key cannot be nil")
 
-    {:error, error} = CacheClient.set(cache_client, cache_name, 12345, value, ttl_seconds)
+    {:error, error} = CacheClient.set(cache_client, cache_name, 12345, value)
     assert String.contains?(error.message, "The key must be a binary")
   end
 
@@ -62,12 +64,11 @@ defmodule CacheClientTest do
     cache_name: cache_name
   } do
     key = random_string(16)
-    ttl_seconds = 60.0
 
-    {:error, error} = CacheClient.set(cache_client, cache_name, key, nil, ttl_seconds)
+    {:error, error} = CacheClient.set(cache_client, cache_name, key, nil)
     assert String.contains?(error.message, "The value cannot be nil")
 
-    {:error, error} = CacheClient.set(cache_client, cache_name, key, 12345, ttl_seconds)
+    {:error, error} = CacheClient.set(cache_client, cache_name, key, 12345)
     assert String.contains?(error.message, "The value must be a binary")
   end
 
@@ -78,10 +79,10 @@ defmodule CacheClientTest do
     key = random_string(16)
     value = "test_value"
 
-    {:error, error} = CacheClient.set(cache_client, cache_name, key, value, "sixty")
+    {:error, error} = CacheClient.set(cache_client, cache_name, key, value, ttl_seconds: "sixty")
     assert String.contains?(error.message, "The TTL must be a float")
 
-    {:error, error} = CacheClient.set(cache_client, cache_name, key, value, -20.0)
+    {:error, error} = CacheClient.set(cache_client, cache_name, key, value, ttl_seconds: -20.0)
     assert String.contains?(error.message, "The TTL must be positive")
   end
 
@@ -819,6 +820,8 @@ defmodule CacheClientTest do
         )
 
       assert 4 = response.rank
+
+      :miss = CacheClient.sorted_set_get_rank(cache_client, cache_name, sorted_set_name, "key99")
     end
 
     test "should fail if the cache name is invalid", %{
