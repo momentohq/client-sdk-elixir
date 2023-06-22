@@ -103,9 +103,12 @@ defmodule Momento.Validation do
     do: {:error, invalid_argument("The #{string_name} cannot be nil")}
 
   defp validate_string(string, string_name) do
-    if String.valid?(string),
-      do: :ok,
-      else: {:error, invalid_argument("The #{string_name} must be a string")}
+    with true <- is_binary(string),
+         String.valid?(string) do
+      :ok
+    else
+      _ -> {:error, invalid_argument("The #{string_name} must be a string")}
+    end
   end
 
   @spec validate_binary(binary :: binary(), binary_name :: String.t()) ::

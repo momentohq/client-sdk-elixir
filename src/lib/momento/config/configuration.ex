@@ -2,7 +2,7 @@ defmodule Momento.Config.Configuration do
   @moduledoc """
   Configuration for Momento CacheClient
   """
-  @enforce_keys[:transport_strategy]
+  @enforce_keys [:transport_strategy]
   defstruct [:transport_strategy]
 
   @opaque t() :: %__MODULE__{

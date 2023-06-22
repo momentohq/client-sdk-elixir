@@ -147,10 +147,10 @@ defmodule Momento.CacheClient do
           cache_name :: String.t(),
           key :: binary(),
           value :: binary(),
-          ttl_seconds :: float() | nil
+          opts :: [ttl_seconds :: float()]
         ) :: Set.t()
-  def set(client, cache_name, key, value, ttl_seconds) do
-    ttl = ttl_seconds || client.default_ttl_seconds
+  def set(client, cache_name, key, value, opts \\ []) do
+    ttl = Keyword.get(opts, :ttl_seconds, client.default_ttl_seconds)
     ScsDataClient.set(client.data_client, cache_name, key, value, ttl)
   end
 
