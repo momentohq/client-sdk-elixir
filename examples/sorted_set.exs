@@ -2,7 +2,14 @@ alias Momento.CacheClient
 
 IO.puts("==Sorted Set Example==")
 
-config = %Momento.Config.Configuration{}
+config = %Momento.Config.Configuration{
+  transport_strategy: %Momento.Config.Transport.TransportStrategy{
+    grpc_config: %Momento.Config.Transport.GrpcConfiguration{
+      deadline_millis: 5000
+    }
+  }
+}
+
 credential_provider = Momento.Auth.CredentialProvider.from_env_var!("MOMENTO_AUTH_TOKEN")
 client = CacheClient.create!(config, credential_provider, 60.0)
 

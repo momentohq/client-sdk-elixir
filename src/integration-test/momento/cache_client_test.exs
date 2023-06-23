@@ -38,7 +38,7 @@ defmodule CacheClientTest do
 
     {:ok, _} = CacheClient.set(cache_client, cache_name, key, value, ttl_seconds: ttl_seconds)
 
-    {:hit, get_result} = CacheClient.get(cache_client, cache_name, key)
+    {:ok, get_result} = CacheClient.get(cache_client, cache_name, key)
     assert match?(^value, get_result.value)
 
     {:ok, _} = CacheClient.delete(cache_client, cache_name, key)

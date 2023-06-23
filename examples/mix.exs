@@ -21,7 +21,7 @@ defmodule Examples.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:gomomento, "~> 0.3.0"},
+      {:gomomento, "~> 0.4.0"},
       {:tls_certificate_check, "~> 1.19"}
     ]
   end

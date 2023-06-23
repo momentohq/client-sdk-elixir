@@ -8,5 +8,5 @@ defmodule Momento.Responses.Get do
           }
   end
 
-  @type t() :: {:hit, Momento.Responses.Get.Hit.t()} | :miss | {:error, Momento.Error.t()}
+  @type t() :: {:ok, Momento.Responses.Get.Hit.t()} | :miss | {:error, Momento.Error.t()}
 end
