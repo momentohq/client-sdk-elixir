@@ -46,23 +46,58 @@ defmodule Momento.CacheClient do
 
   ## Returns
 
+  - A {:ok, `%Momento.CacheClient{}`} tuple representing the connected client.
+  """
+  @spec create(
+          opts :: [
+            config: Configuration.t(),
+            credential_provider: CredentialProvider.t(),
+            default_ttl_seconds: number()
+          ]
+        ) :: {:ok, t()} | {:error, any()}
+  def create(opts) do
+    config = Keyword.get(opts, :config)
+    credential_provider = Keyword.get(opts, :credential_provider)
+    default_ttl_seconds = Keyword.get(opts, :default_ttl_seconds)
+
+    with {:ok, control_client} <- ScsControlClient.create(credential_provider),
+         {:ok, data_client} <- ScsDataClient.create(credential_provider) do
+      {:ok,
+       %__MODULE__{
+         config: config,
+         credential_provider: credential_provider,
+         default_ttl_seconds: default_ttl_seconds,
+         control_client: control_client,
+         data_client: data_client
+       }}
+    end
+  end
+
+  @doc """
+  Creates a new CacheClient instance. Raises an exception if any errors occur during initialization.
+
+  ## Parameters
+
+  - `config`: A struct containing all tunable client settings.
+  - `credential_provider`: A struct representing the credentials to connect to the server.
+
+  ## Returns
+
   - A `%Momento.CacheClient{}` struct representing the connected client.
   """
   @spec create!(
-          config :: Configuration.t(),
-          credential_provider :: CredentialProvider.t(),
-          default_ttl_seconds :: number()
+          opts :: [
+            config: Configuration.t(),
+            credential_provider: CredentialProvider.t(),
+            default_ttl_seconds: number()
+          ]
         ) :: t()
-  def create!(config, credential_provider, default_ttl_seconds) do
-    with control_client <- ScsControlClient.create!(credential_provider),
-         data_client <- ScsDataClient.create!(credential_provider) do
-      %__MODULE__{
-        config: config,
-        credential_provider: credential_provider,
-        default_ttl_seconds: default_ttl_seconds,
-        control_client: control_client,
-        data_client: data_client
-      }
+  def create!(opts) do
+    result = create(opts)
+
+    case result do
+      {:ok, client} -> client
+      {:error, e} -> raise e
     end
   end
 

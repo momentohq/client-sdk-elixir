@@ -18,20 +18,21 @@ defmodule Momento.Internal.ScsDataClient do
     end
   end
 
-  @spec create!(CredentialProvider.t()) :: t()
-  def create!(credential_provider) do
+  @spec create(CredentialProvider.t()) :: {:ok, t()} | {:error, any()}
+  def create(credential_provider) do
     cache_endpoint = CredentialProvider.cache_endpoint(credential_provider)
     tls_options = :tls_certificate_check.options(cache_endpoint)
 
-    {:ok, channel} =
-      GRPC.Stub.connect(cache_endpoint <> ":443",
-        cred: GRPC.Credential.new(ssl: tls_options)
-      )
-
-    %__MODULE__{
-      auth_token: CredentialProvider.auth_token(credential_provider),
-      channel: channel
-    }
+    with {:ok, channel} <-
+           GRPC.Stub.connect(cache_endpoint <> ":443",
+             cred: GRPC.Credential.new(ssl: tls_options)
+           ) do
+      {:ok,
+       %__MODULE__{
+         auth_token: CredentialProvider.auth_token(credential_provider),
+         channel: channel
+       }}
+    end
   end
 
   @spec set(
