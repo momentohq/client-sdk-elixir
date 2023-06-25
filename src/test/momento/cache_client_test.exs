@@ -2,16 +2,12 @@ defmodule Momento.CacheClientTest do
   use ExUnit.Case
 
   alias Momento.CacheClient
+  alias Momento.Configurations
+  alias Momento.Auth.CredentialProvider
 
   @fake_cache_client %Momento.CacheClient{
-    config: %Momento.Config.Configuration{
-      transport_strategy: %Momento.Config.Transport.TransportStrategy{
-        grpc_config: %Momento.Config.Transport.GrpcConfiguration{
-          deadline_millis: 5000
-        }
-      }
-    },
-    credential_provider: %Momento.Auth.CredentialProvider{
+    config: Configurations.Laptop.latest(),
+    credential_provider: %CredentialProvider{
       control_endpoint: "fake",
       cache_endpoint: "fake",
       auth_token: "fake"

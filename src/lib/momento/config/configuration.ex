@@ -5,7 +5,7 @@ defmodule Momento.Config.Configuration do
   @enforce_keys [:transport_strategy]
   defstruct [:transport_strategy]
 
-  @opaque t() :: %__MODULE__{
+  @type t() :: %__MODULE__{
             transport_strategy: Momento.Config.Transport.TransportStrategy.t()
           }
 

@@ -20,8 +20,6 @@ defmodule Momento.Config.Transport.TransportStrategy do
           grpc_config :: GrpcConfiguration.t()
         ) :: TransportStrategy.t()
   def with_grpc_config(transport_strategy, grpc_config) do
-    %TransportStrategy{
-      grpc_config: grpc_config
-    }
+    %{transport_strategy | grpc_config: grpc_config}
   end
 end
