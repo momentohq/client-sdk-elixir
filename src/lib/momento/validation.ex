@@ -12,7 +12,7 @@ defmodule Momento.Validation do
     validate_string(sorted_set_name, "sorted set name")
   end
 
-  @spec validate_sorted_set_elements(elements :: %{binary() => float()} | [{binary(), float()}]) ::
+  @spec validate_sorted_set_elements(elements :: %{binary() => number()} | [{binary(), number()}]) ::
           :ok | {:error, Momento.Error.t()}
   def validate_sorted_set_elements(nil),
     do: {:error, invalid_argument("Sorted set elements cannot be nil")}
@@ -20,7 +20,7 @@ defmodule Momento.Validation do
   def validate_sorted_set_elements(elements) do
     try do
       case Enum.all?(elements, fn {value, score} ->
-             is_binary(value) and is_float(score)
+             is_binary(value) and is_number(score)
            end) do
         true ->
           :ok
@@ -53,11 +53,11 @@ defmodule Momento.Validation do
   @spec validate_value(value :: binary()) :: :ok | {:error, Momento.Error.t()}
   def validate_value(value), do: validate_binary(value, "value")
 
-  @spec validate_score(score :: float()) :: :ok | {:error, Momento.Error.t()}
-  def validate_score(score), do: validate_float(score, "score")
+  @spec validate_score(score :: number()) :: :ok | {:error, Momento.Error.t()}
+  def validate_score(score), do: validate_number(score, "score")
 
-  @spec validate_ttl(ttl :: float()) :: :ok | {:error, Momento.Error.t()}
-  def validate_ttl(ttl), do: validate_positive_float(ttl, "TTL")
+  @spec validate_ttl(ttl :: number()) :: :ok | {:error, Momento.Error.t()}
+  def validate_ttl(ttl), do: validate_positive_number(ttl, "TTL")
 
   @spec validate_collection_ttl(collection_ttl :: Momento.Requests.CollectionTtl.t()) ::
           :ok | {:error, Momento.Error.t()}
@@ -68,7 +68,7 @@ defmodule Momento.Validation do
              "collection_ttl",
              Elixir.Momento.Requests.CollectionTtl
            ),
-         :ok <- validate_positive_float(collection_ttl.ttl_seconds, "TTL") do
+         :ok <- validate_positive_number(collection_ttl.ttl_seconds, "TTL") do
       :ok
     else
       error -> error
@@ -121,15 +121,15 @@ defmodule Momento.Validation do
   defp validate_binary(_, binary_name),
     do: {:error, invalid_argument("The #{binary_name} must be a binary")}
 
-  @spec validate_positive_float(float :: float(), float_name :: String.t()) ::
+  @spec validate_positive_number(num :: number(), name :: String.t()) ::
           :ok | {:error, Momento.Error.t()}
-  defp validate_positive_float(float, float_name) do
-    case validate_float(float, float_name) do
+  defp validate_positive_number(float, name) do
+    case validate_number(float, name) do
       :ok ->
         if float > 0.0 do
           :ok
         else
-          {:error, invalid_argument("The #{float_name} must be positive")}
+          {:error, invalid_argument("The #{name} must be positive")}
         end
 
       error ->
@@ -137,15 +137,15 @@ defmodule Momento.Validation do
     end
   end
 
-  @spec validate_float(float :: float(), float_name :: String.t()) ::
+  @spec validate_number(num :: number(), name :: String.t()) ::
           :ok | {:error, Momento.Error.t()}
-  defp validate_float(nil, float_name),
-    do: {:error, invalid_argument("The #{float_name} cannot be nil")}
+  defp validate_number(nil, name),
+    do: {:error, invalid_argument("The #{name} cannot be nil")}
 
-  defp validate_float(float, _) when is_float(float), do: :ok
+  defp validate_number(num, _) when is_number(num), do: :ok
 
-  defp validate_float(_, float_name),
-    do: {:error, invalid_argument("The #{float_name} must be a float")}
+  defp validate_number(_, name),
+    do: {:error, invalid_argument("The #{name} must be a number")}
 
   @spec validate_struct(struct :: struct(), struct_name :: String.t(), struct_type :: atom()) ::
           :ok | {:error, Momento.Error.t()}
