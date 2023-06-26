@@ -51,7 +51,7 @@ end
 {:ok, _} = CacheClient.set(client, cache_name, "foo", "bar")
 
 case CacheClient.get(client, cache_name, "foo") do
-  {:hit, hit} -> IO.puts("Got value: #{hit.value}")
+  {:ok, hit} -> IO.puts("Got value: #{hit.value}")
   :miss -> :ok
   {:error, error} -> raise error
 end
