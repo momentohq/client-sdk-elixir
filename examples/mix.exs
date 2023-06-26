@@ -25,7 +25,7 @@ defmodule Examples.MixProject do
   defp deps do
     [
       {:dialyxir, "~> 1.3", only: [:dev], runtime: false},
-      {:gomomento, "0.4.0"},
+      {:gomomento, "0.5.0"},
       {:tls_certificate_check, "~> 1.19"},
       {:hdr_histogram, path: "../vendor/hdr_histogram_erl"}
     ]
