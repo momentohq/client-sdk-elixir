@@ -6,8 +6,8 @@ defmodule Momento.Config.Configuration do
   defstruct [:transport_strategy]
 
   @type t() :: %__MODULE__{
-            transport_strategy: Momento.Config.Transport.TransportStrategy.t()
-          }
+          transport_strategy: Momento.Config.Transport.TransportStrategy.t()
+        }
 
   @spec with_transport_strategy(
           config :: Momento.Config.Configuration.t(),
