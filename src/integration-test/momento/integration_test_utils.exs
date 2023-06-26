@@ -2,9 +2,7 @@ defmodule Momento.IntegrationTestUtils do
   use ExUnit.Case
 
   alias Momento.CacheClient
-  alias Momento.Config.Transport.GrpcConfiguration
-  alias Momento.Config.Transport.TransportStrategy
-  alias Momento.Config.Configuration
+  alias Momento.Configurations
   alias Momento.Auth.CredentialProvider
 
   def initialize_cache_client() do
@@ -16,14 +14,7 @@ defmodule Momento.IntegrationTestUtils do
 
     credential_provider = CredentialProvider.from_env_var!("TEST_AUTH_TOKEN")
 
-    config = %Configuration{
-      transport_strategy: %TransportStrategy{
-        grpc_config: %GrpcConfiguration{
-          deadline_millis: 5000
-        }
-      }
-    }
-
+    config = Configurations.Laptop.latest()
     cache_client = CacheClient.create!(config, credential_provider, 120.0)
 
     case CacheClient.create_cache(cache_client, cache_name) do
