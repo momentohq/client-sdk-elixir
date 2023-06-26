@@ -80,7 +80,7 @@ defmodule CacheClientTest do
     value = "test_value"
 
     {:error, error} = CacheClient.set(cache_client, cache_name, key, value, ttl_seconds: "sixty")
-    assert String.contains?(error.message, "The TTL must be a float")
+    assert String.contains?(error.message, "The TTL must be a number")
 
     {:error, error} = CacheClient.set(cache_client, cache_name, key, value, ttl_seconds: -20.0)
     assert String.contains?(error.message, "The TTL must be positive")
@@ -190,7 +190,7 @@ defmodule CacheClientTest do
       assert hit.value == [{"key1", 1.0}]
 
       {:ok, _} =
-        CacheClient.sorted_set_put_element(cache_client, cache_name, sorted_set_name, "key1", 5.0)
+        CacheClient.sorted_set_put_element(cache_client, cache_name, sorted_set_name, "key1", 5)
 
       {:ok, hit} = CacheClient.sorted_set_fetch_by_rank(cache_client, cache_name, sorted_set_name)
       assert hit.value == [{"key1", 5.0}]
@@ -209,7 +209,7 @@ defmodule CacheClientTest do
       cache_name: cache_name
     } do
       sorted_set_name = random_string(16)
-      elements = %{"key1" => 1.0, "key2" => 2.0, "key3" => 3.0}
+      elements = %{"key1" => 1.0, "key2" => 2, "key3" => 3.0}
 
       :miss = CacheClient.sorted_set_fetch_by_rank(cache_client, cache_name, sorted_set_name)
 
@@ -242,7 +242,7 @@ defmodule CacheClientTest do
       cache_name: cache_name
     } do
       sorted_set_name = random_string(16)
-      elements = [{"key1", 1.0}, {"key2", 2.0}, {"key3", 3.0}, {"key4", 4.0}, {"key5", 5.0}]
+      elements = [{"key1", 1.0}, {"key2", 2.0}, {"key3", 3.0}, {"key4", 4}, {"key5", 5.0}]
 
       :miss = CacheClient.sorted_set_fetch_by_rank(cache_client, cache_name, sorted_set_name)
 

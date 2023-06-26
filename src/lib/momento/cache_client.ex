@@ -31,7 +31,7 @@ defmodule Momento.CacheClient do
   @opaque t() :: %__MODULE__{
             config: Configuration.t(),
             credential_provider: CredentialProvider.t(),
-            default_ttl_seconds: float(),
+            default_ttl_seconds: number(),
             control_client: ScsControlClient.t(),
             data_client: ScsDataClient.t()
           }
@@ -51,7 +51,7 @@ defmodule Momento.CacheClient do
   @spec create!(
           config :: Configuration.t(),
           credential_provider :: CredentialProvider.t(),
-          default_ttl_seconds :: float()
+          default_ttl_seconds :: number()
         ) :: t()
   def create!(config, credential_provider, default_ttl_seconds) do
     with control_client <- ScsControlClient.create!(credential_provider),
@@ -147,7 +147,7 @@ defmodule Momento.CacheClient do
           cache_name :: String.t(),
           key :: binary(),
           value :: binary(),
-          opts :: [ttl_seconds :: float()]
+          opts :: [ttl_seconds :: number()]
         ) :: Set.t()
   def set(client, cache_name, key, value, opts \\ []) do
     ttl = Keyword.get(opts, :ttl_seconds, client.default_ttl_seconds)
@@ -198,7 +198,7 @@ defmodule Momento.CacheClient do
           cache_name :: String.t(),
           sorted_set_name :: String.t(),
           value :: binary(),
-          score :: float(),
+          score :: number(),
           opts :: [collection_ttl :: CollectionTtl.t()]
         ) :: SortedSet.PutElement.t()
   def sorted_set_put_element(
@@ -228,7 +228,7 @@ defmodule Momento.CacheClient do
           client :: t(),
           cache_name :: String.t(),
           sorted_set_name :: String.t(),
-          elements :: %{binary() => float()} | [{binary(), float()}],
+          elements :: %{binary() => number()} | [{binary(), number()}],
           opts :: [collection_ttl :: CollectionTtl.t()]
         ) :: SortedSet.PutElements.t()
   def sorted_set_put_elements(
@@ -281,8 +281,8 @@ defmodule Momento.CacheClient do
           cache_name :: String.t(),
           sorted_set_name :: String.t(),
           opts :: [
-            min_score: float(),
-            max_score: float(),
+            min_score: number(),
+            max_score: number(),
             offset: integer(),
             count: integer(),
             sort_order: :asc | :desc
@@ -425,7 +425,7 @@ defmodule Momento.CacheClient do
           cache_name :: String.t(),
           sorted_set_name :: String.t(),
           value :: binary(),
-          amount :: float(),
+          amount :: number(),
           opts :: [collection_ttl :: CollectionTtl.t()]
         ) :: Momento.Responses.SortedSet.IncrementScore.t()
   def sorted_set_increment_score(

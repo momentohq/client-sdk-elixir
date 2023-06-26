@@ -39,7 +39,7 @@ defmodule Momento.Internal.ScsDataClient do
           cache_name :: String.t(),
           key :: binary(),
           value :: binary(),
-          ttl_seconds :: float()
+          ttl_seconds :: number()
         ) :: Momento.Responses.Set.t()
   def set(data_client, cache_name, key, value, ttl_seconds) do
     with :ok <- validate_cache_name(cache_name),
@@ -116,7 +116,7 @@ defmodule Momento.Internal.ScsDataClient do
           data_client :: t(),
           cache_name :: String.t(),
           sorted_set_name :: String.t(),
-          elements :: %{binary() => float()} | [{binary(), float()}],
+          elements :: %{binary() => number()} | [{binary(), number()}],
           collection_ttl :: CollectionTtl.t()
         ) :: Momento.Responses.SortedSet.PutElements.t()
   def sorted_set_put_elements(
@@ -150,7 +150,7 @@ defmodule Momento.Internal.ScsDataClient do
           data_client :: t(),
           cache_name :: String.t(),
           sorted_set_name :: String.t(),
-          elements :: %{binary() => float()} | [{binary(), float()}],
+          elements :: %{binary() => number()} | [{binary(), number()}],
           collection_ttl :: CollectionTtl.t()
         ) :: Momento.Responses.SortedSet.PutElements.t()
   defp send_sorted_set_put_elements(
@@ -303,8 +303,8 @@ defmodule Momento.Internal.ScsDataClient do
           data_client :: t(),
           cache_name :: String.t(),
           sorted_set_name :: String.t(),
-          min_score :: float() | nil,
-          max_score :: float() | nil,
+          min_score :: number() | nil,
+          max_score :: number() | nil,
           offset :: integer() | nil,
           count :: integer() | nil,
           sort_order :: :asc | :desc
@@ -344,8 +344,8 @@ defmodule Momento.Internal.ScsDataClient do
           data_client :: t(),
           cache_name :: String.t(),
           sorted_set_name :: String.t(),
-          min_score :: float() | nil,
-          max_score :: float() | nil,
+          min_score :: number() | nil,
+          max_score :: number() | nil,
           offset :: integer() | nil,
           count :: integer() | nil,
           sort_order :: :asc | :desc
@@ -703,7 +703,7 @@ defmodule Momento.Internal.ScsDataClient do
           cache_name :: String.t(),
           sorted_set_name :: String.t(),
           value :: binary(),
-          amount :: float(),
+          amount :: number(),
           collection_ttl :: CollectionTtl.t()
         ) :: Momento.Responses.SortedSet.IncrementScore.t()
   def sorted_set_increment_score(
