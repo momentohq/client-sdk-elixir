@@ -286,9 +286,9 @@ defmodule Momento.Examples.LoadGen do
   def main(options) do
     cache_client =
       CacheClient.create!(
-        config: Configurations.Laptop.latest(),
-        credential_provider: CredentialProvider.from_env_var!("MOMENTO_AUTH_TOKEN"),
-        default_ttl_seconds: 60
+        Configurations.Laptop.latest(),
+        CredentialProvider.from_env_var!("MOMENTO_AUTH_TOKEN"),
+        60
       )
 
     CacheClient.create_cache(cache_client, @cache_name)
