@@ -49,9 +49,9 @@ defmodule Momento.CacheClient do
   - A {:ok, `%Momento.CacheClient{}`} tuple representing the connected client.
   """
   @spec create(
-            config :: Configuration.t(),
-            credential_provider :: CredentialProvider.t(),
-            default_ttl_seconds :: number()
+          config :: Configuration.t(),
+          credential_provider :: CredentialProvider.t(),
+          default_ttl_seconds :: number()
         ) :: {:ok, t()} | {:error, any()}
   def create(config, credential_provider, default_ttl_seconds) do
     with {:ok, control_client} <- ScsControlClient.create(credential_provider),
@@ -80,9 +80,9 @@ defmodule Momento.CacheClient do
   - A `%Momento.CacheClient{}` struct representing the connected client.
   """
   @spec create!(
-            config :: Configuration.t(),
-            credential_provider :: CredentialProvider.t(),
-            default_ttl_seconds :: number()
+          config :: Configuration.t(),
+          credential_provider :: CredentialProvider.t(),
+          default_ttl_seconds :: number()
         ) :: t()
   def create!(config, credential_provider, default_ttl_seconds) do
     result = create(config, credential_provider, default_ttl_seconds)
