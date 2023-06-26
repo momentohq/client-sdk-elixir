@@ -7,6 +7,7 @@ defmodule Examples.MixProject do
       version: "0.1.0",
       elixir: "~> 1.14",
       start_permanent: Mix.env() == :prod,
+      elixirc_paths: elixirc_paths(Mix.env()),
       deps: deps()
     ]
   end
@@ -18,11 +19,15 @@ defmodule Examples.MixProject do
     ]
   end
 
+  defp elixirc_paths(_), do: ["lib"]
+
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:gomomento, "~> 0.4.0"},
-      {:tls_certificate_check, "~> 1.19"}
+      {:dialyxir, "~> 1.3", only: [:dev], runtime: false},
+      {:gomomento, "0.5.0"},
+      {:tls_certificate_check, "~> 1.19"},
+      {:hdr_histogram, path: "../vendor/hdr_histogram_erl"}
     ]
   end
 end

@@ -57,6 +57,7 @@ jobs:
             mix deps.get
             mix compile
             mix format --check-formatted
+            mix dialyzer
             mix run basic.exs
             mix run sorted_set.exs
             mix run doc_examples/cheat_sheet.exs

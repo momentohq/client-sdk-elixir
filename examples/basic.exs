@@ -41,7 +41,7 @@ defmodule Momento.Examples.Basic do
     response = Task.await(get_task)
 
     case response do
-      {:hit, result} ->
+      {:ok, result} ->
         Logger.info("'get' resulted in a 'hit' for key #{key}: #{inspect(result.value)}")
 
       :miss ->
