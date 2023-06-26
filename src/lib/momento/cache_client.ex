@@ -49,17 +49,11 @@ defmodule Momento.CacheClient do
   - A {:ok, `%Momento.CacheClient{}`} tuple representing the connected client.
   """
   @spec create(
-          opts :: [
-            config: Configuration.t(),
-            credential_provider: CredentialProvider.t(),
-            default_ttl_seconds: number()
-          ]
+            config :: Configuration.t(),
+            credential_provider :: CredentialProvider.t(),
+            default_ttl_seconds :: number()
         ) :: {:ok, t()} | {:error, any()}
-  def create(opts) do
-    config = Keyword.get(opts, :config)
-    credential_provider = Keyword.get(opts, :credential_provider)
-    default_ttl_seconds = Keyword.get(opts, :default_ttl_seconds)
-
+  def create(config, credential_provider, default_ttl_seconds) do
     with {:ok, control_client} <- ScsControlClient.create(credential_provider),
          {:ok, data_client} <- ScsDataClient.create(credential_provider) do
       {:ok,
@@ -86,14 +80,12 @@ defmodule Momento.CacheClient do
   - A `%Momento.CacheClient{}` struct representing the connected client.
   """
   @spec create!(
-          opts :: [
-            config: Configuration.t(),
-            credential_provider: CredentialProvider.t(),
-            default_ttl_seconds: number()
-          ]
+            config :: Configuration.t(),
+            credential_provider :: CredentialProvider.t(),
+            default_ttl_seconds :: number()
         ) :: t()
-  def create!(opts) do
-    result = create(opts)
+  def create!(config, credential_provider, default_ttl_seconds) do
+    result = create(config, credential_provider, default_ttl_seconds)
 
     case result do
       {:ok, client} -> client

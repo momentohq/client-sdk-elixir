@@ -17,11 +17,7 @@ defmodule Momento.IntegrationTestUtils do
     config = Configurations.Laptop.latest()
 
     cache_client =
-      CacheClient.create!(
-        config: config,
-        credential_provider: credential_provider,
-        default_ttl_seconds: 120
-      )
+      CacheClient.create!(config, credential_provider, 120)
 
     case CacheClient.create_cache(cache_client, cache_name) do
       {:ok, _} -> :ok
