@@ -133,7 +133,7 @@ defmodule Examples.DocExamples do
   @spec example_API_Get(client :: Momento.CacheClient.t()) :: any()
   def example_API_Get(client) do
     case Momento.CacheClient.get(client, "test-cache", "test-key") do
-      {:hit, hit} ->
+      {:ok, hit} ->
         IO.puts("Retrieved value for key 'test-key': #{hit.value}")
 
       :miss ->
