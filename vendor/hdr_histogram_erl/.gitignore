@@ -1,0 +1,14 @@
+*.o
+deps/
+ebin/
+logs/
+perf/hh
+priv
+.rebar
+*.beam
+.eunit
+.eqc-info
+current_counterexample.eqc
+erl_crash.dump
+_build
+*.hgrm
