@@ -15,7 +15,8 @@ defmodule Momento.IntegrationTestUtils do
     credential_provider = CredentialProvider.from_env_var!("TEST_AUTH_TOKEN")
 
     config = Configurations.Laptop.latest()
-    cache_client = CacheClient.create!(config, credential_provider, 120.0)
+
+    cache_client = CacheClient.create!(config, credential_provider, 120)
 
     case CacheClient.create_cache(cache_client, cache_name) do
       {:ok, _} -> :ok
