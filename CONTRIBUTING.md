@@ -1,7 +1,7 @@
 ## Development
 
 1. Install Elixir
-    The recommended way to install elixir is using [`asdf`](https://asdf-vm.com/). This allows you to manage multiple versions of elixir/erlang on your machine. To install `asdf`, see their [Getting Started](https://asdf-vm.com/guide/getting-started.html) docs, or:
+    The recommended way to install elixir is using [`asdf`](https://asdf-vm.com/). This allows you to manage multiple versions of elixir/erlang on your machine. To install `asdf`, see their [Getting Started](https://asdf-vm.com/guide/getting-started.html) docs. For macs you can install via homebrew:
 
 ```bash
 brew install asdf
