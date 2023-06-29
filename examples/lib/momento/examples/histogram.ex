@@ -36,6 +36,10 @@ defmodule Momento.Examples.Histogram do
         min: #{:hdr_histogram.min(h)}
         p50: #{:hdr_histogram.percentile(h, 50.0)}
         p90: #{:hdr_histogram.percentile(h, 90.0)}
+        p95: #{:hdr_histogram.percentile(h, 95.0)}
+        p96: #{:hdr_histogram.percentile(h, 96.0)}
+        p97: #{:hdr_histogram.percentile(h, 97.0)}
+        p98: #{:hdr_histogram.percentile(h, 98.0)}
         p99: #{:hdr_histogram.percentile(h, 99.0)}
       p99.9: #{:hdr_histogram.percentile(h, 99.9)}
         max: #{:hdr_histogram.max(h)}
