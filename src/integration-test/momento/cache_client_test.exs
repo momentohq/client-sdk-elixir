@@ -52,11 +52,9 @@ defmodule CacheClientTest do
   } do
     value = "test_value"
 
-    {:error, error} = CacheClient.set(cache_client, cache_name, nil, value)
-    assert String.contains?(error.message, "The key cannot be nil")
-
     {:error, error} = CacheClient.set(cache_client, cache_name, 12345, value)
-    assert String.contains?(error.message, "The key must be a binary")
+    assert :invalid_argument_error = error.error_code
+    assert %Protobuf.EncodeError{} = error.cause
   end
 
   test "set/5 returns an error with a bad value", %{
@@ -65,11 +63,9 @@ defmodule CacheClientTest do
   } do
     key = random_string(16)
 
-    {:error, error} = CacheClient.set(cache_client, cache_name, key, nil)
-    assert String.contains?(error.message, "The value cannot be nil")
-
     {:error, error} = CacheClient.set(cache_client, cache_name, key, 12345)
-    assert String.contains?(error.message, "The value must be a binary")
+    assert :invalid_argument_error = error.error_code
+    assert %Protobuf.EncodeError{} = error.cause
   end
 
   test "set/5 returns an error with a bad TTL", %{
@@ -80,10 +76,11 @@ defmodule CacheClientTest do
     value = "test_value"
 
     {:error, error} = CacheClient.set(cache_client, cache_name, key, value, ttl_seconds: "sixty")
-    assert String.contains?(error.message, "The TTL must be a number")
+    assert :invalid_argument_error = error.error_code
 
     {:error, error} = CacheClient.set(cache_client, cache_name, key, value, ttl_seconds: -20.0)
-    assert String.contains?(error.message, "The TTL must be positive")
+    assert :invalid_argument_error = error.error_code
+    assert %Protobuf.EncodeError{} = error.cause
   end
 
   test "get/3 returns miss when no value is found for a key", %{
@@ -105,11 +102,9 @@ defmodule CacheClientTest do
     cache_client: cache_client,
     cache_name: cache_name
   } do
-    {:error, error} = CacheClient.get(cache_client, cache_name, nil)
-    assert String.contains?(error.message, "The key cannot be nil")
-
     {:error, error} = CacheClient.get(cache_client, cache_name, 12345)
-    assert String.contains?(error.message, "The key must be a binary")
+    assert :invalid_argument_error = error.error_code
+    assert %Protobuf.EncodeError{} = error.cause
   end
 
   test "delete/3 returns success when no value is found for a key", %{
@@ -131,11 +126,9 @@ defmodule CacheClientTest do
     cache_client: cache_client,
     cache_name: cache_name
   } do
-    {:error, error} = CacheClient.delete(cache_client, cache_name, nil)
-    assert String.contains?(error.message, "The key cannot be nil")
-
     {:error, error} = CacheClient.delete(cache_client, cache_name, 12345)
-    assert String.contains?(error.message, "The key must be a binary")
+    assert :invalid_argument_error = error.error_code
+    assert %Protobuf.EncodeError{} = error.cause
   end
 
   describe "sorted_set_put_elements/5" do
@@ -171,6 +164,128 @@ defmodule CacheClientTest do
       {:ok, hit} = CacheClient.sorted_set_fetch_by_rank(cache_client, cache_name, sorted_set_name)
       assert hit.value == [{"key1", 1.0}, {"key3", 3.0}, {"key2", 5.0}]
     end
+
+    test "returns an error with a bad cache name", %{
+      cache_client: cache_client
+    } do
+      sorted_set_name = "sorted set name"
+      elements = [{"key1", 1.0}]
+      collection_ttl = Momento.Requests.CollectionTtl.of(60.0)
+
+      {:error, error} =
+        CacheClient.sorted_set_put_elements(
+          cache_client,
+          nil,
+          sorted_set_name,
+          elements,
+          collection_ttl: collection_ttl
+        )
+
+      assert String.contains?(error.message, "The cache name cannot be nil")
+
+      {:error, error} =
+        CacheClient.sorted_set_put_elements(
+          cache_client,
+          12345,
+          sorted_set_name,
+          elements,
+          collection_ttl: collection_ttl
+        )
+
+      assert String.contains?(error.message, "The cache name must be a string")
+    end
+
+    test "returns an error with a bad sorted set name", %{
+      cache_client: cache_client,
+      cache_name: cache_name
+    } do
+      elements = [{"key1", 1.0}]
+      collection_ttl = Momento.Requests.CollectionTtl.of(60.0)
+
+      {:error, error} =
+        CacheClient.sorted_set_put_elements(
+          cache_client,
+          cache_name,
+          nil,
+          elements,
+          collection_ttl: collection_ttl
+        )
+
+      assert String.contains?(error.message, "The sorted set name cannot be nil")
+
+      {:error, error} =
+        CacheClient.sorted_set_put_elements(
+          cache_client,
+          cache_name,
+          12345,
+          elements,
+          collection_ttl: collection_ttl
+        )
+
+      assert String.contains?(error.message, "The sorted set name must be a string")
+    end
+
+    test "returns an error with bad elements", %{
+      cache_client: cache_client,
+      cache_name: cache_name
+    } do
+      sorted_set_name = "sorted set name"
+      collection_ttl = Momento.Requests.CollectionTtl.of(60.0)
+
+      {:error, error} =
+        CacheClient.sorted_set_put_elements(
+          cache_client,
+          cache_name,
+          sorted_set_name,
+          nil,
+          collection_ttl: collection_ttl
+        )
+
+      assert :invalid_argument_error = error.error_code
+
+      {:error, error} =
+        CacheClient.sorted_set_put_elements(
+          cache_client,
+          cache_name,
+          sorted_set_name,
+          [{12345, 1.0}],
+          collection_ttl: collection_ttl
+        )
+
+      assert :invalid_argument_error = error.error_code
+      assert %Protobuf.EncodeError{} = error.cause
+
+      {:error, error} =
+        CacheClient.sorted_set_put_elements(
+          cache_client,
+          cache_name,
+          sorted_set_name,
+          [{"key1", "one"}],
+          collection_ttl: collection_ttl
+        )
+
+      assert :invalid_argument_error = error.error_code
+      assert %Protobuf.EncodeError{} = error.cause
+    end
+
+    test "returns an error with a bad collection ttl", %{
+      cache_client: cache_client,
+      cache_name: cache_name
+    } do
+      sorted_set_name = "sorted set name"
+      elements = [{"key1", 1.0}]
+
+      {:error, error} =
+        CacheClient.sorted_set_put_elements(
+          cache_client,
+          cache_name,
+          sorted_set_name,
+          elements,
+          collection_ttl: "ttl"
+        )
+
+      assert :invalid_argument_error = error.error_code
+    end
   end
 
   describe "sorted_set_put_element/6" do
@@ -200,6 +315,137 @@ defmodule CacheClientTest do
 
       {:ok, hit} = CacheClient.sorted_set_fetch_by_rank(cache_client, cache_name, sorted_set_name)
       assert hit.value == [{"key2", 2.0}, {"key1", 5.0}]
+    end
+
+    test "returns an error with a bad cache name", %{
+      cache_client: cache_client
+    } do
+      sorted_set_name = "sorted set name"
+      value = "value"
+      score = 1.0
+      collection_ttl = Momento.Requests.CollectionTtl.of(60.0)
+
+      {:error, error} =
+        CacheClient.sorted_set_put_element(
+          cache_client,
+          nil,
+          sorted_set_name,
+          value,
+          score,
+          collection_ttl: collection_ttl
+        )
+
+      assert String.contains?(error.message, "The cache name cannot be nil")
+
+      {:error, error} =
+        CacheClient.sorted_set_put_element(
+          cache_client,
+          12345,
+          sorted_set_name,
+          value,
+          score,
+          collection_ttl: collection_ttl
+        )
+
+      assert String.contains?(error.message, "The cache name must be a string")
+    end
+
+    test "returns an error with a bad sorted set name", %{
+      cache_client: cache_client,
+      cache_name: cache_name
+    } do
+      value = "value"
+      score = 1.0
+      collection_ttl = Momento.Requests.CollectionTtl.of(60.0)
+
+      {:error, error} =
+        CacheClient.sorted_set_put_element(
+          cache_client,
+          cache_name,
+          nil,
+          value,
+          score,
+          collection_ttl: collection_ttl
+        )
+
+      assert String.contains?(error.message, "The sorted set name cannot be nil")
+
+      {:error, error} =
+        CacheClient.sorted_set_put_element(
+          cache_client,
+          cache_name,
+          12345,
+          value,
+          score,
+          collection_ttl: collection_ttl
+        )
+
+      assert String.contains?(error.message, "The sorted set name must be a string")
+    end
+
+    test "returns an error with a bad value", %{
+      cache_client: cache_client,
+      cache_name: cache_name
+    } do
+      sorted_set_name = "sorted set name"
+      score = 1.0
+      collection_ttl = Momento.Requests.CollectionTtl.of(60.0)
+
+      {:error, error} =
+        CacheClient.sorted_set_put_element(
+          cache_client,
+          cache_name,
+          sorted_set_name,
+          12345,
+          score,
+          collection_ttl: collection_ttl
+        )
+
+      assert :invalid_argument_error = error.error_code
+      assert %Protobuf.EncodeError{} = error.cause
+    end
+
+    test "returns an error with a bad score", %{
+      cache_client: cache_client,
+      cache_name: cache_name
+    } do
+      sorted_set_name = "sorted set name"
+      value = "value"
+      collection_ttl = Momento.Requests.CollectionTtl.of(60.0)
+
+      {:error, error} =
+        CacheClient.sorted_set_put_element(
+          cache_client,
+          cache_name,
+          sorted_set_name,
+          value,
+          "one",
+          collection_ttl: collection_ttl
+        )
+
+      assert :invalid_argument_error = error.error_code
+      assert %Protobuf.EncodeError{} = error.cause
+    end
+
+    test "returns an error with a bad collection ttl", %{
+      cache_client: cache_client,
+      cache_name: cache_name
+    } do
+      sorted_set_name = "sorted set name"
+      value = "value"
+      score = 1.0
+
+      {:error, error} =
+        CacheClient.sorted_set_put_element(
+          cache_client,
+          cache_name,
+          sorted_set_name,
+          value,
+          score,
+          collection_ttl: "ttl"
+        )
+
+      assert :invalid_argument_error = error.error_code
     end
   end
 
@@ -309,6 +555,106 @@ defmodule CacheClientTest do
         )
 
       assert hit.value == [{"key4", 4.0}, {"key3", 3.0}]
+    end
+
+    test "returns an error with a bad cache name", %{
+      cache_client: cache_client
+    } do
+      sorted_set_name = "sorted set name"
+      start_rank = 1
+      end_rank = 10
+      sort_order = :asc
+
+      {:error, error} =
+        CacheClient.sorted_set_fetch_by_rank(
+          cache_client,
+          nil,
+          sorted_set_name,
+          start_rank: start_rank,
+          end_rank: end_rank,
+          sort_order: sort_order
+        )
+
+      assert String.contains?(error.message, "The cache name cannot be nil")
+
+      {:error, error} =
+        CacheClient.sorted_set_fetch_by_rank(
+          cache_client,
+          12345,
+          sorted_set_name,
+          start_rank: start_rank,
+          end_rank: end_rank,
+          sort_order: sort_order
+        )
+
+      assert String.contains?(error.message, "The cache name must be a string")
+    end
+
+    test "returns an error with a bad sorted set name", %{
+      cache_client: cache_client,
+      cache_name: cache_name
+    } do
+      start_rank = 1
+      end_rank = 10
+      sort_order = :asc
+
+      {:error, error} =
+        CacheClient.sorted_set_fetch_by_rank(
+          cache_client,
+          cache_name,
+          nil,
+          start_rank: start_rank,
+          end_rank: end_rank,
+          sort_order: sort_order
+        )
+
+      assert String.contains?(error.message, "The sorted set name cannot be nil")
+
+      {:error, error} =
+        CacheClient.sorted_set_fetch_by_rank(
+          cache_client,
+          cache_name,
+          12345,
+          start_rank: start_rank,
+          end_rank: end_rank,
+          sort_order: sort_order
+        )
+
+      assert String.contains?(error.message, "The sorted set name must be a string")
+    end
+
+    test "returns an error with bad ranks", %{
+      cache_client: cache_client,
+      cache_name: cache_name
+    } do
+      sorted_set_name = "sorted set name"
+      sort_order = :asc
+
+      {:error, error} =
+        CacheClient.sorted_set_fetch_by_rank(
+          cache_client,
+          cache_name,
+          sorted_set_name,
+          start_rank: "start",
+          end_rank: 10,
+          sort_order: sort_order
+        )
+
+      assert :invalid_argument_error = error.error_code
+      assert %Protobuf.EncodeError{} = error.cause
+
+      {:error, error} =
+        CacheClient.sorted_set_fetch_by_rank(
+          cache_client,
+          cache_name,
+          sorted_set_name,
+          start_rank: 1,
+          end_rank: "end",
+          sort_order: sort_order
+        )
+
+      assert :invalid_argument_error = error.error_code
+      assert %Protobuf.EncodeError{} = error.cause
     end
   end
 
