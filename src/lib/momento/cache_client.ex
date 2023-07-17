@@ -238,6 +238,7 @@ defmodule Momento.CacheClient do
       ) do
     collection_ttl =
       Keyword.get(opts, :collection_ttl, CollectionTtl.of(client.default_ttl_seconds))
+      |> CollectionTtl.replace_ttl_if_absent(client.default_ttl_seconds)
 
     case ScsDataClient.sorted_set_put_elements(
            client.data_client,
@@ -267,6 +268,7 @@ defmodule Momento.CacheClient do
       ) do
     collection_ttl =
       Keyword.get(opts, :collection_ttl, CollectionTtl.of(client.default_ttl_seconds))
+      |> CollectionTtl.replace_ttl_if_absent(client.default_ttl_seconds)
 
     ScsDataClient.sorted_set_put_elements(
       client.data_client,
@@ -465,6 +467,7 @@ defmodule Momento.CacheClient do
       ) do
     collection_ttl =
       Keyword.get(opts, :collection_ttl, CollectionTtl.of(client.default_ttl_seconds))
+      |> CollectionTtl.replace_ttl_if_absent(client.default_ttl_seconds)
 
     ScsDataClient.sorted_set_increment_score(
       client.data_client,
