@@ -7,6 +7,8 @@ defmodule Momento.Internal.ScsDataClient do
   @enforce_keys [:auth_token, :channel]
   defstruct [:auth_token, :channel]
 
+  @moduledoc false
+
   @opaque t() :: %__MODULE__{
             auth_token: String.t(),
             channel: GRPC.Channel.t()

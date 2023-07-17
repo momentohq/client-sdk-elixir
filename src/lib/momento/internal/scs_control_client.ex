@@ -4,6 +4,8 @@ defmodule Momento.Internal.ScsControlClient do
   alias Momento.Auth.CredentialProvider
   alias Momento.Responses.{CacheInfo, CreateCache, DeleteCache, ListCaches}
 
+  @moduledoc false
+
   @enforce_keys [:auth_token, :channel]
   defstruct [:auth_token, :channel]
 
