@@ -2,7 +2,6 @@ Code.require_file("integration-test/momento/integration_test_utils.exs")
 
 defmodule CacheClientTest do
   use ExUnit.Case
-  doctest Momento.CacheClient
 
   alias Momento.CacheClient
 
