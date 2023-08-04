@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.2](https://github.com/momentohq/client-sdk-elixir/compare/v0.6.1...v0.6.2) (2023-08-04)
+
+
+### Miscellaneous
+
+* empty commit to test release plugin ([#70](https://github.com/momentohq/client-sdk-elixir/issues/70)) ([82c2406](https://github.com/momentohq/client-sdk-elixir/commit/82c24062ffb2bd4e63da6c05e24f677ea4750a6b))
+
 ## [0.6.1](https://github.com/momentohq/client-sdk-elixir/compare/v0.6.0...v0.6.1) (2023-08-04)
 
 
