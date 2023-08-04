@@ -5,7 +5,7 @@ on:
     branches: [main]
 
 jobs:
-  Generate readme and prep release:
+  generate-readme-and-prep-release:
     runs-on: ubuntu-latest
     steps:
       - name: Setup repo
