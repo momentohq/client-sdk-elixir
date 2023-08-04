@@ -21,3 +21,26 @@ jobs:
           project_type: sdk
           sdk_language: Elixir
           dev_docs_slug: elixir
+
+      - name: Update release branch
+        uses: google-github-actions/release-please-action@v3
+        id: release
+        with:
+          token: ${{ secrets.MOMENTO_MACHINE_USER_GITHUB_TOKEN }}
+          release-type: elixir
+          package-name: client-sdk-elixir
+          changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"chore","section":"Miscellaneous","hidden":false}]'
+
+      - name: Publish test
+        if: ${{ steps.release.outputs.release_created }}
+        run: |
+          echo "Published version: ${{ steps.release.outputs.tag_name }}"
+
+#      - name: Publish to hex
+#        if: ${{ steps.release.outputs.release_created }}
+#        env:
+#          HEX_API_KEY: ${{ secrets.ELIXIR_HEX_PACKAGE_PUBLISH_API_KEY }}
+#        run: |
+#          pushd src
+#            mix hex.publish --yes
+#          popd

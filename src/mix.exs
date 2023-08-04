@@ -4,7 +4,7 @@ defmodule Momento.MixProject do
   def project do
     [
       app: :gomomento,
-      version: "0.0.1-develop",
+      version: "0.5.0",
       elixir: "~> 1.14",
       start_permanent: Mix.env() == :prod,
       elixirc_paths: elixirc_paths(Mix.env()),
