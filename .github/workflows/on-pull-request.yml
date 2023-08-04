@@ -5,7 +5,7 @@ on:
     branches: [main]
 
 jobs:
-  test:
+  Build and test:
     runs-on: ubuntu-20.04
     env:
       TEST_AUTH_TOKEN: ${{ secrets.ALPHA_TEST_AUTH_TOKEN }}
