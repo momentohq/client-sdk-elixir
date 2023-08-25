@@ -34,14 +34,14 @@ jobs:
 
       - name: Publish test
         run: |
-          echo "Published version: ${{ steps.release.outputs.tag_name }}"
-        if: ${{ steps.release.outputs.release_created }}
+          echo "Published version: ${{ steps.release.outputs.src--tag_name }}"
+        if: ${{ steps.release.outputs.src--release_created }}
 
 #      - name: Publish to hex
-#        if: ${{ steps.release.outputs.release_created }}
 #        env:
 #          HEX_API_KEY: ${{ secrets.ELIXIR_HEX_PACKAGE_PUBLISH_API_KEY }}
 #        run: |
 #          pushd src
 #            mix hex.publish --yes
 #          popd
+#        if: ${{ steps.release.outputs.src--release_created }}

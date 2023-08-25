@@ -414,12 +414,12 @@ Examples.DocExamples.example_API_CredentialProviderFromString()
 
 client = Examples.DocExamples.example_API_InstantiateCacheClient()
 
-Examples.DocExamples.example_API_ErrorHandlingHitMiss(client)
-Examples.DocExamples.example_API_ErrorHandlingSuccess(client)
-
 Examples.DocExamples.example_API_CreateCache(client)
 Examples.DocExamples.example_API_DeleteCache(client)
 Examples.DocExamples.example_API_CreateCache(client)
+
+Examples.DocExamples.example_API_ErrorHandlingHitMiss(client)
+Examples.DocExamples.example_API_ErrorHandlingSuccess(client)
 
 Examples.DocExamples.example_API_ListCaches(client)
 Examples.DocExamples.example_API_Set(client)
