@@ -32,16 +32,11 @@ jobs:
           package-name: client-sdk-elixir
           changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"chore","section":"Miscellaneous","hidden":false}]'
 
-      - name: Publish test
+      - name: Publish to hex
+        env:
+          HEX_API_KEY: ${{ secrets.ELIXIR_HEX_PACKAGE_PUBLISH_API_KEY }}
         run: |
-          echo "Published version: ${{ steps.release.outputs.src--tag_name }}"
+          pushd src
+            mix hex.publish --yes
+          popd
         if: ${{ steps.release.outputs.src--release_created }}
-
-#      - name: Publish to hex
-#        env:
-#          HEX_API_KEY: ${{ secrets.ELIXIR_HEX_PACKAGE_PUBLISH_API_KEY }}
-#        run: |
-#          pushd src
-#            mix hex.publish --yes
-#          popd
-#        if: ${{ steps.release.outputs.src--release_created }}
