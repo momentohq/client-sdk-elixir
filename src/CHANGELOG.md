@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.3](https://github.com/momentohq/client-sdk-elixir/compare/v0.6.2...v0.6.3) (2023-08-25)
+
+
+### Miscellaneous
+
+* remove old out of date readme ([#73](https://github.com/momentohq/client-sdk-elixir/issues/73)) ([2c9f5f4](https://github.com/momentohq/client-sdk-elixir/commit/2c9f5f44f8682861f7666273fcf4e4236191b01e))
+
 ## [0.6.2](https://github.com/momentohq/client-sdk-elixir/compare/v0.6.1...v0.6.2) (2023-08-04)
 
 
