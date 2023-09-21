@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.4](https://github.com/momentohq/client-sdk-elixir/compare/v0.6.3...v0.6.4) (2023-09-21)
+
+
+### Miscellaneous
+
+* set the hex docs front page to the Momento.CacheClient module ([#76](https://github.com/momentohq/client-sdk-elixir/issues/76)) ([bd4b088](https://github.com/momentohq/client-sdk-elixir/commit/bd4b088c6100c7fe2ee74ba6dcd7371665d6a7e4))
+
 ## [0.6.3](https://github.com/momentohq/client-sdk-elixir/compare/v0.6.2...v0.6.3) (2023-08-25)
 
 
