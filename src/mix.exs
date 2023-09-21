@@ -13,7 +13,10 @@ defmodule Momento.MixProject do
       package: package(),
       name: "Momento Elixir SDK",
       source_url: "https://github.com/momentohq/client-sdk-elixir",
-      homepage_url: "https://www.gomomento.com/"
+      homepage_url: "https://www.gomomento.com/",
+      docs: [
+        main: "Momento.CacheClient"
+      ]
     ]
   end
 
@@ -47,7 +50,10 @@ defmodule Momento.MixProject do
     [
       files: ~w(lib generated .formatter.exs mix.exs ../README.md ../LICENSE),
       licenses: ["Apache-2.0"],
-      links: %{"GitHub" => "https://github.com/momentohq/client-sdk-elixir"}
+      links: %{
+        "GitHub" => "https://github.com/momentohq/client-sdk-elixir",
+        "Momento Documentation" => "https://docs.momentohq.com/cache/develop/sdks/elixir"
+      }
     ]
   end
 end

@@ -9,8 +9,26 @@ defmodule Momento.CacheClient do
 
   require Logger
 
-  @moduledoc """
+  @moduledoc ~S"""
   Client to perform operations against a Momento cache.
+
+  A client is created by supplying a configuration, a credential provider, and a default time-to-live:
+      config = %Momento.Config.Configuration{
+        transport_strategy: %Momento.Config.Transport.TransportStrategy{
+          grpc_config: %Momento.Config.Transport.GrpcConfiguration{
+            deadline_millis: 5000
+          }
+        }
+      }
+
+      credential_provider = Momento.Auth.CredentialProvider.from_env_var!("MOMENTO_AUTH_TOKEN")
+      default_ttl_seconds = 60.0
+      client = CacheClient.create!(config, credential_provider, default_ttl_seconds)
+
+  The resulting struct maintains the connection and can be given to any of the CacheClient functions to make calls to Momento:
+      iex> Momento.CacheClient.set(client, "cache", "key", "value")
+      {:ok, %Momento.Responses.Set.Ok{}}
+
   """
 
   @typedoc """
