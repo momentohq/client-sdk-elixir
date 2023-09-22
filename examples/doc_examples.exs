@@ -23,13 +23,7 @@ defmodule Examples.DocExamples do
 
   @spec example_API_InstantiateCacheClient() :: Momento.CacheClient.t()
   def example_API_InstantiateCacheClient() do
-    config = %Momento.Config.Configuration{
-      transport_strategy: %Momento.Config.Transport.TransportStrategy{
-        grpc_config: %Momento.Config.Transport.GrpcConfiguration{
-          deadline_millis: 5000
-        }
-      }
-    }
+    config = Momento.Configurations.Laptop.latest()
 
     credential_provider = Momento.Auth.CredentialProvider.from_env_var!("MOMENTO_AUTH_TOKEN")
     default_ttl_seconds = 60.0

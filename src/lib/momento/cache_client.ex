@@ -13,13 +13,7 @@ defmodule Momento.CacheClient do
   Client to perform operations against a Momento cache.
 
   A client is created by supplying a configuration, a credential provider, and a default time-to-live:
-      config = %Momento.Config.Configuration{
-        transport_strategy: %Momento.Config.Transport.TransportStrategy{
-          grpc_config: %Momento.Config.Transport.GrpcConfiguration{
-            deadline_millis: 5000
-          }
-        }
-      }
+      config = Momento.Configurations.Laptop.latest()
 
       credential_provider = Momento.Auth.CredentialProvider.from_env_var!("MOMENTO_AUTH_TOKEN")
       default_ttl_seconds = 60.0

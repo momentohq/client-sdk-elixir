@@ -58,13 +58,7 @@ end
 Logger.info("Hello world")
 Logger.info("Hello logging world!")
 
-config = %Momento.Config.Configuration{
-  transport_strategy: %Momento.Config.Transport.TransportStrategy{
-    grpc_config: %Momento.Config.Transport.GrpcConfiguration{
-      deadline_millis: 5000
-    }
-  }
-}
+config = Momento.Configurations.Laptop.latest()
 
 credential_provider = Momento.Auth.CredentialProvider.from_env_var!("MOMENTO_AUTH_TOKEN")
 cache_client = Momento.CacheClient.create!(config, credential_provider, 60.0)
