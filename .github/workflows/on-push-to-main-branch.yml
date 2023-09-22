@@ -43,6 +43,8 @@ jobs:
           HEX_API_KEY: ${{ secrets.ELIXIR_HEX_PACKAGE_PUBLISH_API_KEY }}
         run: |
           pushd src
+            mix deps.get
+            mix compile
             mix hex.publish --yes
           popd
         if: ${{ steps.release.outputs.src--release_created }}
