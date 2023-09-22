@@ -1,4 +1,8 @@
 defmodule Momento.Configurations do
+  @moduledoc """
+  Prebuilt versions of `Momento.Config.Configuration` for different environments.
+  """
+
   defmodule Laptop do
     @spec latest() :: Momento.Config.Configuration.t()
     def latest() do
