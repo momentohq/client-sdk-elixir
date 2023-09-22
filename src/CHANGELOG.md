@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.6](https://github.com/momentohq/client-sdk-elixir/compare/v0.6.5...v0.6.6) (2023-09-22)
+
+
+### Miscellaneous
+
+* add module doc for Configurations ([#82](https://github.com/momentohq/client-sdk-elixir/issues/82)) ([aa0e418](https://github.com/momentohq/client-sdk-elixir/commit/aa0e418d76bd58ebca4ef3a83dad6418ed071103))
+
 ## [0.6.5](https://github.com/momentohq/client-sdk-elixir/compare/v0.6.4...v0.6.5) (2023-09-22)
 
 
