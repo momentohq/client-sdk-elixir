@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.5](https://github.com/momentohq/client-sdk-elixir/compare/v0.6.4...v0.6.5) (2023-09-22)
+
+
+### Miscellaneous
+
+* switch docs and examples to use pre-built configurations ([#79](https://github.com/momentohq/client-sdk-elixir/issues/79)) ([3ff3b2f](https://github.com/momentohq/client-sdk-elixir/commit/3ff3b2f3ff44ced8b1bd4ccf7e151049415f5ef1))
+
 ## [0.6.4](https://github.com/momentohq/client-sdk-elixir/compare/v0.6.3...v0.6.4) (2023-09-21)
 
 
