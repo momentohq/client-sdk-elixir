@@ -48,7 +48,7 @@ defmodule Momento.Internal.ScsDataClient do
     with :ok <- validate_cache_name(cache_name),
          {:ok, ttl_milliseconds} <- get_ttl_milliseconds(ttl_seconds) do
       try do
-        metadata = %{cache: cache_name, Authorization: data_client.auth_token}
+        metadata = create_metadata(cache_name, data_client)
 
         set_request = %Momento.Protos.CacheClient.SetRequest{
           cache_key: key,
@@ -75,7 +75,7 @@ defmodule Momento.Internal.ScsDataClient do
   def get(data_client, cache_name, key) do
     with :ok <- validate_cache_name(cache_name) do
       try do
-        metadata = %{cache: cache_name, Authorization: data_client.auth_token}
+        metadata = create_metadata(cache_name, data_client)
 
         get_request = %Momento.Protos.CacheClient.GetRequest{cache_key: key}
 
@@ -104,7 +104,7 @@ defmodule Momento.Internal.ScsDataClient do
   def delete(data_client, cache_name, key) do
     with :ok <- validate_cache_name(cache_name) do
       try do
-        metadata = %{cache: cache_name, Authorization: data_client.auth_token}
+        metadata = create_metadata(cache_name, data_client)
 
         delete_request = %Momento.Protos.CacheClient.DeleteRequest{cache_key: key}
 
@@ -141,7 +141,7 @@ defmodule Momento.Internal.ScsDataClient do
          {:ok, ttl_milliseconds} <- get_ttl_milliseconds(collection_ttl),
          {:ok, transformed_elements} <- transform_sorted_set_elements(elements) do
       try do
-        metadata = %{cache: cache_name, Authorization: data_client.auth_token}
+        metadata = create_metadata(cache_name, data_client)
 
         sorted_set_put_request = %Momento.Protos.CacheClient.SortedSetPutRequest{
           set_name: sorted_set_name,
@@ -211,7 +211,7 @@ defmodule Momento.Internal.ScsDataClient do
     with :ok <- validate_cache_name(cache_name),
          :ok <- validate_sorted_set_name(sorted_set_name) do
       try do
-        metadata = %{cache: cache_name, Authorization: data_client.auth_token}
+        metadata = create_metadata(cache_name, data_client)
 
         start_index =
           case start_rank do
@@ -298,7 +298,7 @@ defmodule Momento.Internal.ScsDataClient do
     with :ok <- validate_cache_name(cache_name),
          :ok <- validate_sorted_set_name(sorted_set_name) do
       try do
-        metadata = %{cache: cache_name, Authorization: data_client.auth_token}
+        metadata = create_metadata(cache_name, data_client)
 
         request_min_score =
           case min_score do
@@ -405,7 +405,7 @@ defmodule Momento.Internal.ScsDataClient do
     with :ok <- validate_cache_name(cache_name),
          :ok <- validate_sorted_set_name(sorted_set_name) do
       try do
-        metadata = %{cache: cache_name, Authorization: data_client.auth_token}
+        metadata = create_metadata(cache_name, data_client)
 
         remove_request = %Momento.Protos.CacheClient.SortedSetRemoveRequest{
           set_name: sorted_set_name,
@@ -449,7 +449,7 @@ defmodule Momento.Internal.ScsDataClient do
     with :ok <- validate_cache_name(cache_name),
          :ok <- validate_sorted_set_name(sorted_set_name) do
       try do
-        metadata = %{cache: cache_name, Authorization: data_client.auth_token}
+        metadata = create_metadata(cache_name, data_client)
 
         request_order =
           case sort_order do
@@ -571,7 +571,7 @@ defmodule Momento.Internal.ScsDataClient do
     with :ok <- validate_cache_name(cache_name),
          :ok <- validate_sorted_set_name(sorted_set_name) do
       try do
-        metadata = %{cache: cache_name, Authorization: data_client.auth_token}
+        metadata = create_metadata(cache_name, data_client)
 
         get_scores_request = %Momento.Protos.CacheClient.SortedSetGetScoreRequest{
           set_name: sorted_set_name,
@@ -642,7 +642,7 @@ defmodule Momento.Internal.ScsDataClient do
          :ok <- validate_sorted_set_name(sorted_set_name),
          {:ok, ttl_milliseconds} <- get_ttl_milliseconds(collection_ttl) do
       try do
-        metadata = %{cache: cache_name, Authorization: data_client.auth_token}
+        metadata = create_metadata(cache_name, data_client)
 
         increment_request = %Momento.Protos.CacheClient.SortedSetIncrementRequest{
           set_name: sorted_set_name,
@@ -687,4 +687,37 @@ defmodule Momento.Internal.ScsDataClient do
 
   defp get_ttl_milliseconds(ttl),
     do: {:error, Momento.Error.invalid_argument("Unable to parse TTL from #{ttl}")}
+
+  @agent_data_key "__#{__MODULE__}_AGENT_DATA_SENT__"
+
+  defp should_send_agent_data? do
+    :erlang.get(@agent_data_key) == :undefined
+  end
+
+  @spec create_metadata(String.t(), t()) :: %{required(String.t()) => String.t()}
+  defp create_metadata(cache_name, data_client) do
+    base_metadata = %{
+      "cache" => cache_name,
+      "authorization" => data_client.auth_token
+    }
+
+    if should_send_agent_data?() do
+      :erlang.put(@agent_data_key, true)
+
+      Map.merge(base_metadata, %{
+        "agent" => "elixir:cache:" <> get_library_version(),
+        "runtime-version" => System.version()
+      })
+    else
+      base_metadata
+    end
+  end
+
+  @spec get_library_version() :: String.t()
+  defp get_library_version do
+    case Application.spec(:gomomento, :vsn) do
+      nil -> "unknown"
+      version -> to_string(version)
+    end
+  end
 end
