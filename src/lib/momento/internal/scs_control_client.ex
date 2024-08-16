@@ -125,7 +125,9 @@ defmodule Momento.Internal.ScsControlClient do
       :erlang.put(@agent_data_key, true)
 
       Map.merge(base_metadata, %{
+        # example agent: "elixir:cache:0.6.6"
         "agent" => "elixir:cache:" <> get_library_version(),
+        # example runtime-version: "1.16.2"
         "runtime-version" => System.version()
       })
     else
