@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.6.7](https://github.com/momentohq/client-sdk-elixir/compare/v0.6.6...v0.6.7) (2024-08-19)
+
+
+### Miscellaneous
+
+* add agent and runtime-version metadata ([26f2772](https://github.com/momentohq/client-sdk-elixir/commit/26f2772a3d5e781a8a0e2d0844aa014fc91985b3))
+* empty commit to bump readme generator ([290ec44](https://github.com/momentohq/client-sdk-elixir/commit/290ec447c344ea9adca160b0cd0066b86434e68c))
+* empty commit to bump readme generator ([de12218](https://github.com/momentohq/client-sdk-elixir/commit/de122182e168d90e536f63fad19269905e72dd6a))
+
 ## [0.6.6](https://github.com/momentohq/client-sdk-elixir/compare/v0.6.5...v0.6.6) (2023-09-22)
 
 
