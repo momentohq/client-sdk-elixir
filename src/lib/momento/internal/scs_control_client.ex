@@ -39,7 +39,7 @@ defmodule Momento.Internal.ScsControlClient do
 
   @spec list_caches(client :: t()) :: Momento.Responses.ListCaches.t()
   def list_caches(client) do
-    metadata = %{Authorization: client.auth_token}
+    metadata = create_metadata(client)
     list_caches_request = %Momento.Protos.ControlClient.ListCachesRequest{}
 
     case Momento.Protos.ControlClient.ScsControl.Stub.list_caches(
@@ -60,7 +60,7 @@ defmodule Momento.Internal.ScsControlClient do
 
   @spec create_cache(client :: t(), cache_name :: String.t()) :: Momento.Responses.CreateCache.t()
   def create_cache(client, cache_name) do
-    metadata = %{Authorization: client.auth_token}
+    metadata = create_metadata(client)
 
     create_cache_request = %Momento.Protos.ControlClient.CreateCacheRequest{
       cache_name: cache_name
@@ -88,7 +88,7 @@ defmodule Momento.Internal.ScsControlClient do
 
   @spec delete_cache(client :: t(), cache_name :: String.t()) :: Momento.Responses.DeleteCache.t()
   def delete_cache(client, cache_name) do
-    metadata = %{Authorization: client.auth_token}
+    metadata = create_metadata(client)
 
     delete_cache_request = %Momento.Protos.ControlClient.DeleteCacheRequest{
       cache_name: cache_name
@@ -106,6 +106,40 @@ defmodule Momento.Internal.ScsControlClient do
         {:error, error_response} ->
           {:error, Momento.Error.convert(error_response)}
       end
+    end
+  end
+
+  @agent_data_key "__#{__MODULE__}_AGENT_DATA_SENT__"
+
+  defp should_send_agent_data? do
+    :erlang.get(@agent_data_key) == :undefined
+  end
+
+  @spec create_metadata(t()) :: %{required(String.t()) => String.t()}
+  defp create_metadata(client) do
+    base_metadata = %{
+      "authorization" => client.auth_token
+    }
+
+    if should_send_agent_data?() do
+      :erlang.put(@agent_data_key, true)
+
+      Map.merge(base_metadata, %{
+        # example agent: "elixir:cache:0.6.6"
+        "agent" => "elixir:cache:" <> get_library_version(),
+        # example runtime-version: "1.16.2"
+        "runtime-version" => System.version()
+      })
+    else
+      base_metadata
+    end
+  end
+
+  @spec get_library_version() :: String.t()
+  defp get_library_version do
+    case Application.spec(:gomomento, :vsn) do
+      nil -> "unknown"
+      version -> to_string(version)
     end
   end
 end

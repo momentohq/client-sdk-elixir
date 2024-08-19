@@ -38,7 +38,8 @@ defmodule Momento.MixProject do
       {:google_protos, "~> 0.3"},
       {:joken, "~> 2.5"},
       {:jason, "~> 1.4"},
-      {:tls_certificate_check, "~> 1.19"}
+      {:tls_certificate_check, "~> 1.19"},
+      {:mock, "~> 0.3.8", only: :test}
     ]
   end
 
