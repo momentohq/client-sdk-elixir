@@ -6,7 +6,7 @@ defmodule Momento.IntegrationTestUtils do
   alias Momento.Auth.CredentialProvider
 
   def initialize_cache_client() do
-    cache_name = System.get_env("TEST_CACHE_NAME")
+    cache_name = System.get_env("TEST_CACHE_NAME") || "elixir_integration_test_#{UUID.uuid4()}"
 
     if cache_name == nil do
       raise ArgumentError, "Missing required environment variable TEST_CACHE_NAME"

@@ -39,6 +39,7 @@ defmodule Momento.MixProject do
       {:joken, "~> 2.5"},
       {:jason, "~> 1.4"},
       {:tls_certificate_check, "~> 1.19"},
+      {:uuid, "~> 1.1"},
       {:mock, "~> 0.3.8", only: :test}
     ]
   end
