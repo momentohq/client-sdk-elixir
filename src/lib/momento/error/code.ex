@@ -13,6 +13,7 @@ defmodule Momento.Error.Code do
           | :timeout_error
           | :server_unavailable
           | :client_resource_exhausted
+          | :failed_precondition
           | :unknown
 
   def invalid_argument_error, do: :invalid_argument_error
@@ -28,5 +29,6 @@ defmodule Momento.Error.Code do
   def timeout_error, do: :timeout_error
   def server_unavailable, do: :server_unavailable
   def client_resource_exhausted, do: :client_resource_exhausted
+  def failed_precondition, do: :failed_precondition
   def unknown, do: :unknown
 end

@@ -50,7 +50,7 @@ defmodule Momento.Error do
       # InvalidArgument
       3 ->
         create_error(
-          Momento.Error.Code.bad_request_error(),
+          Momento.Error.Code.invalid_argument_error(),
           error,
           "The request was invalid; please contact Momento."
         )
@@ -94,7 +94,7 @@ defmodule Momento.Error do
       # FailedPrecondition
       9 ->
         create_error(
-          Momento.Error.Code.bad_request_error(),
+          Momento.Error.Code.failed_precondition(),
           error,
           "The request was invalid; please contact Momento."
         )
@@ -167,53 +167,45 @@ defmodule Momento.Error do
     }
   end
 
-  defp determine_limit_exceeded_message(error_cause) do
-    case error_cause do
-      "topic_subscriptions_limit_exceeded" ->
-        "Topic subscriptions limit exceeded."
+  defmodule LimitExceededMessages do
+    @messages %{
+      "topic_subscriptions_limit_exceeded" => "Topic subscriptions limit exceeded.",
+      "operations_rate_limit_exceeded" => "Operations rate limit exceeded.",
+      "throughput_rate_limit_exceeded" => "Throughput rate limit exceeded.",
+      "request_size_limit_exceeded" => "Request size limit exceeded.",
+      "item_size_limit_exceeded" => "Item size limit exceeded.",
+      "element_size_limit_exceeded" => "Element size limit exceeded."
+    }
 
-      "operations_rate_limit_exceeded" ->
-        "Operations rate limit exceeded."
+    @default_message "Limit exceeded for this account."
 
-      "throughput_rate_limit_exceeded" ->
-        "Throughput rate limit exceeded."
-
-      "request_size_limit_exceeded" ->
-        "Request size limit exceeded."
-
-      "item_size_limit_exceeded" ->
-        "Item size limit exceeded."
-
-      "element_size_limit_exceeded" ->
-        "Element size limit exceeded."
-
-      _ ->
-        default_limit_exceeded_message(error_cause)
+    def determine_limit_exceeded_message(error_cause) do
+      Map.get(@messages, error_cause, default_limit_exceeded_message(error_cause))
     end
-  end
 
-  defp default_limit_exceeded_message(error_cause) do
-    cond do
-      String.contains?(String.downcase(error_cause), "subscribers") ->
-        "Topic subscriptions limit exceeded."
+    defp default_limit_exceeded_message(error_cause) do
+      cond do
+        String.contains?(String.downcase(error_cause), "subscribers") ->
+          @messages["topic_subscriptions_limit_exceeded"]
 
-      String.contains?(String.downcase(error_cause), "operations") ->
-        "Operations rate limit exceeded."
+        String.contains?(String.downcase(error_cause), "operations") ->
+          @messages["operations_rate_limit_exceeded"]
 
-      String.contains?(String.downcase(error_cause), "throughput") ->
-        "Throughput rate limit exceeded."
+        String.contains?(String.downcase(error_cause), "throughput") ->
+          @messages["throughput_rate_limit_exceeded"]
 
-      String.contains?(String.downcase(error_cause), "request limit") ->
-        "Request size limit exceeded."
+        String.contains?(String.downcase(error_cause), "request limit") ->
+          @messages["request_size_limit_exceeded"]
 
-      String.contains?(String.downcase(error_cause), "item size") ->
-        "Item size limit exceeded."
+        String.contains?(String.downcase(error_cause), "item size") ->
+          @messages["item_size_limit_exceeded"]
 
-      String.contains?(String.downcase(error_cause), "element size") ->
-        "Element size limit exceeded."
+        String.contains?(String.downcase(error_cause), "element size") ->
+          @messages["element_size_limit_exceeded"]
 
-      true ->
-        "Request rate, bandwidth, or object size exceeded the limits for this account. Reduce usage or contact Momento to request a limit increase."
+        true ->
+          @default_message
+      end
     end
   end
 
