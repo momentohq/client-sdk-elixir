@@ -157,16 +157,6 @@ defmodule Momento.Error do
     end
   end
 
-  defp handle_limit_exceeded_error(error) do
-    message = determine_limit_exceeded_message(error.metadata["err"] || "")
-
-    %Momento.Error{
-      error_code: Momento.Error.Code.limit_exceeded_error(),
-      cause: error,
-      message: message
-    }
-  end
-
   defmodule LimitExceededMessages do
     @messages %{
       "topic_subscriptions_limit_exceeded" => "Topic subscriptions limit exceeded.",
@@ -207,6 +197,16 @@ defmodule Momento.Error do
           @default_message
       end
     end
+  end
+
+  defp handle_limit_exceeded_error(error) do
+    message = LimitExceededMessages.determine_limit_exceeded_message(error.metadata["err"] || "")
+
+    %Momento.Error{
+      error_code: Momento.Error.Code.limit_exceeded_error(),
+      cause: error,
+      message: message
+    }
   end
 
   defp create_error(error_code, cause, message) do
