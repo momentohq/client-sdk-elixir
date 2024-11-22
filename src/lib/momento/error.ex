@@ -52,7 +52,7 @@ defmodule Momento.Error do
         create_error(
           Momento.Error.Code.invalid_argument_error(),
           error,
-          "The request was invalid; please contact Momento."
+          "Invalid argument passed to Momento client."
         )
 
       # DeadlineExceeded
@@ -96,7 +96,7 @@ defmodule Momento.Error do
         create_error(
           Momento.Error.Code.failed_precondition(),
           error,
-          "The request was invalid; please contact Momento."
+          "System is not in a state required for the operation's execution."
         )
 
       # Aborted
