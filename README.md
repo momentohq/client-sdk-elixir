@@ -1,22 +1,22 @@
 <head>
-  <meta name="Momento Elixir Client Library Documentation" content="Elixir client software development kit for Momento Cache">
+  <meta name="Momento Client Library Documentation for Elixir" content="Momento client software development kit for Elixir">
 </head>
 <img src="https://docs.momentohq.com/img/momento-logo-forest.svg" alt="logo" width="400"/>
 
 [![project status](https://momentohq.github.io/standards-and-practices/badges/project-status-official.svg)](https://github.com/momentohq/standards-and-practices/blob/main/docs/momento-on-github.md)
 [![project stability](https://momentohq.github.io/standards-and-practices/badges/project-stability-beta.svg)](https://github.com/momentohq/standards-and-practices/blob/main/docs/momento-on-github.md)
 
-# Momento Elixir Client Library
+# Momento Client Library for Elixir
 
 Momento Cache is a fast, simple, pay-as-you-go caching solution without any of the operational overhead
-required by traditional caching solutions.  This repo contains the source code for the Momento Elixir client library.
+required by traditional caching solutions.  This repo contains the source code for the Momento client library for Elixir.
 
 To get started with Momento you will need a Momento Auth Token. You can get one from the [Momento Console](https://console.gomomento.com).
 
 * Website: [https://www.gomomento.com/](https://www.gomomento.com/)
 * Momento Documentation: [https://docs.momentohq.com/](https://docs.momentohq.com/)
 * Getting Started: [https://docs.momentohq.com/getting-started](https://docs.momentohq.com/getting-started)
-* Elixir SDK Documentation: [https://docs.momentohq.com/sdks/elixir](https://docs.momentohq.com/sdks/elixir)
+* Momento SDK Documentation for Elixir: [https://docs.momentohq.com/sdks/elixir](https://docs.momentohq.com/sdks/elixir)
 * Discuss: [Momento Discord](https://discord.gg/3HkAKjUZGq)
 
 ## Packages
