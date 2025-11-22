@@ -30,6 +30,81 @@ defmodule Momento.Auth.CredentialProvider do
   end
 
   @doc """
+  Fetches the Momento service endpoint and global api key stored in the given 
+  environment variable in order to construct a credential provider.
+
+  Returns the credential provider or raises an exception.
+
+  ## Examples
+
+      iex> Momento.Auth.CredentialProvider.global_key_from_env_var!("MOMENTO_API_KEY", "momento.endpoint.here")
+      %Momento.Auth.CredentialProvider{}
+
+  """
+  @spec global_key_from_env_var!(
+          env_var :: String.t(),
+          endpoint :: String.t()
+        ) :: t()
+  def global_key_from_env_var!(env_var, endpoint)
+
+  def global_key_from_env_var!(nil, _endpoint),
+    do: raise(ArgumentError, "Environment variable name cannot be nil")
+
+  def global_key_from_env_var!(_env_var, nil),
+    do: raise(ArgumentError, "Endpoint cannot be nil")
+
+  def global_key_from_env_var!(env_var, endpoint) do
+    if endpoint == "" do
+      raise(ArgumentError, "Endpoint cannot be empty")
+    end
+
+    if env_var == "" do
+      raise(ArgumentError, "Environment variable name cannot be empty")
+    end
+
+    case System.get_env(env_var) do
+      nil -> raise "#{env_var} is not set"
+      token -> global_key_from_string!(token, endpoint)
+    end
+  end
+
+  @doc """
+  Constructs a credential provider from the given global api key and endpoint.
+
+  Returns the credential or raises an exception.
+
+  ## Examples
+
+      iex> valid_token = "valid_token" # This should be a valid Momento global api key.
+      iex> Momento.Auth.CredentialProvider.global_key_from_string!(valid_token, "momento.endpoint.here")
+      %Momento.Auth.CredentialProvider{}
+
+  """
+  @spec global_key_from_string!(String.t(), String.t()) :: t()
+  def global_key_from_string!(token, endpoint)
+
+  def global_key_from_string!(nil, _endpoint),
+    do: raise(ArgumentError, "Auth token cannot be nil")
+
+  def global_key_from_string!(_token, nil), do: raise(ArgumentError, "Endpoint cannot be nil")
+
+  def global_key_from_string!(token, endpoint) do
+    if endpoint == "" do
+      raise(ArgumentError, "Endpoint cannot be empty")
+    end
+
+    if token == "" do
+      raise(ArgumentError, "Auth token cannot be empty")
+    end
+
+    %Momento.Auth.CredentialProvider{
+      control_endpoint: "control." <> endpoint,
+      cache_endpoint: "cache." <> endpoint,
+      auth_token: token
+    }
+  end
+
+  @doc """
   Fetches the given environment variable and parses it into a credential.
 
   Returns the credential or raises an exception.

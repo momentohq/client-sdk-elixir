@@ -37,6 +37,10 @@ defmodule Momento.Auth.CredentialProviderTest do
 
   @invalid_token "INVALID_TOKEN"
 
+  @test_global_api_key "testToken"
+  @test_endpoint "testEndpoint"
+  @test_env_var_name "MOMENTO_TEST_GLOBAL_API_KEY"
+
   test "from_string!/2 with valid v1 token returns expected value" do
     assert CredentialProvider.from_string!(@v1_valid_token) ==
              %Momento.Auth.CredentialProvider{
@@ -163,5 +167,93 @@ defmodule Momento.Auth.CredentialProviderTest do
     assert_raise RuntimeError, ~r/c not found/, fn ->
       CredentialProvider.from_string!(@legacy_missing_cache)
     end
+  end
+
+  test "global_key_from_string!/2 happy path" do
+    assert CredentialProvider.global_key_from_string!(@test_global_api_key, @test_endpoint) ==
+             %Momento.Auth.CredentialProvider{
+               control_endpoint: "control." <> @test_endpoint,
+               cache_endpoint: "cache." <> @test_endpoint,
+               auth_token: @test_global_api_key
+             }
+  end
+
+  test "global_key_from_string!/2 with nil token raises an exception" do
+    assert_raise ArgumentError, "Auth token cannot be nil", fn ->
+      CredentialProvider.global_key_from_string!(nil, @test_endpoint)
+    end
+  end
+
+  test "global_key_from_string!/2 with nil endpoint raises an exception" do
+    assert_raise ArgumentError, "Endpoint cannot be nil", fn ->
+      CredentialProvider.global_key_from_string!(@test_global_api_key, nil)
+    end
+  end
+
+  test "global_key_from_string!/2 with empty string token raises an exception" do
+    assert_raise ArgumentError, "Auth token cannot be empty", fn ->
+      CredentialProvider.global_key_from_string!("", @test_endpoint)
+    end
+  end
+
+  test "global_key_from_string!/2 with empty string endpoint raises an exception" do
+    assert_raise ArgumentError, "Endpoint cannot be empty", fn ->
+      CredentialProvider.global_key_from_string!(@test_global_api_key, "")
+    end
+  end
+
+  test "global_key_from_env_var!/2 happy path" do
+    System.put_env(@test_env_var_name, @test_global_api_key)
+
+    assert CredentialProvider.global_key_from_env_var!(@test_env_var_name, @test_endpoint) ==
+             %Momento.Auth.CredentialProvider{
+               control_endpoint: "control." <> @test_endpoint,
+               cache_endpoint: "cache." <> @test_endpoint,
+               auth_token: @test_global_api_key
+             }
+
+    System.delete_env(@test_env_var_name)
+  end
+
+  test "global_key_from_env_var!/2 with unset env var raises an exception" do
+    System.delete_env(@test_env_var_name)
+
+    assert_raise RuntimeError, "#{@test_env_var_name} is not set", fn ->
+      CredentialProvider.global_key_from_env_var!(@test_env_var_name, @test_endpoint)
+    end
+  end
+
+  test "global_key_from_env_var!/2 with nil env var name raises an exception" do
+    assert_raise ArgumentError, "Environment variable name cannot be nil", fn ->
+      CredentialProvider.global_key_from_env_var!(nil, @test_endpoint)
+    end
+  end
+
+  test "global_key_from_env_var!/2 with nil endpoint raises an exception" do
+    assert_raise ArgumentError, "Endpoint cannot be nil", fn ->
+      CredentialProvider.global_key_from_env_var!(@test_env_var_name, nil)
+    end
+  end
+
+  test "global_key_from_env_var!/2 with empty string env var name raises an exception" do
+    assert_raise ArgumentError, "Environment variable name cannot be empty", fn ->
+      CredentialProvider.global_key_from_env_var!("", @test_endpoint)
+    end
+  end
+
+  test "global_key_from_env_var!/2 with empty string endpoint raises an exception" do
+    assert_raise ArgumentError, "Endpoint cannot be empty", fn ->
+      CredentialProvider.global_key_from_env_var!(@test_env_var_name, "")
+    end
+  end
+
+  test "global_key_from_env_var!/2 with empty string in env var raises an exception" do
+    System.put_env(@test_env_var_name, "")
+
+    assert_raise ArgumentError, "Auth token cannot be empty", fn ->
+      CredentialProvider.global_key_from_env_var!(@test_env_var_name, @test_endpoint)
+    end
+
+    System.delete_env(@test_env_var_name)
   end
 end

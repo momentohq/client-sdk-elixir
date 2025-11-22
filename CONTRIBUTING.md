@@ -6,6 +6,9 @@
 ```bash
 brew install asdf
 echo -e "\n. $(brew --prefix asdf)/libexec/asdf.sh" >> ${ZDOTDIR:-~}/.zshrc
+
+# or perhaps:
+export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
 ```
 
 Then restart your shell.
@@ -14,11 +17,9 @@ Next, install erlang and elixir via asdf:
 
 ```bash
 asdf plugin add erlang
-asdf install erlang 25.3.2.2
-asdf global erlang 25.3.2.2
+asdf install erlang 26.2.5
 asdf plugin add elixir
 asdf install elixir 1.14.5
-asdf global elixir 1.14.5
 ```
 
     Alternately you may install elixir via homebrew, which is a little faster for the initial install but will prevent you from being able to easily switch between different versions of elixir/erlang. To install via homebrew: 
