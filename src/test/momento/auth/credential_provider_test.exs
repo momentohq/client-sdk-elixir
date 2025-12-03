@@ -37,7 +37,7 @@ defmodule Momento.Auth.CredentialProviderTest do
 
   @invalid_token "INVALID_TOKEN"
 
-  @test_global_api_key "testToken"
+  @test_global_api_key "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJ0IjoiZyJ9.LloWc3qLRkBm_djlOjXE8wNSENqOay17xHLJR5XIr0cwkyhhh8w_oBaiQDktBkOvh-wKLQGUKavSQuOwXEb2_g"
   @test_endpoint "testEndpoint"
   @test_env_var_name "MOMENTO_TEST_GLOBAL_API_KEY"
 
@@ -169,6 +169,22 @@ defmodule Momento.Auth.CredentialProviderTest do
     end
   end
 
+  test "from_string!/2 with global api key raises an exception" do
+    assert_raise ArgumentError, ~r/Received a global API key/, fn ->
+      CredentialProvider.from_string!(@test_global_api_key)
+    end
+  end
+
+  test "from_env_var!/2 with global api key raises an exception" do
+    System.put_env(@test_env_var_name, @test_global_api_key)
+
+    assert_raise ArgumentError, ~r/Received a global API key/, fn ->
+      CredentialProvider.from_env_var!(@test_env_var_name)
+    end
+
+    System.delete_env(@test_env_var_name)
+  end
+
   test "global_key_from_string!/2 happy path" do
     assert CredentialProvider.global_key_from_string!(@test_global_api_key, @test_endpoint) ==
              %Momento.Auth.CredentialProvider{
@@ -200,6 +216,22 @@ defmodule Momento.Auth.CredentialProviderTest do
     assert_raise ArgumentError, "Endpoint cannot be empty", fn ->
       CredentialProvider.global_key_from_string!(@test_global_api_key, "")
     end
+  end
+
+  test "global_key_from_string!/2 with v1 api key raises an exception" do
+    assert_raise ArgumentError,
+                 "Did not expect global API key to be base64 encoded. Are you using the correct key? Or did you mean to use `from_string!()` instead?",
+                 fn ->
+                   CredentialProvider.global_key_from_string!(@v1_valid_token, @test_endpoint)
+                 end
+  end
+
+  test "global_key_from_string!/2 with pre-v1 api key raises an exception" do
+    assert_raise ArgumentError,
+                 "Provided API key is not a global API key. Are you using the correct key? Or did you mean to use `from_string!()` instead?",
+                 fn ->
+                   CredentialProvider.global_key_from_string!(@legacy_valid_token, @test_endpoint)
+                 end
   end
 
   test "global_key_from_env_var!/2 happy path" do
@@ -253,6 +285,30 @@ defmodule Momento.Auth.CredentialProviderTest do
     assert_raise ArgumentError, "Auth token cannot be empty", fn ->
       CredentialProvider.global_key_from_env_var!(@test_env_var_name, @test_endpoint)
     end
+
+    System.delete_env(@test_env_var_name)
+  end
+
+  test "global_key_from_env_var!/2 with v1 api key in env var raises an exception" do
+    System.put_env(@test_env_var_name, @v1_valid_token)
+
+    assert_raise ArgumentError,
+                 "Did not expect global API key to be base64 encoded. Are you using the correct key? Or did you mean to use `from_env_var!()` instead?",
+                 fn ->
+                   CredentialProvider.global_key_from_env_var!(@test_env_var_name, @test_endpoint)
+                 end
+
+    System.delete_env(@test_env_var_name)
+  end
+
+  test "global_key_from_env_var!/2 with pre-v1 api key in env var raises an exception" do
+    System.put_env(@test_env_var_name, @legacy_valid_token)
+
+    assert_raise ArgumentError,
+                 "Provided API key is not a global API key. Are you using the correct key? Or did you mean to use `from_env_var!()` instead?",
+                 fn ->
+                   CredentialProvider.global_key_from_env_var!(@test_env_var_name, @test_endpoint)
+                 end
 
     System.delete_env(@test_env_var_name)
   end

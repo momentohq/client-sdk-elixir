@@ -30,7 +30,7 @@ defmodule Momento.Auth.CredentialProvider do
   end
 
   @doc """
-  Fetches the Momento service endpoint and global api key stored in the given 
+  Fetches the Momento service endpoint and global api key stored in the given
   environment variable in order to construct a credential provider.
 
   Returns the credential provider or raises an exception.
@@ -63,8 +63,33 @@ defmodule Momento.Auth.CredentialProvider do
     end
 
     case System.get_env(env_var) do
-      nil -> raise "#{env_var} is not set"
-      token -> global_key_from_string!(token, endpoint)
+      nil ->
+        raise "#{env_var} is not set"
+
+      token ->
+        if token == "" do
+          raise(ArgumentError, "Auth token cannot be empty")
+        end
+
+        if is_base64(token) == {:ok, true} do
+          raise(
+            ArgumentError,
+            "Did not expect global API key to be base64 encoded. Are you using the correct key? Or did you mean to use `from_env_var!()` instead?"
+          )
+        end
+
+        case is_global_api_key(token) do
+          {:ok, true} ->
+            :ok
+
+          _ ->
+            raise(
+              ArgumentError,
+              "Provided API key is not a global API key. Are you using the correct key? Or did you mean to use `from_env_var!()` instead?"
+            )
+        end
+
+        global_key_from_string!(token, endpoint)
     end
   end
 
@@ -95,6 +120,24 @@ defmodule Momento.Auth.CredentialProvider do
 
     if token == "" do
       raise(ArgumentError, "Auth token cannot be empty")
+    end
+
+    if is_base64(token) == {:ok, true} do
+      raise(
+        ArgumentError,
+        "Did not expect global API key to be base64 encoded. Are you using the correct key? Or did you mean to use `from_string!()` instead?"
+      )
+    end
+
+    case is_global_api_key(token) do
+      {:ok, true} ->
+        :ok
+
+      _ ->
+        raise(
+          ArgumentError,
+          "Provided API key is not a global API key. Are you using the correct key? Or did you mean to use `from_string!()` instead?"
+        )
     end
 
     %Momento.Auth.CredentialProvider{
@@ -152,6 +195,13 @@ defmodule Momento.Auth.CredentialProvider do
   def from_string!(nil, _opts), do: raise(ArgumentError, "Auth token cannot be nil")
 
   def from_string!(token, opts) do
+    if is_global_api_key(token) == {:ok, true} do
+      raise(
+        ArgumentError,
+        "Received a global API key. Are you using the correct key? Or did you mean to use `global_key_from_string!()` or `global_key_from_env_var!()` instead?"
+      )
+    end
+
     case decode_v1_token(token) do
       {:error, v1_error} ->
         if String.contains?(v1_error, "base64") do
@@ -194,6 +244,27 @@ defmodule Momento.Auth.CredentialProvider do
           Keyword.get(opts, :control_endpoint) || credential_provider.control_endpoint,
         cache_endpoint: Keyword.get(opts, :cache_endpoint) || credential_provider.cache_endpoint
     }
+  end
+
+  @spec is_base64(String.t()) :: {:ok, bool} | {:error, String.t()}
+  defp is_base64(base64_string) do
+    case Base.decode64(base64_string) do
+      {:ok, decoded} ->
+        {:ok, String.length(decoded) > 0}
+
+      _ ->
+        {:error, "Failed to decode base64 string"}
+    end
+  end
+
+  @spec is_global_api_key(String.t()) :: {:ok, bool} | {:error, String.t()}
+  defp is_global_api_key(api_key) do
+    with {:ok, claims} <- decode_jwt(api_key),
+         {:ok, key_type} <- get_claim(claims, "t") do
+      {:ok, key_type == "g"}
+    else
+      error -> error
+    end
   end
 
   @spec decode_v1_token(String.t()) :: {:ok, t()} | {:error, String.t()}
