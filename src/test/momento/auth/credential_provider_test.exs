@@ -37,10 +37,10 @@ defmodule Momento.Auth.CredentialProviderTest do
 
   @invalid_token "INVALID_TOKEN"
 
-  @test_v2_api_key "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJ0IjoiZyIsImlkIjoic29tZS1pZCJ9.WRhKpdh7cFCXO7lAaVojtQAxK6mxMdBrvXTJL1xu94S0d6V1YSstOObRlAIMA7i_yIxO1mWEF3rlF5UNc77VXQ"
+  @test_v2_api_key "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJ0IjoiZyIsImp0aSI6InNvbWUtaWQifQ.GMr9nA6HE0ttB6llXct_2Sg5-fOKGFbJCdACZFgNbN1fhT6OPg_hVc8ThGzBrWC_RlsBpLA1nzqK3SOJDXYxAw"
   @test_endpoint "testEndpoint"
-  @api_key_env_var "MOMENTO_TEST_V2_API_KEY"
-  @endpoint_env_var "MOMENTO_TEST_ENDPOINT"
+  @api_key_env_var "MOMENTO_API_KEY"
+  @endpoint_env_var "MOMENTO_ENDPOINT"
 
   test "from_string!/2 with valid v1 token returns expected value" do
     assert CredentialProvider.from_string!(@v1_valid_token) ==
@@ -272,23 +272,33 @@ defmodule Momento.Auth.CredentialProviderTest do
     System.delete_env(@api_key_env_var)
   end
 
-  test "from_env_var_v2!/2 with nil env var name raises an exception" do
+  test "from_env_var_v2!/2 with omitted env var names uses defaults" do
     System.put_env(@endpoint_env_var, @test_endpoint)
-
-    assert_raise ArgumentError, "API key environment variable name cannot be nil", fn ->
-      CredentialProvider.from_env_var_v2!(nil, @endpoint_env_var)
-    end
-
-    System.delete_env(@endpoint_env_var)
-  end
-
-  test "from_env_var_v2!/2 with nil endpoint env var raises an exception" do
     System.put_env(@api_key_env_var, @test_v2_api_key)
 
-    assert_raise ArgumentError, "Endpoint environment variable name cannot be nil", fn ->
-      CredentialProvider.from_env_var_v2!(@api_key_env_var, nil)
-    end
+    assert CredentialProvider.from_env_var_v2!() ==
+             %Momento.Auth.CredentialProvider{
+               control_endpoint: "control." <> @test_endpoint,
+               cache_endpoint: "cache." <> @test_endpoint,
+               auth_token: @test_v2_api_key
+             }
 
+    System.delete_env(@endpoint_env_var)
+    System.delete_env(@api_key_env_var)
+  end
+
+  test "from_env_var_v2!/2 with nil env var names uses defaults" do
+    System.put_env(@endpoint_env_var, @test_endpoint)
+    System.put_env(@api_key_env_var, @test_v2_api_key)
+
+    assert CredentialProvider.from_env_var_v2!(nil, nil) ==
+             %Momento.Auth.CredentialProvider{
+               control_endpoint: "control." <> @test_endpoint,
+               cache_endpoint: "cache." <> @test_endpoint,
+               auth_token: @test_v2_api_key
+             }
+
+    System.delete_env(@endpoint_env_var)
     System.delete_env(@api_key_env_var)
   end
 
