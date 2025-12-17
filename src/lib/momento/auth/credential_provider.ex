@@ -45,10 +45,6 @@ defmodule Momento.Auth.CredentialProvider do
           api_key_env_var :: String.t(),
           endpoint_env_var :: String.t()
         ) :: t()
-  def from_env_var_v2!() do
-    from_env_var_v2!("MOMENTO_API_KEY", "MOMENTO_ENDPOINT")
-  end
-
   def from_env_var_v2!(nil, nil) do
     from_env_var_v2!("MOMENTO_API_KEY", "MOMENTO_ENDPOINT")
   end
@@ -61,7 +57,10 @@ defmodule Momento.Auth.CredentialProvider do
     from_env_var_v2!(api_key_env_var, "MOMENTO_ENDPOINT")
   end
 
-  def from_env_var_v2!(api_key_env_var, endpoint_env_var) do
+  def from_env_var_v2!(
+        api_key_env_var \\ "MOMENTO_API_KEY",
+        endpoint_env_var \\ "MOMENTO_ENDPOINT"
+      ) do
     if api_key_env_var == "" do
       raise(ArgumentError, "API key environment variable name cannot be empty")
     end
@@ -70,35 +69,35 @@ defmodule Momento.Auth.CredentialProvider do
       raise(ArgumentError, "Endpoint environment variable name cannot be empty")
     end
 
-    case System.get_env(api_key_env_var) do
-      nil ->
-        raise "#{api_key_env_var} is not set"
+    api_key = System.get_env(api_key_env_var)
 
-      token ->
-        if token == "" do
-          raise(ArgumentError, "API key cannot be empty")
-        end
+    if api_key == nil do
+      raise(ArgumentError, "#{api_key_env_var} is not set")
+    end
 
-        case is_v2_api_key(token) do
-          {:ok, true} ->
-            case System.get_env(endpoint_env_var) do
-              nil ->
-                raise "#{endpoint_env_var} is not set"
+    if api_key == "" do
+      raise(ArgumentError, "API key cannot be empty")
+    end
 
-              endpoint ->
-                if endpoint == "" do
-                  raise(ArgumentError, "Endpoint cannot be empty")
-                end
+    endpoint = System.get_env(endpoint_env_var)
 
-                from_api_key_v2!(token, endpoint)
-            end
+    if endpoint == nil do
+      raise(ArgumentError, "#{endpoint_env_var} is not set")
+    end
 
-          _ ->
-            raise(
-              ArgumentError,
-              "Received an invalid v2 API key. Are you using the correct key? Or did you mean to use `from_env_var!()` with a legacy key instead?"
-            )
-        end
+    if endpoint == "" do
+      raise(ArgumentError, "Endpoint cannot be empty")
+    end
+
+    case is_v2_api_key(api_key) do
+      {:ok, true} ->
+        from_api_key_v2!(api_key, endpoint)
+
+      _ ->
+        raise(
+          ArgumentError,
+          "Received an invalid v2 API key. Are you using the correct key? Or did you mean to use `from_env_var!()` with a legacy key instead?"
+        )
     end
   end
 

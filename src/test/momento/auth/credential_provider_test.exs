@@ -254,7 +254,7 @@ defmodule Momento.Auth.CredentialProviderTest do
     System.delete_env(@api_key_env_var)
     System.put_env(@endpoint_env_var, @test_endpoint)
 
-    assert_raise RuntimeError, "#{@api_key_env_var} is not set", fn ->
+    assert_raise ArgumentError, "#{@api_key_env_var} is not set", fn ->
       CredentialProvider.from_env_var_v2!(@api_key_env_var, @endpoint_env_var)
     end
 
@@ -265,7 +265,7 @@ defmodule Momento.Auth.CredentialProviderTest do
     System.delete_env(@endpoint_env_var)
     System.put_env(@api_key_env_var, @test_v2_api_key)
 
-    assert_raise RuntimeError, "#{@endpoint_env_var} is not set", fn ->
+    assert_raise ArgumentError, "#{@endpoint_env_var} is not set", fn ->
       CredentialProvider.from_env_var_v2!(@api_key_env_var, @endpoint_env_var)
     end
 
