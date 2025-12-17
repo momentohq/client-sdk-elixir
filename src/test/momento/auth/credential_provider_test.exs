@@ -37,6 +37,11 @@ defmodule Momento.Auth.CredentialProviderTest do
 
   @invalid_token "INVALID_TOKEN"
 
+  @test_v2_api_key "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJ0IjoiZyIsImp0aSI6InNvbWUtaWQifQ.GMr9nA6HE0ttB6llXct_2Sg5-fOKGFbJCdACZFgNbN1fhT6OPg_hVc8ThGzBrWC_RlsBpLA1nzqK3SOJDXYxAw"
+  @test_endpoint "testEndpoint"
+  @api_key_env_var "MOMENTO_API_KEY"
+  @endpoint_env_var "MOMENTO_ENDPOINT"
+
   test "from_string!/2 with valid v1 token returns expected value" do
     assert CredentialProvider.from_string!(@v1_valid_token) ==
              %Momento.Auth.CredentialProvider{
@@ -163,5 +168,235 @@ defmodule Momento.Auth.CredentialProviderTest do
     assert_raise RuntimeError, ~r/c not found/, fn ->
       CredentialProvider.from_string!(@legacy_missing_cache)
     end
+  end
+
+  test "from_string!/2 with v2 api key raises an exception" do
+    assert_raise ArgumentError, ~r/Received a v2 API key/, fn ->
+      CredentialProvider.from_string!(@test_v2_api_key)
+    end
+  end
+
+  test "from_env_var!/2 with v2 api key raises an exception" do
+    System.put_env(@api_key_env_var, @test_v2_api_key)
+
+    assert_raise ArgumentError, ~r/Received a v2 API key/, fn ->
+      CredentialProvider.from_env_var!(@api_key_env_var)
+    end
+
+    System.delete_env(@api_key_env_var)
+  end
+
+  test "from_api_key_v2!/2 happy path" do
+    assert CredentialProvider.from_api_key_v2!(@test_v2_api_key, @test_endpoint) ==
+             %Momento.Auth.CredentialProvider{
+               control_endpoint: "control." <> @test_endpoint,
+               cache_endpoint: "cache." <> @test_endpoint,
+               auth_token: @test_v2_api_key
+             }
+  end
+
+  test "from_api_key_v2!/2 with nil token raises an exception" do
+    assert_raise ArgumentError, "API key cannot be nil", fn ->
+      CredentialProvider.from_api_key_v2!(nil, @test_endpoint)
+    end
+  end
+
+  test "from_api_key_v2!/2 with nil endpoint raises an exception" do
+    assert_raise ArgumentError, "Endpoint cannot be nil", fn ->
+      CredentialProvider.from_api_key_v2!(@test_v2_api_key, nil)
+    end
+  end
+
+  test "from_api_key_v2!/2 with empty string token raises an exception" do
+    assert_raise ArgumentError, "API key cannot be empty", fn ->
+      CredentialProvider.from_api_key_v2!("", @test_endpoint)
+    end
+  end
+
+  test "from_api_key_v2!/2 with empty string endpoint raises an exception" do
+    assert_raise ArgumentError, "Endpoint cannot be empty", fn ->
+      CredentialProvider.from_api_key_v2!(@test_v2_api_key, "")
+    end
+  end
+
+  test "from_api_key_v2!/2 with v1 api key raises an exception" do
+    assert_raise ArgumentError,
+                 "Received an invalid v2 API key. Are you using the correct key? Or did you mean to use `from_string!()` with a legacy key instead?",
+                 fn ->
+                   CredentialProvider.from_api_key_v2!(@v1_valid_token, @test_endpoint)
+                 end
+  end
+
+  test "from_api_key_v2!/2 with pre-v1 api key raises an exception" do
+    assert_raise ArgumentError,
+                 "Received an invalid v2 API key. Are you using the correct key? Or did you mean to use `from_string!()` with a legacy key instead?",
+                 fn ->
+                   CredentialProvider.from_api_key_v2!(@legacy_valid_token, @test_endpoint)
+                 end
+  end
+
+  test "from_env_var_v2!/2 happy path" do
+    System.put_env(@api_key_env_var, @test_v2_api_key)
+    System.put_env(@endpoint_env_var, @test_endpoint)
+
+    assert CredentialProvider.from_env_var_v2!(@api_key_env_var, @endpoint_env_var) ==
+             %Momento.Auth.CredentialProvider{
+               control_endpoint: "control." <> @test_endpoint,
+               cache_endpoint: "cache." <> @test_endpoint,
+               auth_token: @test_v2_api_key
+             }
+
+    System.delete_env(@api_key_env_var)
+    System.delete_env(@endpoint_env_var)
+  end
+
+  test "from_env_var_v2!/2 with unset api key env var raises an exception" do
+    System.delete_env(@api_key_env_var)
+    System.put_env(@endpoint_env_var, @test_endpoint)
+
+    assert_raise ArgumentError, "#{@api_key_env_var} is not set", fn ->
+      CredentialProvider.from_env_var_v2!(@api_key_env_var, @endpoint_env_var)
+    end
+
+    System.delete_env(@endpoint_env_var)
+  end
+
+  test "from_env_var_v2!/2 with unset endpoint env var raises an exception" do
+    System.delete_env(@endpoint_env_var)
+    System.put_env(@api_key_env_var, @test_v2_api_key)
+
+    assert_raise ArgumentError, "#{@endpoint_env_var} is not set", fn ->
+      CredentialProvider.from_env_var_v2!(@api_key_env_var, @endpoint_env_var)
+    end
+
+    System.delete_env(@api_key_env_var)
+  end
+
+  test "from_env_var_v2!/2 with omitted env var names uses defaults" do
+    System.put_env(@endpoint_env_var, @test_endpoint)
+    System.put_env(@api_key_env_var, @test_v2_api_key)
+
+    assert CredentialProvider.from_env_var_v2!() ==
+             %Momento.Auth.CredentialProvider{
+               control_endpoint: "control." <> @test_endpoint,
+               cache_endpoint: "cache." <> @test_endpoint,
+               auth_token: @test_v2_api_key
+             }
+
+    System.delete_env(@endpoint_env_var)
+    System.delete_env(@api_key_env_var)
+  end
+
+  test "from_env_var_v2!/2 with nil env var names uses defaults" do
+    System.put_env(@endpoint_env_var, @test_endpoint)
+    System.put_env(@api_key_env_var, @test_v2_api_key)
+
+    assert CredentialProvider.from_env_var_v2!(nil, nil) ==
+             %Momento.Auth.CredentialProvider{
+               control_endpoint: "control." <> @test_endpoint,
+               cache_endpoint: "cache." <> @test_endpoint,
+               auth_token: @test_v2_api_key
+             }
+
+    System.delete_env(@endpoint_env_var)
+    System.delete_env(@api_key_env_var)
+  end
+
+  test "from_env_var_v2!/2 with empty string api key env var raises an exception" do
+    System.put_env(@endpoint_env_var, @test_endpoint)
+
+    assert_raise ArgumentError, "API key environment variable name cannot be empty", fn ->
+      CredentialProvider.from_env_var_v2!("", @endpoint_env_var)
+    end
+
+    System.delete_env(@endpoint_env_var)
+  end
+
+  test "from_env_var_v2!/2 with empty string endpoint env var raises an exception" do
+    System.put_env(@api_key_env_var, @test_v2_api_key)
+
+    assert_raise ArgumentError, "Endpoint environment variable name cannot be empty", fn ->
+      CredentialProvider.from_env_var_v2!(@api_key_env_var, "")
+    end
+
+    System.delete_env(@api_key_env_var)
+  end
+
+  test "from_env_var_v2!/2 with empty string in api key env var raises an exception" do
+    System.put_env(@api_key_env_var, "")
+    System.put_env(@endpoint_env_var, @test_endpoint)
+
+    assert_raise ArgumentError, "API key cannot be empty", fn ->
+      CredentialProvider.from_env_var_v2!(@api_key_env_var, @endpoint_env_var)
+    end
+
+    System.delete_env(@api_key_env_var)
+    System.delete_env(@endpoint_env_var)
+  end
+
+  test "from_env_var_v2!/2 with empty string in endpoint env var raises an exception" do
+    System.put_env(@api_key_env_var, @test_v2_api_key)
+    System.put_env(@endpoint_env_var, "")
+
+    assert_raise ArgumentError, "Endpoint cannot be empty", fn ->
+      CredentialProvider.from_env_var_v2!(@api_key_env_var, @endpoint_env_var)
+    end
+
+    System.delete_env(@api_key_env_var)
+    System.delete_env(@endpoint_env_var)
+  end
+
+  test "from_env_var_v2!/2 with v1 api key in env var raises an exception" do
+    System.put_env(@api_key_env_var, @v1_valid_token)
+    System.put_env(@endpoint_env_var, @test_endpoint)
+
+    assert_raise ArgumentError,
+                 "Received an invalid v2 API key. Are you using the correct key? Or did you mean to use `from_env_var!()` with a legacy key instead?",
+                 fn ->
+                   CredentialProvider.from_env_var_v2!(@api_key_env_var, @endpoint_env_var)
+                 end
+
+    System.delete_env(@api_key_env_var)
+    System.delete_env(@endpoint_env_var)
+  end
+
+  test "from_env_var_v2!/2 with pre-v1 api key in env var raises an exception" do
+    System.put_env(@api_key_env_var, @legacy_valid_token)
+    System.put_env(@endpoint_env_var, @test_endpoint)
+
+    assert_raise ArgumentError,
+                 "Received an invalid v2 API key. Are you using the correct key? Or did you mean to use `from_env_var!()` with a legacy key instead?",
+                 fn ->
+                   CredentialProvider.from_env_var_v2!(@api_key_env_var, @endpoint_env_var)
+                 end
+
+    System.delete_env(@api_key_env_var)
+    System.delete_env(@endpoint_env_var)
+  end
+
+  test "from_disposable_token!/2 given v2 api key raises an exception" do
+    assert_raise ArgumentError,
+                 "Received a v2 API key. Are you using the correct key? Or did you mean to use `from_api_key_v2!()` or `from_env_var_v2!()` instead?",
+                 fn ->
+                   CredentialProvider.from_disposable_token!(@test_v2_api_key)
+                 end
+  end
+
+  test "from_disposable_token!/2 given v1 api key" do
+    assert CredentialProvider.from_disposable_token!(@v1_valid_token) ==
+             %Momento.Auth.CredentialProvider{
+               control_endpoint: @control_endpoint,
+               cache_endpoint: @cache_endpoint,
+               auth_token: @v1_api_key
+             }
+  end
+
+  test "from_disposable_token!/2 given pre-v1 api key" do
+    assert CredentialProvider.from_disposable_token!(@legacy_valid_token) ==
+             %Momento.Auth.CredentialProvider{
+               control_endpoint: @control_endpoint,
+               cache_endpoint: @cache_endpoint,
+               auth_token: @legacy_valid_token
+             }
   end
 end

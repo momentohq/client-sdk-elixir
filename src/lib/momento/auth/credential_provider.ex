@@ -30,6 +30,171 @@ defmodule Momento.Auth.CredentialProvider do
   end
 
   @doc """
+  Fetches the Momento service endpoint and v2 api key stored in the given
+  environment variables in order to construct a credential provider.
+
+  Returns the credential provider or raises an exception.
+
+  ## Examples
+
+      iex> Momento.Auth.CredentialProvider.from_env_var_v2!("MOMENTO_API_KEY", "MOMENTO_ENDPOINT")
+      %Momento.Auth.CredentialProvider{}
+
+  """
+  @spec from_env_var_v2!(
+          api_key_env_var :: String.t(),
+          endpoint_env_var :: String.t()
+        ) :: t()
+  def from_env_var_v2!(
+        api_key_env_var \\ "MOMENTO_API_KEY",
+        endpoint_env_var \\ "MOMENTO_ENDPOINT"
+      ) do
+    # handle if nil passed in
+    api_key_env_var = api_key_env_var || "MOMENTO_API_KEY"
+    endpoint_env_var = endpoint_env_var || "MOMENTO_ENDPOINT"
+
+    if api_key_env_var == "" do
+      raise(ArgumentError, "API key environment variable name cannot be empty")
+    end
+
+    if endpoint_env_var == "" do
+      raise(ArgumentError, "Endpoint environment variable name cannot be empty")
+    end
+
+    api_key_env_var = api_key_env_var || "MOMENTO_API_KEY"
+    endpoint_env_var = endpoint_env_var || "MOMENTO_ENDPOINT"
+
+    api_key = System.get_env(api_key_env_var)
+
+    if api_key == nil do
+      raise(ArgumentError, "#{api_key_env_var} is not set")
+    end
+
+    if api_key == "" do
+      raise(ArgumentError, "API key cannot be empty")
+    end
+
+    endpoint = System.get_env(endpoint_env_var)
+
+    if endpoint == nil do
+      raise(ArgumentError, "#{endpoint_env_var} is not set")
+    end
+
+    if endpoint == "" do
+      raise(ArgumentError, "Endpoint cannot be empty")
+    end
+
+    case is_v2_api_key(api_key) do
+      {:ok, true} ->
+        from_api_key_v2!(api_key, endpoint)
+
+      _ ->
+        raise(
+          ArgumentError,
+          "Received an invalid v2 API key. Are you using the correct key? Or did you mean to use `from_env_var!()` with a legacy key instead?"
+        )
+    end
+  end
+
+  @doc """
+  Constructs a credential provider from the given v2 api key and endpoint.
+
+  Returns the credential or raises an exception.
+
+  ## Examples
+
+      iex> valid_token = "valid_token" # This should be a valid Momento v2 api key.
+      iex> Momento.Auth.CredentialProvider.from_api_key_v2!(valid_token, "momento.endpoint.here")
+      %Momento.Auth.CredentialProvider{}
+
+  """
+  @spec from_api_key_v2!(String.t(), String.t()) :: t()
+  def from_api_key_v2!(token, endpoint)
+
+  def from_api_key_v2!(nil, _endpoint),
+    do: raise(ArgumentError, "API key cannot be nil")
+
+  def from_api_key_v2!(_token, nil), do: raise(ArgumentError, "Endpoint cannot be nil")
+
+  def from_api_key_v2!(token, endpoint) do
+    if endpoint == "" do
+      raise(ArgumentError, "Endpoint cannot be empty")
+    end
+
+    if token == "" do
+      raise(ArgumentError, "API key cannot be empty")
+    end
+
+    case is_v2_api_key(token) do
+      {:ok, true} ->
+        :ok
+
+      _ ->
+        raise(
+          ArgumentError,
+          "Received an invalid v2 API key. Are you using the correct key? Or did you mean to use `from_string!()` with a legacy key instead?"
+        )
+    end
+
+    %Momento.Auth.CredentialProvider{
+      control_endpoint: "control." <> endpoint,
+      cache_endpoint: "cache." <> endpoint,
+      auth_token: token
+    }
+  end
+
+  @doc """
+  Parses the given disposable token into a credential provider.
+
+  Returns the credential provider or raises an exception.
+
+  ## Examples
+
+      iex> valid_token = "valid_token" # This should be a valid Momento auth token.
+      iex> Momento.Auth.CredentialProvider.from_disposable_token!(valid_token)
+      %Momento.Auth.CredentialProvider{}
+
+  """
+  @spec from_disposable_token!(String.t()) :: t()
+  def from_disposable_token!(token)
+  def from_disposable_token!(nil), do: raise(ArgumentError, "Auth token cannot be nil")
+
+  def from_disposable_token!(token) do
+    if is_v2_api_key(token) == {:ok, true} do
+      raise(
+        ArgumentError,
+        "Received a v2 API key. Are you using the correct key? Or did you mean to use `from_api_key_v2!()` or `from_env_var_v2!()` instead?"
+      )
+    end
+
+    case decode_v1_token(token) do
+      {:error, v1_error} ->
+        if String.contains?(v1_error, "base64") do
+          case decode_legacy_token(token) do
+            {:error, legacy_error} ->
+              raise "Failed to decode auth token: " <> legacy_error
+
+            {:ok, result} ->
+              %{
+                result
+                | control_endpoint: result.control_endpoint,
+                  cache_endpoint: result.cache_endpoint
+              }
+          end
+        else
+          raise "Failed to decode auth token: " <> v1_error
+        end
+
+      {:ok, result} ->
+        %{
+          result
+          | control_endpoint: result.control_endpoint,
+            cache_endpoint: result.cache_endpoint
+        }
+    end
+  end
+
+  @doc """
   Fetches the given environment variable and parses it into a credential.
 
   Returns the credential or raises an exception.
@@ -46,11 +211,14 @@ defmodule Momento.Auth.CredentialProvider do
           env_var :: String.t(),
           opts :: [control_endpoint: String.t(), cache_endpoint: String.t()]
         ) :: t()
+  @deprecated "Use from_env_var_v2!/2 instead"
   def from_env_var!(env_var, opts \\ [])
 
+  @deprecated "Use from_env_var_v2!/2 instead"
   def from_env_var!(nil, _opts),
     do: raise(ArgumentError, "Environment variable name cannot be nil")
 
+  @deprecated "Use from_env_var_v2!/2 instead"
   def from_env_var!(env_var, opts) do
     case System.get_env(env_var) do
       nil -> raise "#{env_var} is not set"
@@ -77,6 +245,13 @@ defmodule Momento.Auth.CredentialProvider do
   def from_string!(nil, _opts), do: raise(ArgumentError, "Auth token cannot be nil")
 
   def from_string!(token, opts) do
+    if is_v2_api_key(token) == {:ok, true} do
+      raise(
+        ArgumentError,
+        "Received a v2 API key. Are you using the correct key? Or did you mean to use `from_api_key_v2!()` or `from_env_var_v2!()` instead?"
+      )
+    end
+
     case decode_v1_token(token) do
       {:error, v1_error} ->
         if String.contains?(v1_error, "base64") do
@@ -119,6 +294,31 @@ defmodule Momento.Auth.CredentialProvider do
           Keyword.get(opts, :control_endpoint) || credential_provider.control_endpoint,
         cache_endpoint: Keyword.get(opts, :cache_endpoint) || credential_provider.cache_endpoint
     }
+  end
+
+  @spec is_base64(String.t()) :: {:ok, bool} | {:error, String.t()}
+  defp is_base64(base64_string) do
+    case Base.decode64(base64_string) do
+      {:ok, decoded} ->
+        {:ok, String.length(decoded) > 0}
+
+      _ ->
+        {:error, "Failed to decode base64 string"}
+    end
+  end
+
+  @spec is_v2_api_key(String.t()) :: {:ok, bool} | {:error, String.t()}
+  defp is_v2_api_key(api_key) do
+    if is_base64(api_key) == {:ok, true} do
+      {:ok, false}
+    end
+
+    with {:ok, claims} <- decode_jwt(api_key),
+         {:ok, key_type} <- get_claim(claims, "t") do
+      {:ok, key_type == "g"}
+    else
+      error -> error
+    end
   end
 
   @spec decode_v1_token(String.t()) :: {:ok, t()} | {:error, String.t()}
