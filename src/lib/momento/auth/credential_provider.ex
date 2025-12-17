@@ -45,22 +45,14 @@ defmodule Momento.Auth.CredentialProvider do
           api_key_env_var :: String.t(),
           endpoint_env_var :: String.t()
         ) :: t()
-  def from_env_var_v2!(nil, nil) do
-    from_env_var_v2!("MOMENTO_API_KEY", "MOMENTO_ENDPOINT")
-  end
-
-  def from_env_var_v2!(nil, endpoint_env_var) do
-    from_env_var_v2!("MOMENTO_API_KEY", endpoint_env_var)
-  end
-
-  def from_env_var_v2!(api_key_env_var, nil) do
-    from_env_var_v2!(api_key_env_var, "MOMENTO_ENDPOINT")
-  end
-
   def from_env_var_v2!(
         api_key_env_var \\ "MOMENTO_API_KEY",
         endpoint_env_var \\ "MOMENTO_ENDPOINT"
       ) do
+    # handle if nil passed in
+    api_key_env_var = api_key_env_var || "MOMENTO_API_KEY"
+    endpoint_env_var = endpoint_env_var || "MOMENTO_ENDPOINT"
+
     if api_key_env_var == "" do
       raise(ArgumentError, "API key environment variable name cannot be empty")
     end
@@ -68,6 +60,9 @@ defmodule Momento.Auth.CredentialProvider do
     if endpoint_env_var == "" do
       raise(ArgumentError, "Endpoint environment variable name cannot be empty")
     end
+
+    api_key_env_var = api_key_env_var || "MOMENTO_API_KEY"
+    endpoint_env_var = endpoint_env_var || "MOMENTO_ENDPOINT"
 
     api_key = System.get_env(api_key_env_var)
 
