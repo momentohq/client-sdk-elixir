@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.0](https://github.com/momentohq/client-sdk-elixir/compare/v0.7.0...v0.8.0) (2025-12-17)
+
+
+### Features
+
+* new credential provider methods for accepting global api keys and update setup instructions ([9eeba0f](https://github.com/momentohq/client-sdk-elixir/commit/9eeba0f78729bad25b6e3181b2ebe403b9bf3de2))
+
 ## [0.7.0](https://github.com/momentohq/client-sdk-elixir/compare/v0.6.6...v0.7.0) (2024-11-22)
 
 
