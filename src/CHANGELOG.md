@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.1](https://github.com/momentohq/client-sdk-elixir/compare/v0.8.0...v0.8.1) (2026-01-09)
+
+
+### Miscellaneous
+
+* update examples, tests, and docs to use a v2 api key ([#91](https://github.com/momentohq/client-sdk-elixir/issues/91)) ([7f09763](https://github.com/momentohq/client-sdk-elixir/commit/7f097631a52cc06841bff4aebf2640bc04723569))
+
 ## [0.8.0](https://github.com/momentohq/client-sdk-elixir/compare/v0.7.0...v0.8.0) (2025-12-17)
 
 
