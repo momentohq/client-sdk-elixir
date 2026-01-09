@@ -9,8 +9,8 @@ defmodule Examples.DocExamples do
                      ".eyJ0IjoiZyIsImp0aSI6InNvbWUtaWQifQ" <>
                      ".GMr9nA6HE0ttB6llXct_2Sg5-fOKGFbJCdACZFgNbN1fhT6OPg_hVc8ThGzBrWC_RlsBpLA1nzqK3SOJDXYxAw"
 
-  @spec retrieve_api_key_v1_from_your_secrets_manager() :: String.t()
-  def retrieve_api_key_v1_from_your_secrets_manager() do
+  @spec retrieve_api_key_from_your_secrets_manager() :: String.t()
+  def retrieve_api_key_from_your_secrets_manager() do
     @fake_api_key_v1
   end
 
@@ -36,7 +36,7 @@ defmodule Examples.DocExamples do
 
   @spec example_API_CredentialProviderFromString() :: Momento.Auth.CredentialProvider.t()
   def example_API_CredentialProviderFromString() do
-    api_key = retrieve_api_key_v1_from_your_secrets_manager()
+    api_key = retrieve_api_key_from_your_secrets_manager()
     Momento.Auth.CredentialProvider.from_string!(api_key)
   end
 
@@ -45,6 +45,12 @@ defmodule Examples.DocExamples do
     api_key = retrieve_api_key_v2_from_your_secrets_manager()
     endpoint = "cell-4-us-west-2-1.prod.a.momentohq.com"
     Momento.Auth.CredentialProvider.from_api_key_v2!(api_key, endpoint)
+  end
+
+  @spec example_API_CredentialProviderFromDisposableToken() :: Momento.Auth.CredentialProvider.t()
+  def example_API_CredentialProviderFromDisposableToken() do
+    api_key = retrieve_api_key_from_your_secrets_manager()
+    Momento.Auth.CredentialProvider.from_disposable_token!(api_key)
   end
 
   @spec example_API_InstantiateCacheClient() :: Momento.CacheClient.t()
