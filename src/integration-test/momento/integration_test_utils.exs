@@ -12,7 +12,7 @@ defmodule Momento.IntegrationTestUtils do
       raise ArgumentError, "Missing required environment variable TEST_CACHE_NAME"
     end
 
-    credential_provider = CredentialProvider.from_env_var!("TEST_AUTH_TOKEN")
+    credential_provider = CredentialProvider.from_env_var_v2!()
 
     config = Configurations.Laptop.latest()
 

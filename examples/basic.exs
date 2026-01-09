@@ -60,7 +60,7 @@ Logger.info("Hello logging world!")
 
 config = Momento.Configurations.Laptop.latest()
 
-credential_provider = Momento.Auth.CredentialProvider.from_env_var!("MOMENTO_AUTH_TOKEN")
+credential_provider = Momento.Auth.CredentialProvider.from_env_var_v2!()
 cache_client = Momento.CacheClient.create!(config, credential_provider, 60.0)
 
 1..20

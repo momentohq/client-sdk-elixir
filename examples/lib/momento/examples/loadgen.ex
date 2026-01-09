@@ -287,7 +287,7 @@ defmodule Momento.Examples.LoadGen do
     cache_client =
       CacheClient.create!(
         Configurations.Laptop.latest(),
-        CredentialProvider.from_env_var!("MOMENTO_AUTH_TOKEN"),
+        CredentialProvider.from_env_var_v2!(),
         60
       )
 

@@ -1,6 +1,6 @@
 IO.puts("gRPC Test")
 
-credential_provider = Momento.Auth.CredentialProvider.from_env_var!("MOMENTO_AUTH_TOKEN")
+credential_provider = Momento.Auth.CredentialProvider.from_env_var_v2!()
 metadata = %{cache: "cache", Authorization: credential_provider.auth_token}
 
 IO.inspect(credential_provider.cache_endpoint)

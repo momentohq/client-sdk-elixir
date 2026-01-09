@@ -203,7 +203,7 @@ defmodule Momento.Auth.CredentialProvider do
 
   ## Examples
 
-      iex> Momento.Auth.CredentialProvider.from_env_var!("MOMENTO_AUTH_TOKEN")
+      iex> Momento.Auth.CredentialProvider.from_env_var!("MOMENTO_API_KEY")
       %Momento.Auth.CredentialProvider{}
 
   """

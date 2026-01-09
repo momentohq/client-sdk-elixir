@@ -37,8 +37,7 @@ asdf install elixir 1.14.5
     * `mix test`
 1. To run integration tests:
     * Generate auth token with [momento-cli](https://github.com/momentohq/momento-cli/) (if you don't already have one)
-    * `TEST_AUTH_TOKEN=<auth token> TEST_CACHE_NAME=<cache id> mix test integration-test`
-        * `TEST_CACHE_NAME` is required. Give it any string value for now.
+    * `MOMENTO_API_KEY=<your api key> MOMENTO_ENDPOINT=<your endpoint> mix test integration-test`
       
 ### Code Formatting and Type Checking
 
