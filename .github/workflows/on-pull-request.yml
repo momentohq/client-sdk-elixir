@@ -4,13 +4,14 @@ on:
   pull_request:
     branches: [main]
 
+env:
+  MOMENTO_API_KEY: ${{ secrets.ALPHA_API_KEY_V2 }}
+  MOMENTO_ENDPOINT: "cell-alpha-dev.preprod.a.momentohq.com"
+  TEST_CACHE_NAME: elixir-integration-test-ci-${{ github.sha }}
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    env:
-      TEST_AUTH_TOKEN: ${{ secrets.ALPHA_TEST_AUTH_TOKEN }}
-      MOMENTO_AUTH_TOKEN: ${{ secrets.ALPHA_TEST_AUTH_TOKEN }}
-      TEST_CACHE_NAME: elixir-integration-test-ci-${{ github.sha }}
 
     steps:
       - uses: actions/checkout@v3
@@ -32,7 +33,7 @@ jobs:
       - name: Setup Elixir
         uses: erlef/setup-beam@v1
         with:
-          otp-version: '25.3.2'
+          otp-version: '26.2'
           elixir-version: '1.14.5'
 
       - name: Build and run tests

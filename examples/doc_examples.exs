@@ -1,31 +1,63 @@
 defmodule Examples.DocExamples do
-  @fake_api_key "eyJhcGlfa2V5IjogImV5SjBlWEFpT2lKS1YxUWlMQ0poYkdjaU9pSklVekkxTmlKOS5leUpwYzNNaU9pS" <>
-                  "lBibXhwYm1VZ1NsZFVJRUoxYVd4a1pYSWlMQ0pwWVhRaU9qRTJOemd6TURVNE1USXNJbVY0Y0NJNk5E" <>
-                  "ZzJOVFV4TlRReE1pd2lZWFZrSWpvaUlpd2ljM1ZpSWpvaWFuSnZZMnRsZEVCbGVHRnRjR3hsTG1OdmJ" <>
-                  "TSjkuOEl5OHE4NExzci1EM1lDb19IUDRkLXhqSGRUOFVDSXV2QVljeGhGTXl6OCIsICJlbmRwb2ludC" <>
-                  "I6ICJ0ZXN0Lm1vbWVudG9ocS5jb20ifQo="
+  @fake_api_key_v1 "eyJhcGlfa2V5IjogImV5SjBlWEFpT2lKS1YxUWlMQ0poYkdjaU9pSklVekkxTmlKOS5leUpwYzNNaU9pS" <>
+                     "lBibXhwYm1VZ1NsZFVJRUoxYVd4a1pYSWlMQ0pwWVhRaU9qRTJOemd6TURVNE1USXNJbVY0Y0NJNk5E" <>
+                     "ZzJOVFV4TlRReE1pd2lZWFZrSWpvaUlpd2ljM1ZpSWpvaWFuSnZZMnRsZEVCbGVHRnRjR3hsTG1OdmJ" <>
+                     "TSjkuOEl5OHE4NExzci1EM1lDb19IUDRkLXhqSGRUOFVDSXV2QVljeGhGTXl6OCIsICJlbmRwb2ludC" <>
+                     "I6ICJ0ZXN0Lm1vbWVudG9ocS5jb20ifQo="
 
-  @spec retrieve_auth_token_from_your_secrets_manager() :: String.t()
-  def retrieve_auth_token_from_your_secrets_manager() do
-    @fake_api_key
+  @fake_api_key_v2 "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9" <>
+                     ".eyJ0IjoiZyIsImp0aSI6InNvbWUtaWQifQ" <>
+                     ".GMr9nA6HE0ttB6llXct_2Sg5-fOKGFbJCdACZFgNbN1fhT6OPg_hVc8ThGzBrWC_RlsBpLA1nzqK3SOJDXYxAw"
+
+  @spec retrieve_api_key_from_your_secrets_manager() :: String.t()
+  def retrieve_api_key_from_your_secrets_manager() do
+    @fake_api_key_v1
+  end
+
+  @spec retrieve_api_key_v2_from_your_secrets_manager() :: String.t()
+  def retrieve_api_key_v2_from_your_secrets_manager() do
+    @fake_api_key_v2
   end
 
   @spec example_API_CredentialProviderFromEnvVar() :: Momento.Auth.CredentialProvider.t()
   def example_API_CredentialProviderFromEnvVar() do
-    Momento.Auth.CredentialProvider.from_env_var!("MOMENTO_AUTH_TOKEN")
+    Momento.Auth.CredentialProvider.from_env_var!("V1_API_KEY")
+  end
+
+  @spec example_API_CredentialProviderFromEnvVarV2() :: Momento.Auth.CredentialProvider.t()
+  def example_API_CredentialProviderFromEnvVarV2() do
+    Momento.Auth.CredentialProvider.from_env_var_v2!("MOMENTO_API_KEY", "MOMENTO_ENDPOINT")
+  end
+
+  @spec example_API_CredentialProviderFromEnvVarV2Default() :: Momento.Auth.CredentialProvider.t()
+  def example_API_CredentialProviderFromEnvVarV2Default() do
+    Momento.Auth.CredentialProvider.from_env_var_v2!()
   end
 
   @spec example_API_CredentialProviderFromString() :: Momento.Auth.CredentialProvider.t()
   def example_API_CredentialProviderFromString() do
-    auth_token = retrieve_auth_token_from_your_secrets_manager()
-    Momento.Auth.CredentialProvider.from_string!(auth_token)
+    api_key = retrieve_api_key_from_your_secrets_manager()
+    Momento.Auth.CredentialProvider.from_string!(api_key)
+  end
+
+  @spec example_API_CredentialProviderFromApiKeyV2() :: Momento.Auth.CredentialProvider.t()
+  def example_API_CredentialProviderFromApiKeyV2() do
+    api_key = retrieve_api_key_v2_from_your_secrets_manager()
+    endpoint = "cell-4-us-west-2-1.prod.a.momentohq.com"
+    Momento.Auth.CredentialProvider.from_api_key_v2!(api_key, endpoint)
+  end
+
+  @spec example_API_CredentialProviderFromDisposableToken() :: Momento.Auth.CredentialProvider.t()
+  def example_API_CredentialProviderFromDisposableToken() do
+    api_key = retrieve_api_key_from_your_secrets_manager()
+    Momento.Auth.CredentialProvider.from_disposable_token!(api_key)
   end
 
   @spec example_API_InstantiateCacheClient() :: Momento.CacheClient.t()
   def example_API_InstantiateCacheClient() do
     config = Momento.Configurations.Laptop.latest()
 
-    credential_provider = Momento.Auth.CredentialProvider.from_env_var!("MOMENTO_AUTH_TOKEN")
+    credential_provider = Momento.Auth.CredentialProvider.from_env_var_v2!()
     default_ttl_seconds = 60.0
     Momento.CacheClient.create!(config, credential_provider, default_ttl_seconds)
   end
@@ -403,8 +435,14 @@ defmodule Examples.DocExamples do
   end
 end
 
+System.put_env("V1_API_KEY", Examples.DocExamples.retrieve_api_key_from_your_secrets_manager())
 Examples.DocExamples.example_API_CredentialProviderFromEnvVar()
+
+Examples.DocExamples.example_API_CredentialProviderFromEnvVarV2()
+Examples.DocExamples.example_API_CredentialProviderFromEnvVarV2Default()
 Examples.DocExamples.example_API_CredentialProviderFromString()
+Examples.DocExamples.example_API_CredentialProviderFromApiKeyV2()
+Examples.DocExamples.example_API_CredentialProviderFromDisposableToken()
 
 client = Examples.DocExamples.example_API_InstantiateCacheClient()
 

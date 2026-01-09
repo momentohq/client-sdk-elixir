@@ -4,7 +4,7 @@ IO.puts("==Sorted Set Example==")
 
 config = Momento.Configurations.Laptop.latest()
 
-credential_provider = Momento.Auth.CredentialProvider.from_env_var!("MOMENTO_AUTH_TOKEN")
+credential_provider = Momento.Auth.CredentialProvider.from_env_var_v2!()
 client = CacheClient.create!(config, credential_provider, 60.0)
 
 cache_name = "sorted-set-example"
