@@ -21,7 +21,7 @@ defmodule Examples.DocExamples do
 
   @spec example_API_CredentialProviderFromEnvVar() :: Momento.Auth.CredentialProvider.t()
   def example_API_CredentialProviderFromEnvVar() do
-    Momento.Auth.CredentialProvider.from_env_var!("MOMENTO_API_KEY")
+    Momento.Auth.CredentialProvider.from_env_var!("V1_API_KEY")
   end
 
   @spec example_API_CredentialProviderFromEnvVarV2() :: Momento.Auth.CredentialProvider.t()
@@ -435,7 +435,9 @@ defmodule Examples.DocExamples do
   end
 end
 
+System.put_env("V1_API_KEY", Examples.DocExamples.retrieve_api_key_from_your_secrets_manager())
 Examples.DocExamples.example_API_CredentialProviderFromEnvVar()
+
 Examples.DocExamples.example_API_CredentialProviderFromEnvVarV2()
 Examples.DocExamples.example_API_CredentialProviderFromEnvVarV2Default()
 Examples.DocExamples.example_API_CredentialProviderFromString()
