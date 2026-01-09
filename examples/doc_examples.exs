@@ -440,6 +440,7 @@ Examples.DocExamples.example_API_CredentialProviderFromEnvVarV2()
 Examples.DocExamples.example_API_CredentialProviderFromEnvVarV2Default()
 Examples.DocExamples.example_API_CredentialProviderFromString()
 Examples.DocExamples.example_API_CredentialProviderFromApiKeyV2()
+Examples.DocExamples.example_API_CredentialProviderFromDisposableToken()
 
 client = Examples.DocExamples.example_API_InstantiateCacheClient()
 
