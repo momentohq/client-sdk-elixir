@@ -50,7 +50,8 @@ defmodule Momento.Internal.ScsControlClient do
       {:ok, response} ->
         {:ok,
          %ListCaches.Ok{
-           caches: Enum.map(response.cache, fn c -> %CacheInfo{name: c.cache_name} end)
+           caches:
+             Enum.map(response.cache, fn c -> %CacheInfo{name: c.cache_name, id: c.cache_id} end)
          }}
 
       {:error, error_response} ->

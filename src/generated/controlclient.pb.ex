@@ -164,6 +164,161 @@ defmodule Momento.Protos.ControlClient.ListCachesRequest do
   field :next_token, 1, type: :string, json_name: "nextToken"
 end
 
+defmodule Momento.Protos.ControlClient.CacheLimits do
+  @moduledoc false
+
+  use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
+
+  def descriptor do
+    # credo:disable-for-next-line
+    %Google.Protobuf.DescriptorProto{
+      name: "_CacheLimits",
+      field: [
+        %Google.Protobuf.FieldDescriptorProto{
+          name: "max_traffic_rate",
+          extendee: nil,
+          number: 1,
+          label: :LABEL_OPTIONAL,
+          type: :TYPE_UINT32,
+          type_name: nil,
+          default_value: nil,
+          options: nil,
+          oneof_index: nil,
+          json_name: "maxTrafficRate",
+          proto3_optional: nil,
+          __unknown_fields__: []
+        },
+        %Google.Protobuf.FieldDescriptorProto{
+          name: "max_throughput_kbps",
+          extendee: nil,
+          number: 2,
+          label: :LABEL_OPTIONAL,
+          type: :TYPE_UINT32,
+          type_name: nil,
+          default_value: nil,
+          options: nil,
+          oneof_index: nil,
+          json_name: "maxThroughputKbps",
+          proto3_optional: nil,
+          __unknown_fields__: []
+        },
+        %Google.Protobuf.FieldDescriptorProto{
+          name: "max_item_size_kb",
+          extendee: nil,
+          number: 3,
+          label: :LABEL_OPTIONAL,
+          type: :TYPE_UINT32,
+          type_name: nil,
+          default_value: nil,
+          options: nil,
+          oneof_index: nil,
+          json_name: "maxItemSizeKb",
+          proto3_optional: nil,
+          __unknown_fields__: []
+        },
+        %Google.Protobuf.FieldDescriptorProto{
+          name: "max_ttl_seconds",
+          extendee: nil,
+          number: 4,
+          label: :LABEL_OPTIONAL,
+          type: :TYPE_UINT64,
+          type_name: nil,
+          default_value: nil,
+          options: nil,
+          oneof_index: nil,
+          json_name: "maxTtlSeconds",
+          proto3_optional: nil,
+          __unknown_fields__: []
+        }
+      ],
+      nested_type: [],
+      enum_type: [],
+      extension_range: [],
+      extension: [],
+      options: nil,
+      oneof_decl: [],
+      reserved_range: [],
+      reserved_name: [],
+      __unknown_fields__: []
+    }
+  end
+
+  field :max_traffic_rate, 1, type: :uint32, json_name: "maxTrafficRate"
+  field :max_throughput_kbps, 2, type: :uint32, json_name: "maxThroughputKbps"
+  field :max_item_size_kb, 3, type: :uint32, json_name: "maxItemSizeKb"
+  field :max_ttl_seconds, 4, type: :uint64, json_name: "maxTtlSeconds"
+end
+
+defmodule Momento.Protos.ControlClient.TopicLimits do
+  @moduledoc false
+
+  use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
+
+  def descriptor do
+    # credo:disable-for-next-line
+    %Google.Protobuf.DescriptorProto{
+      name: "_TopicLimits",
+      field: [
+        %Google.Protobuf.FieldDescriptorProto{
+          name: "max_publish_rate",
+          extendee: nil,
+          number: 1,
+          label: :LABEL_OPTIONAL,
+          type: :TYPE_UINT32,
+          type_name: nil,
+          default_value: nil,
+          options: nil,
+          oneof_index: nil,
+          json_name: "maxPublishRate",
+          proto3_optional: nil,
+          __unknown_fields__: []
+        },
+        %Google.Protobuf.FieldDescriptorProto{
+          name: "max_subscription_count",
+          extendee: nil,
+          number: 2,
+          label: :LABEL_OPTIONAL,
+          type: :TYPE_UINT32,
+          type_name: nil,
+          default_value: nil,
+          options: nil,
+          oneof_index: nil,
+          json_name: "maxSubscriptionCount",
+          proto3_optional: nil,
+          __unknown_fields__: []
+        },
+        %Google.Protobuf.FieldDescriptorProto{
+          name: "max_publish_message_size_kb",
+          extendee: nil,
+          number: 3,
+          label: :LABEL_OPTIONAL,
+          type: :TYPE_UINT32,
+          type_name: nil,
+          default_value: nil,
+          options: nil,
+          oneof_index: nil,
+          json_name: "maxPublishMessageSizeKb",
+          proto3_optional: nil,
+          __unknown_fields__: []
+        }
+      ],
+      nested_type: [],
+      enum_type: [],
+      extension_range: [],
+      extension: [],
+      options: nil,
+      oneof_decl: [],
+      reserved_range: [],
+      reserved_name: [],
+      __unknown_fields__: []
+    }
+  end
+
+  field :max_publish_rate, 1, type: :uint32, json_name: "maxPublishRate"
+  field :max_subscription_count, 2, type: :uint32, json_name: "maxSubscriptionCount"
+  field :max_publish_message_size_kb, 3, type: :uint32, json_name: "maxPublishMessageSizeKb"
+end
+
 defmodule Momento.Protos.ControlClient.Cache do
   @moduledoc false
 
@@ -187,6 +342,48 @@ defmodule Momento.Protos.ControlClient.Cache do
           json_name: "cacheName",
           proto3_optional: nil,
           __unknown_fields__: []
+        },
+        %Google.Protobuf.FieldDescriptorProto{
+          name: "cache_limits",
+          extendee: nil,
+          number: 2,
+          label: :LABEL_OPTIONAL,
+          type: :TYPE_MESSAGE,
+          type_name: ".control_client._CacheLimits",
+          default_value: nil,
+          options: nil,
+          oneof_index: nil,
+          json_name: "cacheLimits",
+          proto3_optional: nil,
+          __unknown_fields__: []
+        },
+        %Google.Protobuf.FieldDescriptorProto{
+          name: "topic_limits",
+          extendee: nil,
+          number: 3,
+          label: :LABEL_OPTIONAL,
+          type: :TYPE_MESSAGE,
+          type_name: ".control_client._TopicLimits",
+          default_value: nil,
+          options: nil,
+          oneof_index: nil,
+          json_name: "topicLimits",
+          proto3_optional: nil,
+          __unknown_fields__: []
+        },
+        %Google.Protobuf.FieldDescriptorProto{
+          name: "cache_id",
+          extendee: nil,
+          number: 4,
+          label: :LABEL_OPTIONAL,
+          type: :TYPE_STRING,
+          type_name: nil,
+          default_value: nil,
+          options: nil,
+          oneof_index: nil,
+          json_name: "cacheId",
+          proto3_optional: nil,
+          __unknown_fields__: []
         }
       ],
       nested_type: [],
@@ -202,6 +399,9 @@ defmodule Momento.Protos.ControlClient.Cache do
   end
 
   field :cache_name, 1, type: :string, json_name: "cacheName"
+  field :cache_limits, 2, type: Momento.Protos.ControlClient.CacheLimits, json_name: "cacheLimits"
+  field :topic_limits, 3, type: Momento.Protos.ControlClient.TopicLimits, json_name: "topicLimits"
+  field :cache_id, 4, type: :string, json_name: "cacheId"
 end
 
 defmodule Momento.Protos.ControlClient.ListCachesResponse do
