@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.9.0](https://github.com/momentohq/client-sdk-elixir/compare/v0.8.0...v0.9.0) (2026-10-30)
+
+
+### Features
+
+* expose cache id on CacheInfo ([#94](https://github.com/momentohq/client-sdk-elixir/issues/94)) ([0c5419e](https://github.com/momentohq/client-sdk-elixir/commit/0c5419efeb1d81082e9eb2f0b6fc0b84994fb0d0))
+
+
+### Miscellaneous
+
+* update examples, tests, and docs to use a v2 api key ([#91](https://github.com/momentohq/client-sdk-elixir/issues/91)) ([7f09763](https://github.com/momentohq/client-sdk-elixir/commit/7f097631a52cc06841bff4aebf2640bc04723569))
+
 ## [0.8.0](https://github.com/momentohq/client-sdk-elixir/compare/v0.7.0...v0.8.0) (2025-12-17)
 
 
